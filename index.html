@@ -436,7 +436,7 @@
 <div id="screen-stats" class="screen">
   <div class="site-header">
     <img src="" alt="Massive Darkness 2" class="logo-img header-logo-clone">
-    <div class="subtitle">Passo 3 de 3 — Vida e Mana Base (Nível 1) e Carta Inicial do Deck</div>
+    <div class="subtitle">Passo 3 de 3 — Vida e Mana Base (Nível 1)</div>
     <div class="ornament" style="margin-top:6px;">✦ ✦ ✦</div>
   </div>
   <p style="text-align:center; color:var(--text-dim); margin-bottom:20px; font-style:italic;">
@@ -502,7 +502,7 @@
         <div>
           <div class="card-title" style="margin-bottom:3px;">📋 Registro dos Heróis ao Final da Partida</div>
           <p style="font-size:14px;color:var(--text-dim);">
-            Para cada herói abaixo, registre: <strong>1) Herói</strong> • <strong>2) Nível alcançado (atualiza Vida e Mana automaticamente)</strong> • <strong>3) Quanto de XP ficou</strong> • <strong>4) Cartas no Deck</strong> • <strong>5) Itens Equipados</strong> • <strong>6) Quantos Espólios ficou</strong>.
+            Para cada herói abaixo, registre: <strong>1) Herói</strong> • <strong>2) Nível alcançado (atualiza Vida e Mana automaticamente)</strong> • <strong>3) Quanto de XP ficou</strong> • <strong>4) Quais Itens está usando</strong> • <strong>5) Quantos Espólios ficou</strong>.
           </p>
         </div>
         <button class="btn btn-purple btn-xs" onclick="openLevelTableReferenceModal()">📊 Ver Tabela Nível 1–10 (XP / Vida / Mana)</button>
@@ -2015,7 +2015,6 @@ function renderStatsScreen() {
     const cls    = CLASSES_LIST.find(c => c.id === player.classId);
     const hpDef  = player.hpBase > 0 ? player.hpBase : (cls ? cls.hpSug : 5);
     const mpDef  = player.mpBase >= 0 ? player.mpBase : (cls ? cls.mpSug : 3);
-    const classSkills = getSkillsForClass(player.classId).filter(s => !s.isHybrid);
 
     const block = document.createElement('div');
     block.className = 'card stats-player-block';
@@ -2032,7 +2031,7 @@ function renderStatsScreen() {
           </div>
         </div>
       </div>
-      <div class="stats-row" style="margin-bottom:14px;">
+      <div class="stats-row">
         <div class="stat-input-box hp-box">
           <div class="stat-icon">❤️</div>
           <label>Vida Base (Nível 1)</label>
@@ -2046,12 +2045,6 @@ function renderStatsScreen() {
           <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">Sugerido para ${cls?.name || ''}: ${cls ? cls.mpSug : 3} (Aumenta automaticamente ao subir de nível!)</div>
         </div>
       </div>
-      <div>
-        <label>🃏 Carta Inicial no Deck do Herói (Categoria I — Nível 1)</label>
-        <select id="skill-init-${pIdx}">
-          ${classSkills.map(s => `<option value="${s.id}">${escapeHtml(s.name)} [${escapeHtml(s.slot)}] — ${escapeHtml(s.desc.I)}</option>`).join('')}
-        </select>
-      </div>
     `;
     container.appendChild(block);
   });
@@ -2061,7 +2054,6 @@ function startCampaignDashboard() {
   for (let i = 0; i < state.players.length; i++) {
     const hp = parseInt(document.getElementById(`hp-init-${i}`)?.value);
     const mp = parseInt(document.getElementById(`mp-init-${i}`)?.value);
-    const initSkillId = document.getElementById(`skill-init-${i}`)?.value;
 
     if (isNaN(hp) || hp < 1 || isNaN(mp) || mp < 0) {
       document.getElementById('stats-error').style.display = 'block';
@@ -2076,21 +2068,7 @@ function startCampaignDashboard() {
     p.xp = 0;  p.level = 1;
     p.alive = true;
     p.spoils = 0;
-
-    const catalog = getSkillsForClass(p.classId);
-    const chosen = catalog.find(s => s.id === initSkillId) || catalog[0];
-    if (chosen) {
-      p.skills = [{
-        uid: 'sk_' + Date.now() + '_' + i,
-        skillId: chosen.id,
-        name: chosen.name,
-        category: 'I',
-        slot: chosen.slot,
-        cost: chosen.cost,
-        desc: chosen.desc.I,
-        exhausted: false
-      }];
-    }
+    p.skills = [];
   }
 
   document.getElementById('stats-error').style.display = 'none';
@@ -2336,45 +2314,10 @@ function renderHeroesTab() {
           ` : ''}
         </div>
 
-        <!-- 4. QUAL CARTA ESTÁ USANDO NO SEU DECK -->
+        <!-- 4. QUAIS ITENS ESTÁ USANDO -->
         <div class="hero-subbox">
           <div class="hero-subbox-hdr">
-            <span class="hero-subbox-title">🃏 4. Qual Carta está usando no seu Deck (${(p.skills || []).length})</span>
-            <button class="btn btn-purple btn-xs" onclick="openAddSkillModal(${idx})">📚 Catálogo da Classe</button>
-          </div>
-
-          <div class="skill-chip-list" style="margin-bottom:8px;">${skillsHtml}</div>
-
-          <!-- Adição rápida de carta no deck -->
-          <div style="display:flex;gap:5px;margin-bottom:8px;">
-            <input type="text" id="quick-deck-name-${idx}" placeholder="Digite o nome da carta do deck..." style="flex:1;padding:5px 8px;font-size:12px;" onkeydown="if(event.key==='Enter')quickAddDeckCard(${idx})">
-            <select id="quick-deck-cat-${idx}" style="width:82px;padding:5px 4px;font-size:11px;">
-              <option value="I">Cat. I</option>
-              <option value="II">Cat. II</option>
-              <option value="III">Cat. III</option>
-              <option value="IV">Cat. IV</option>
-              <option value="H">Híbrido/Camp.</option>
-            </select>
-            <button class="btn btn-gold btn-xs" onclick="quickAddDeckCard(${idx})">+ Deck</button>
-          </div>
-
-          <!-- Poder de Conjunto / Notas de Classe -->
-          <div style="border-top:1px dashed rgba(201,162,63,0.25);padding-top:6px;">
-            <label style="font-size:9px;margin-bottom:3px;">🛡️ Carta de Poder de Conjunto (Set Power):</label>
-            <select style="font-size:12px;padding:4px 8px;" onchange="changeHeroSetPower(${idx}, this.value)">
-              ${SET_POWERS.map(sp => `<option value="${sp.id}" ${p.setPower === sp.id ? 'selected' : ''}>${escapeHtml(sp.name)}</option>`).join('')}
-            </select>
-            ${setObj.id !== 'none' ? `
-              <div style="font-size:11px;color:var(--teal-lt);margin-top:4px;line-height:1.3;">
-                • ${escapeHtml(setObj.lower)}<br>• ${escapeHtml(setObj.upper)}
-              </div>` : ''}
-          </div>
-        </div>
-
-        <!-- 5. QUAIS ITENS ESTÁ USANDO -->
-        <div class="hero-subbox">
-          <div class="hero-subbox-hdr">
-            <span class="hero-subbox-title">🎒 5. Quais Itens está usando (${invCount}/7) • 🍺 Taverna (${tavCount}/2)</span>
+            <span class="hero-subbox-title">🎒 4. Quais Itens está usando (${invCount}/7) • 🍺 Taverna (${tavCount}/2)</span>
             <button class="btn btn-dark btn-xs" onclick="openAddItemModal(${idx})">+ Detalhado</button>
           </div>
 
@@ -2409,13 +2352,13 @@ function renderHeroesTab() {
           ` : ''}
         </div>
 
-        <!-- 6. QUANTOS ESPÓLIOS FICOU -->
+        <!-- 5. QUANTOS ESPÓLIOS FICOU -->
         <div class="hero-subbox" style="background:rgba(201,162,63,0.08);border-color:var(--gold);">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <img src="${CITY_IMAGES.spoils}" alt="Espólios" style="width:28px;height:28px;object-fit:contain;">
               <div>
-                <div class="hero-subbox-title" style="color:var(--gold-light);">🪙 6. Quantos Espólios ficou?</div>
+                <div class="hero-subbox-title" style="color:var(--gold-light);">🪙 5. Quantos Espólios ficou?</div>
                 <div style="font-size:11px;color:var(--text-dim);">Para gastar na Fase da Cidade</div>
               </div>
             </div>
