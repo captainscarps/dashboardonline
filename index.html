@@ -413,7 +413,7 @@
           <option value="oneshot">🎲 Partida Única / One-Shot (Níveis 1 a 5 · XP 5/10/12/18)</option>
         </select>
         <div id="mode-desc-box" style="font-size:12px;color:var(--text-dim);margin-top:5px;font-style:italic;">
-          Progressão completa até o Nível 10 (XP: 10 / 10 / 12 / 18 / 25 / 32 / 40 / 50 / 62), Árvore de Missões A–N, Fase da Cidade, Bolsa de Tesouros e 30 Cartas de Campanha.
+          Progressão completa até o Nível 10 (XP: 10 / 15 / 20 / 25 / 30 / 33 / 35 / 37 / 40), Árvore de Missões A–N, Fase da Cidade, Bolsa de Tesouros e 30 Cartas de Campanha.
         </div>
       </div>
 
@@ -719,24 +719,24 @@ const CITY_IMAGES = {
 // ════════════════════════════════════════════════════════════════
 // Conforme Tabela de XP de Campanha:
 // Nv 1->2: 10 XP (+1 Vida)
-// Nv 2->3: 10 XP (+1 Mana; acumulado +1 Vida, +1 Mana)
-// Nv 3->4: 12 XP (+1 Vida; acumulado +2 Vida, +1 Mana)
-// Nv 4->5: 18 XP (+1 Mana; acumulado +2 Vida, +2 Mana)
-// Nv 5->6: 25 XP (+1 Vida; acumulado +3 Vida, +2 Mana)
-// Nv 6->7: 32 XP (+1 Mana; acumulado +3 Vida, +3 Mana)
-// Nv 7->8: 40 XP (+1 Vida; acumulado +4 Vida, +3 Mana)
-// Nv 8->9: 50 XP (+1 Mana; acumulado +4 Vida, +4 Mana)
-// Nv 9->10: 62 XP (+1 Vida, +1 Mana; acumulado +5 Vida, +5 Mana)
+// Nv 2->3: 15 XP (+1 Mana; acumulado +1 Vida, +1 Mana)
+// Nv 3->4: 20 XP (+1 Vida; acumulado +2 Vida, +1 Mana)
+// Nv 4->5: 25 XP (+1 Mana; acumulado +2 Vida, +2 Mana)
+// Nv 5->6: 30 XP (+1 Vida; acumulado +3 Vida, +2 Mana)
+// Nv 6->7: 33 XP (+1 Mana; acumulado +3 Vida, +3 Mana)
+// Nv 7->8: 35 XP (+1 Vida; acumulado +4 Vida, +3 Mana)
+// Nv 8->9: 37 XP (+1 Mana; acumulado +4 Vida, +4 Mana)
+// Nv 9->10: 40 XP (+1 Vida, +1 Mana; acumulado +5 Vida, +5 Mana)
 const LEVEL_TABLE_CAMPAIGN = {
   1:  { xpToNext: 10, hpGain: 0, mpGain: 0, cumHp: 0, cumMp: 0, catAllowed: 'I',   note: '1 Talento Inicial (Nv.1)' },
-  2:  { xpToNext: 10, hpGain: 1, mpGain: 0, cumHp: 1, cumMp: 0, catAllowed: 'I',   note: '+1 Vida Máx, +1 Talento' },
-  3:  { xpToNext: 12, hpGain: 0, mpGain: 1, cumHp: 1, cumMp: 1, catAllowed: 'II',  note: '+1 Mana Máx, +1 Talento (Libera Cat. II)' },
-  4:  { xpToNext: 18, hpGain: 1, mpGain: 0, cumHp: 2, cumMp: 1, catAllowed: 'II',  note: '+1 Vida Máx, +1 Talento' },
-  5:  { xpToNext: 25, hpGain: 0, mpGain: 1, cumHp: 2, cumMp: 2, catAllowed: 'III', note: '+1 Mana Máx, +1 Talento (Libera Cat. III)' },
-  6:  { xpToNext: 32, hpGain: 1, mpGain: 0, cumHp: 3, cumMp: 2, catAllowed: 'III', note: '+1 Vida Máx, +1 Talento' },
-  7:  { xpToNext: 40, hpGain: 0, mpGain: 1, cumHp: 3, cumMp: 3, catAllowed: 'IV',  note: '+1 Mana Máx, +1 Talento (Libera Cat. IV)' },
-  8:  { xpToNext: 50, hpGain: 1, mpGain: 0, cumHp: 4, cumMp: 3, catAllowed: 'IV',  note: '+1 Vida Máx, +1 Talento' },
-  9:  { xpToNext: 62, hpGain: 0, mpGain: 1, cumHp: 4, cumMp: 4, catAllowed: 'H',   note: '+1 Mana Máx, +1 Talento (Libera Híbridos Nv.9)' },
+  2:  { xpToNext: 15, hpGain: 1, mpGain: 0, cumHp: 1, cumMp: 0, catAllowed: 'I',   note: '+1 Vida Máx, +1 Talento' },
+  3:  { xpToNext: 20, hpGain: 0, mpGain: 1, cumHp: 1, cumMp: 1, catAllowed: 'II',  note: '+1 Mana Máx, +1 Talento (Libera Cat. II)' },
+  4:  { xpToNext: 25, hpGain: 1, mpGain: 0, cumHp: 2, cumMp: 1, catAllowed: 'II',  note: '+1 Vida Máx, +1 Talento' },
+  5:  { xpToNext: 30, hpGain: 0, mpGain: 1, cumHp: 2, cumMp: 2, catAllowed: 'III', note: '+1 Mana Máx, +1 Talento (Libera Cat. III)' },
+  6:  { xpToNext: 33, hpGain: 1, mpGain: 0, cumHp: 3, cumMp: 2, catAllowed: 'III', note: '+1 Vida Máx, +1 Talento' },
+  7:  { xpToNext: 35, hpGain: 0, mpGain: 1, cumHp: 3, cumMp: 3, catAllowed: 'IV',  note: '+1 Mana Máx, +1 Talento (Libera Cat. IV)' },
+  8:  { xpToNext: 37, hpGain: 1, mpGain: 0, cumHp: 4, cumMp: 3, catAllowed: 'IV',  note: '+1 Vida Máx, +1 Talento' },
+  9:  { xpToNext: 40, hpGain: 0, mpGain: 1, cumHp: 4, cumMp: 4, catAllowed: 'H',   note: '+1 Mana Máx, +1 Talento (Libera Híbridos Nv.9)' },
   10: { xpToNext: null, hpGain: 1, mpGain: 1, cumHp: 5, cumMp: 5, catAllowed: 'H', note: '+1 Vida Máx, +1 Mana Máx, +1 Talento (Nível Máximo!)' }
 };
 
@@ -1826,7 +1826,7 @@ function updateModeDesc() {
   const mode = document.getElementById('new-camp-mode').value;
   const descEl = document.getElementById('mode-desc-box');
   const map = {
-    heavenfall: 'Progressão completa até o Nível 10 (XP: 10 / 10 / 12 / 18 / 25 / 32 / 40 / 50 / 62), Árvore de 14 Missões A–N, Fase da Cidade, Bolsa de Tesouros e 30 Cartas de Campanha.',
+    heavenfall: 'Progressão completa até o Nível 10 (XP: 10 / 15 / 20 / 25 / 30 / 33 / 35 / 37 / 40), Árvore de 14 Missões A–N, Fase da Cidade, Bolsa de Tesouros e 30 Cartas de Campanha.',
     horsemen: 'Mini-campanha temática de 4 Missões contra os Quatro Cavaleiros do Apocalipse, usando evolução de campanha e Fase da Cidade.',
     demondragon: 'Campanha temática de 3 Missões caçando o Dragão Demônio até seu covil vulcânico.',
     hellscape: 'Missões clássicas da caixa base Hellscape com suporte a evolução de heróis, habilidades e espólios.',
