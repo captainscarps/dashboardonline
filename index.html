@@ -2067,7 +2067,294 @@
     }
   }
 
-</style>
+
+  /* ================================================================
+     LOGO & MOBILE RESPONSIVENESS SYSTEM (Arounda SaaS)
+     ================================================================ */
+  .saas-sidebar-brand {
+    padding: 16px 18px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .saas-sidebar-logo {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    max-height: 48px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.7));
+    transition: transform 0.2s ease;
+  }
+
+  .saas-sidebar-logo:hover {
+    transform: scale(1.02);
+  }
+
+  .saas-topbar-mobile-logo {
+    display: none;
+    height: 32px;
+    max-width: 110px;
+    object-fit: contain;
+  }
+
+  .saas-intro-brand-header {
+    margin-bottom: 14px;
+  }
+
+  .saas-intro-logo {
+    max-width: 280px;
+    width: 100%;
+    height: auto;
+    max-height: 80px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.8));
+  }
+
+  .saas-wizard-brand-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .saas-wizard-logo {
+    height: 36px;
+    max-width: 140px;
+    object-fit: contain;
+  }
+
+  /* Comprehensive Responsive Breakpoints */
+  @media (max-width: 1024px) {
+    .saas-topbar-mobile-logo {
+      display: block;
+    }
+    .saas-sidebar {
+      transform: translateX(-100%);
+      width: 260px;
+    }
+    .saas-sidebar.open {
+      transform: translateX(0);
+    }
+    .saas-sidebar-backdrop.open {
+      display: block;
+    }
+    .saas-main-canvas {
+      margin-left: 0;
+    }
+    .saas-hamburger-btn {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .saas-topbar {
+      padding: 0 12px;
+      height: 56px;
+      gap: 6px;
+    }
+
+    .saas-topbar-left {
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .saas-breadcrumbs {
+      display: none;
+    }
+
+    .saas-topbar-mode-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      white-space: nowrap;
+    }
+
+    .saas-topbar-right {
+      gap: 6px;
+    }
+
+    .saas-save-status-badge {
+      padding: 6px;
+      border-radius: 50%;
+      min-width: unset;
+    }
+
+    #topbar-save-label {
+      display: none;
+    }
+
+    .btn-saas {
+      padding: 6px 9px;
+      font-size: 11px;
+      height: 34px;
+    }
+
+    .btn-saas-label {
+      display: none;
+    }
+
+    .btn-saas-primary {
+      padding: 6px 12px;
+    }
+
+    .btn-saas-primary span {
+      display: inline !important;
+    }
+
+    .saas-content-area {
+      padding: 14px 10px 40px;
+    }
+
+    .saas-kpi-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .saas-kpi-card {
+      padding: 12px 14px;
+    }
+
+    .saas-kpi-value {
+      font-size: 20px;
+    }
+
+    .dash-tabs {
+      gap: 4px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+
+    .dash-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .dash-tab-btn {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    .modal-box {
+      width: 95vw;
+      max-height: 88vh;
+      padding: 16px 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .saas-topbar-mobile-logo {
+      height: 24px;
+      max-width: 80px;
+    }
+
+    .saas-kpi-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .heroes-dash-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .hero-card-top {
+      padding: 10px 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hero-top-actions {
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+
+    .hero-top-actions button {
+      flex: 1;
+      text-align: center;
+      padding: 5px 6px;
+    }
+
+    .level-btn-strip {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+    }
+
+    .lvl-num-btn {
+      padding: 8px 0;
+      font-size: 13px;
+    }
+
+    .hero-xp-controls {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .hero-xp-input-wrap {
+      justify-content: space-between;
+    }
+
+    .hero-xp-controls > div:last-child {
+      display: flex;
+      gap: 4px;
+    }
+
+    .hero-xp-controls > div:last-child button {
+      flex: 1;
+      padding: 6px 0;
+    }
+
+    .quick-add-row {
+      flex-wrap: wrap;
+    }
+
+    .quick-add-row input {
+      width: 100%;
+      flex: auto;
+    }
+
+    .quick-add-row select {
+      flex: 1;
+    }
+
+    .quick-add-row button {
+      flex: 1;
+      padding: 7px;
+    }
+
+    .spoils-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .spoils-stepper {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .spoils-stepper button {
+      padding: 6px 14px;
+    }
+
+    .closure-footer-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .closure-footer-buttons button {
+      width: 100%;
+      padding: 10px;
+    }
+  }
+
+  </style>
 </head>
 <body>
 
@@ -2080,11 +2367,7 @@
   <aside class="saas-sidebar" id="saas-sidebar">
     <!-- Brand Header -->
     <div class="saas-sidebar-brand">
-      <div class="saas-brand-icon-box">MD2</div>
-      <div>
-        <div class="saas-brand-title">Massive Darkness 2</div>
-        <div class="saas-brand-badge">Campaign Manager SaaS</div>
-      </div>
+      <img src="logo-registro.png" class="saas-sidebar-logo header-logo-clone" alt="Registro de Campanha — Massive Darkness 2">
     </div>
 
     <!-- Active Campaign Mini Widget -->
@@ -2171,6 +2454,7 @@
         <button class="saas-hamburger-btn" onclick="toggleSidebar()" aria-label="Abrir Menu Lateral">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
+        <img src="logo-registro.png" class="saas-topbar-mobile-logo header-logo-clone" alt="Registro de Campanha">
         <div class="saas-breadcrumbs">
           <span class="saas-bc-root">Registro</span>
           <span class="saas-bc-sep">/</span>
@@ -2189,15 +2473,15 @@
         <!-- Ações Rápidas -->
         <button class="btn-saas btn-saas-secondary" onclick="syncFromSupabase()" title="Sincronizar com Nuvem Supabase">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-          <span>Sincronizar</span>
+          <span class="btn-saas-label">Sincronizar</span>
         </button>
         <button class="btn-saas btn-saas-secondary" onclick="openLevelTableReferenceModal()" title="Tabela Oficial de Níveis (1 a 10)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
-          <span>Tabela Níveis</span>
+          <span class="btn-saas-label">Tabela Níveis</span>
         </button>
         <button class="btn-saas btn-saas-primary" onclick="saveCampaignNow(true)" title="Salvar alterações da campanha">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-          <span>Salvar Registro</span>
+          <span>Salvar</span>
         </button>
       </div>
     </header>
@@ -2209,8 +2493,11 @@
            TELA 1: HUB DE CAMPANHAS (SAAS DASHBOARD)
            ========================================== -->
       <div id="screen-intro" class="screen active">
-        <!-- Hero Header Executivo -->
+        <!-- Hero Header Executivo com Logo Oficial -->
         <div style="margin-bottom: 24px;">
+          <div class="saas-intro-brand-header">
+            <img src="logo-registro.png" class="saas-intro-logo header-logo-clone" alt="Registro de Campanha — Massive Darkness 2">
+          </div>
           <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(50,73,56,0.3);border:1px solid rgba(119,146,103,0.3);border-radius:9999px;font-size:11px;font-weight:600;color:var(--mint);margin-bottom:10px;">
             <span style="width:6px;height:6px;border-radius:50%;background:var(--sage);"></span>
             SaaS Suite • Massive Darkness 2
@@ -2323,6 +2610,9 @@
            TELA 2: ESCOLHA DE CLASSES (WIZARD)
            ========================================== -->
       <div id="screen-classes" class="screen">
+        <div class="saas-wizard-brand-bar">
+          <img src="logo-registro.png" class="saas-wizard-logo header-logo-clone" alt="Registro de Campanha">
+        </div>
         <div class="card" style="margin-bottom:20px;">
           <div class="card-title">
             <span>Passo 1 de 3 — Escolha a Classe de Cada Personagem</span>
@@ -2344,6 +2634,9 @@
            TELA 3: ESCOLHA DE HERÓIS (WIZARD)
            ========================================== -->
       <div id="screen-heroes" class="screen">
+        <div class="saas-wizard-brand-bar">
+          <img src="logo-registro.png" class="saas-wizard-logo header-logo-clone" alt="Registro de Campanha">
+        </div>
         <div class="card" style="margin-bottom:20px;">
           <div class="card-title">
             <span>Passo 2 de 3 — Escolha o Retrato de Cada Herói</span>
