@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registro de Campanha — Massive Darkness 2</title>
-<link href="https://fonts.googleapis.com/css2?family=Almendra+SC&family=Almendra:ital,wght@0,400;0,700;1,400&family=Metamorphous&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Almendra+SC&family=Almendra:ital,wght@0,400;0,700;1,400&family=Metamorphous&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   /* ════════════════════════════════════════════════════════════════
      MORHEN CON — FANTASY FESTIVAL WEBSITE UI/UX DESIGN SYSTEM
@@ -1367,9 +1369,296 @@
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg-deep); }
   ::-webkit-scrollbar-thumb { background: var(--border-gold); border-radius: 2px; }
+
+  /* ════════════════════════════════════════════════════════════════
+     BnF FANTASY DESIGN SYSTEM (https://fantasy.bnf.fr/en/)
+     - Twilight indigo, sunset gold glow, and crimson accents
+     - Parallax multi-layer scene (dragon, clouds, birds, cliff, wood)
+     - Interlocking 45° diamond separators & chapter curtain transitions
+  ════════════════════════════════════════════════════════════════ */
+  :root {
+    --bnf-twilight:   #0d081d;
+    --bnf-night:      #130c2b;
+    --bnf-purple:     #1b1238;
+    --bnf-purple-mid: #251745;
+    --bnf-gold:       #f1d180;
+    --bnf-gold-glow:  #ff9d3b;
+    --bnf-gold-dark:  #8b6f34;
+    --bnf-crimson:    #c94a29;
+    --bnf-crimson-lt: #de2a22;
+    --bnf-text:       #f6f4ee;
+    --bnf-text-dim:   #cfc9bc;
+    --bnf-text-muted: #8e8779;
+  }
+
+  body {
+    background-color: #080512;
+    background-image:
+      radial-gradient(ellipse 90% 50% at 50% 0%, rgba(241, 209, 128, 0.16) 0%, rgba(217, 124, 56, 0.12) 30%, transparent 70%),
+      radial-gradient(ellipse 70% 45% at 15% 35%, rgba(67, 65, 177, 0.14) 0%, transparent 65%),
+      radial-gradient(ellipse 70% 45% at 85% 65%, rgba(123, 92, 145, 0.16) 0%, transparent 65%),
+      linear-gradient(180deg, #090514 0%, #130c2b 35%, #0e0820 70%, #06040e 100%);
+    background-attachment: fixed;
+    color: var(--bnf-text);
+  }
+
+  /* BnF Multi-layer Parallax Scene Header */
+  .bnf-hero-stage {
+    position: relative;
+    width: 100%;
+    min-height: 420px;
+    max-height: 520px;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid rgba(241, 209, 128, 0.45);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 32px rgba(241, 209, 128, 0.18);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    perspective: 1000px;
+    background-color: #130c2b;
+  }
+
+  .bnf-layer {
+    position: absolute;
+    inset: -30px;
+    pointer-events: none;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    transition: transform 0.15s cubic-bezier(0.25, 0.1, 0.67, 0.99);
+    will-change: transform;
+  }
+
+  .bnf-layer-bg {
+    background-image: url('assets/bnf/fond-principal.jpg'), url('https://fantasy.bnf.fr/themes/custom/fantasy/images/home/fond-principal.jpg');
+    background-size: cover;
+    background-position: center 25%;
+    opacity: 0.94;
+    filter: brightness(0.92) contrast(1.1);
+  }
+
+  .bnf-layer-dragon {
+    background-image: url('assets/bnf/dragon.png'), url('https://fantasy.bnf.fr/themes/custom/fantasy/images/home/dragon.png');
+    background-size: 340px auto;
+    background-position: 82% 20%;
+    animation: BnFDragon 22s ease-in-out infinite alternate;
+    opacity: 0.88;
+  }
+
+  .bnf-layer-clouds {
+    background-image: url('assets/bnf/nuages.png'), url('https://fantasy.bnf.fr/themes/custom/fantasy/images/home/nuages.png');
+    background-size: cover;
+    background-position: center bottom;
+    opacity: 0.6;
+    mix-blend-mode: screen;
+    animation: BnFClouds 65s linear infinite alternate;
+  }
+
+  .bnf-layer-birds {
+    background-image: url('assets/bnf/oiseaux.png'), url('https://fantasy.bnf.fr/themes/custom/fantasy/images/home/oiseaux.png');
+    background-size: 280px auto;
+    background-position: 20% 24%;
+    animation: BnFBirds 42s linear infinite;
+    opacity: 0.8;
+  }
+
+  .bnf-layer-wood {
+    background-image: url('assets/bnf/foret.png'), url('https://fantasy.bnf.fr/themes/custom/fantasy/images/home/foret.png');
+    background-size: cover;
+    background-position: center bottom;
+    opacity: 0.92;
+    animation: BnFWood 20s cubic-bezier(0.25, 0.1, 0.67, 0.99) infinite alternate;
+  }
+
+  .bnf-layer-main {
+    background-image: url('assets/bnf/plan-principal.png'), url('https://fantasy.bnf.fr/themes/custom/fantasy/images/home/plan-principal.png');
+    background-size: cover;
+    background-position: center bottom;
+    opacity: 0.86;
+  }
+
+  .bnf-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 50%, transparent 35%, rgba(13, 8, 29, 0.75) 95%),
+      linear-gradient(180deg, rgba(13, 8, 29, 0.45) 0%, transparent 25%, rgba(13, 8, 29, 0.9) 100%);
+    z-index: 6;
+  }
+
+  .bnf-hero-content {
+    position: relative;
+    z-index: 10;
+    padding: 30px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    transition: transform 0.18s ease-out;
+    animation: BnFContentIn 1.2s cubic-bezier(0.25, 0.1, 0.67, 0.99) forwards;
+  }
+
+  .bnf-logo-wrap {
+    margin-bottom: 8px;
+    filter: drop-shadow(0 12px 32px rgba(0,0,0,0.96)) drop-shadow(0 0 26px rgba(241,209,128,0.42));
+    transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.67, 0.99);
+  }
+  .bnf-logo-wrap:hover {
+    transform: scale(1.025);
+  }
+
+  /* BnF Interlocking Diamond Separators (.separator & .separator-elt) */
+  .bnf-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px auto 20px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    user-select: none;
+  }
+  .bnf-separator-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(241,209,128,0.3) 30%, rgba(241,209,128,0.9) 100%);
+    position: relative;
+    transform-origin: right center;
+    animation: BnFSeparatorLine 1.2s cubic-bezier(0.25, 0.1, 0.67, 0.99) forwards;
+  }
+  .bnf-separator-line.right {
+    background: linear-gradient(90deg, rgba(241,209,128,0.9) 0%, rgba(241,209,128,0.3) 70%, transparent 100%);
+    transform-origin: left center;
+  }
+  .bnf-diamonds {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 40px;
+    height: 22px;
+    margin: 0 14px;
+  }
+  .bnf-diamond-1, .bnf-diamond-2 {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border: 1.5px solid #f1d180;
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px rgba(241, 209, 128, 0.5);
+    animation: BnFSeparatorElt 1.1s cubic-bezier(0.7, -0.01, 0.44, 1.07) forwards;
+    transition: all 0.3s ease;
+  }
+  .bnf-diamond-1 {
+    left: 6px;
+    border-color: #f1d180;
+  }
+  .bnf-diamond-2 {
+    right: 6px;
+    border-color: #ff9d3b;
+  }
+  .bnf-separator:hover .bnf-diamond-1 {
+    transform: rotate(45deg) scale(1.18) translateX(-2px);
+    box-shadow: 0 0 18px rgba(241, 209, 128, 0.85);
+  }
+  .bnf-separator:hover .bnf-diamond-2 {
+    transform: rotate(45deg) scale(1.18) translateX(2px);
+    box-shadow: 0 0 18px rgba(255, 157, 59, 0.85);
+  }
+
+  /* BnF Chapter Transition Curtain */
+  .bnf-chapter-curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(circle at center, rgba(37, 23, 69, 0.94) 0%, rgba(13, 8, 29, 0.98) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    transition: opacity 0.24s cubic-bezier(0.25, 0.1, 0.67, 0.99);
+  }
+  .bnf-chapter-curtain.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .bnf-curtain-emblem {
+    position: relative;
+    width: 44px;
+    height: 44px;
+  }
+  .bnf-curtain-emblem .bnf-diamond-1,
+  .bnf-curtain-emblem .bnf-diamond-2 {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #f1d180;
+    box-shadow: 0 0 20px rgba(241, 209, 128, 0.75);
+    animation: BnFElemSpin 1.4s ease-in-out infinite alternate;
+  }
+  .bnf-curtain-emblem .bnf-diamond-1 { left: 4px; border-color: #f1d180; }
+  .bnf-curtain-emblem .bnf-diamond-2 { right: 4px; border-color: #ff9d3b; }
+
+  @keyframes BnFElemSpin {
+    0% { transform: rotate(45deg) scale(0.9); }
+    100% { transform: rotate(135deg) scale(1.15); }
+  }
+  @keyframes BnFDragon {
+    0% { transform: translate3d(-15px, 0, 0) scale(0.98); opacity: 0.65; }
+    50% { transform: translate3d(20px, -15px, 0) scale(1.02); opacity: 0.95; }
+    100% { transform: translate3d(-15px, 0, 0) scale(0.98); opacity: 0.65; }
+  }
+  @keyframes BnFClouds {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-80px, 30px, 0); }
+  }
+  @keyframes BnFBirds {
+    0% { transform: translate3d(-60px, 15px, 0); opacity: 0; }
+    20% { opacity: 0.8; }
+    80% { opacity: 0.8; }
+    100% { transform: translate3d(120px, -35px, 0); opacity: 0; }
+  }
+  @keyframes BnFWood {
+    0% { transform: scale(1) translateZ(0); }
+    100% { transform: scale(1.04) translateZ(0); }
+  }
+  @keyframes BnFContentIn {
+    0% { opacity: 0; transform: translateY(24px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes BnFSeparatorLine {
+    0% { transform: scaleX(0); opacity: 0; }
+    100% { transform: scaleX(1); opacity: 1; }
+  }
+  @keyframes BnFSeparatorElt {
+    0% { transform: scale(0) rotate(45deg); opacity: 0; }
+    100% { transform: scale(1) rotate(45deg); opacity: 1; }
+  }
+  @keyframes BnFCardFadeIn {
+    0% { opacity: 0; transform: translateY(18px) scale(0.985); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
 </style>
 </head>
 <body>
+
+<!-- BnF Chapter Curtain Cinematic Screen Transition -->
+<div id="bnf-chapter-curtain" class="bnf-chapter-curtain">
+  <div class="bnf-curtain-emblem">
+    <div class="bnf-diamond-1"></div>
+    <div class="bnf-diamond-2"></div>
+  </div>
+  <div style="font-family:'Frank Ruhl Libre','Cinzel',serif;font-size:14px;letter-spacing:4px;color:#f1d180;text-transform:uppercase;">
+    ✦ Massive Darkness 2 ✦
+  </div>
+</div>
+
 
 <!-- ════════════════════════════════════════════════════════════════
      BARRA DE NAVEGAÇÃO SUPERIOR ESTILO MORHEN CON (bm_11, bm_14, bm_15)
@@ -1399,10 +1688,31 @@
      TELA 1 — HUB DE CAMPANHAS & NOVA CAMPANHA
 ══════════════════════════════════════════ -->
 <div id="screen-intro" class="screen active">
-  <div class="site-header">
-    <img id="header-logo" src="logo-registro.png" alt="Registro de Campanha" class="logo-img">
-    <div class="subtitle">Massive Darkness 2 • Heróis, Níveis, Mapas de Jogo &amp; Recompensas</div>
-    <div class="ornament">✦ ❖ ✦</div>
+  <!-- BnF Multi-Layer Parallax Fantasy Scene Stage -->
+  <div class="bnf-hero-stage" id="bnfHeroStage">
+    <div class="bnf-layer bnf-layer-bg" data-depth="0.06"></div>
+    <div class="bnf-layer bnf-layer-dragon" data-depth="0.14"></div>
+    <div class="bnf-layer bnf-layer-clouds" data-depth="0.22"></div>
+    <div class="bnf-layer bnf-layer-birds" data-depth="0.32"></div>
+    <div class="bnf-layer bnf-layer-wood" data-depth="0.48"></div>
+    <div class="bnf-layer bnf-layer-main" data-depth="0.65"></div>
+    <div class="bnf-vignette"></div>
+    <div class="bnf-hero-content">
+      <div class="bnf-logo-wrap">
+        <img id="header-logo" src="logo-registro.png" alt="Registro de Campanha" class="logo-img">
+      </div>
+      <div class="subtitle" style="font-family:'Frank Ruhl Libre','Cinzel',serif;font-size:13.5px;letter-spacing:4px;color:var(--gold-light);text-transform:uppercase;margin-top:8px;">
+        Massive Darkness 2 • Heróis, Níveis, Mapas de Jogo &amp; Recompensas
+      </div>
+      <div class="bnf-separator">
+        <span class="bnf-separator-line"></span>
+        <span class="bnf-diamonds">
+          <span class="bnf-diamond-1"></span>
+          <span class="bnf-diamond-2"></span>
+        </span>
+        <span class="bnf-separator-line right"></span>
+      </div>
+    </div>
   </div>
 
   <div class="morhen-sword-banner">
@@ -2820,7 +3130,62 @@ function getMaxLevel() {
 }
 
 // ── Inicialização da Página ─────────────────────────────────────
+
+// ── BnF Fantasy Interactive Multi-Layer Parallax ─────────────────
+function initBnfParallax() {
+  const stage = document.getElementById('bnfHeroStage');
+  if (!stage) return;
+  const layers = stage.querySelectorAll('.bnf-layer');
+  const content = stage.querySelector('.bnf-hero-content');
+
+  let targetX = 0, targetY = 0;
+  let currentX = 0, currentY = 0;
+  let isMoving = false;
+
+  stage.addEventListener('mousemove', (e) => {
+    const rect = stage.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    targetX = x * 2;
+    targetY = y * 2;
+    if (!isMoving) {
+      isMoving = true;
+      requestAnimationFrame(updateParallax);
+    }
+  });
+
+  stage.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+  });
+
+  function updateParallax() {
+    currentX += (targetX - currentX) * 0.08;
+    currentY += (targetY - currentY) * 0.08;
+
+    layers.forEach(layer => {
+      const depth = parseFloat(layer.getAttribute('data-depth') || '0.2');
+      const moveX = (currentX * depth * 35).toFixed(2);
+      const moveY = (currentY * depth * 22).toFixed(2);
+      layer.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+    });
+
+    if (content) {
+      const contentMoveX = (currentX * 12).toFixed(2);
+      const contentMoveY = (currentY * 8).toFixed(2);
+      content.style.transform = `translate3d(${contentMoveX}px, ${contentMoveY}px, 0)`;
+    }
+
+    if (Math.abs(targetX - currentX) > 0.001 || Math.abs(targetY - currentY) > 0.001) {
+      requestAnimationFrame(updateParallax);
+    } else {
+      isMoving = false;
+    }
+  }
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
+  initBnfParallax();
   document.getElementById('header-logo').src = LOGO_DATA;
   document.querySelectorAll('.header-logo-clone').forEach(el => { el.src = LOGO_DATA; });
 
@@ -3507,11 +3872,34 @@ function startCampaignDashboard() {
 // DASHBOARD PRINCIPAL: ABAS E RENDERIZAÇÃO COMPLETA
 // ════════════════════════════════════════════════════════════════
 function switchDashTab(tabName) {
-  ['heroes', 'missions', 'city', 'cards'].forEach(t => {
-    document.getElementById(`tabbtn-${t}`)?.classList.toggle('active', t === tabName);
-    document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tabName);
-  });
-  renderDashboardAll();
+  const curtain = document.getElementById('bnf-chapter-curtain');
+  if (curtain) {
+    curtain.classList.add('active');
+    setTimeout(() => {
+      ['heroes', 'missions', 'city', 'cards'].forEach(t => {
+        document.getElementById(`tabbtn-${t}`)?.classList.toggle('active', t === tabName);
+        document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tabName);
+      });
+      renderDashboardAll();
+      const activeTabEl = document.getElementById(`tab-${tabName}`);
+      if (activeTabEl) {
+        activeTabEl.querySelectorAll('.card').forEach((card, idx) => {
+          card.style.animation = 'none';
+          card.offsetHeight;
+          card.style.animation = `BnFCardFadeIn 0.42s cubic-bezier(0.25, 0.1, 0.67, 0.99) ${idx * 0.05}s both`;
+        });
+      }
+      setTimeout(() => {
+        curtain.classList.remove('active');
+      }, 90);
+    }, 110);
+  } else {
+    ['heroes', 'missions', 'city', 'cards'].forEach(t => {
+      document.getElementById(`tabbtn-${t}`)?.classList.toggle('active', t === tabName);
+      document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tabName);
+    });
+    renderDashboardAll();
+  }
 }
 
 function openHubFromDashboard() {
@@ -5780,9 +6168,30 @@ function clearLog() {
 }
 
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const curtain = document.getElementById('bnf-chapter-curtain');
+  if (curtain) {
+    curtain.classList.add('active');
+    setTimeout(() => {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) {
+        target.classList.add('active');
+        target.querySelectorAll('.card').forEach((card, idx) => {
+          card.style.animation = 'none';
+          card.offsetHeight;
+          card.style.animation = `BnFCardFadeIn 0.48s cubic-bezier(0.25, 0.1, 0.67, 0.99) ${idx * 0.06}s both`;
+        });
+      }
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      setTimeout(() => {
+        curtain.classList.remove('active');
+      }, 110);
+    }, 140);
+  } else {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id)?.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 
 function escapeHtml(str) {
