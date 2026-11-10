@@ -1004,21 +1004,26 @@
     margin: 0 auto;
   }
 
-  /* Hero Cards in Dashboard */
+  /* ================================================================
+     AROUNDA SAAS HERO CARDS & VITALS
+     ================================================================ */
   .heroes-dash-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 24px;
     margin-bottom: 24px;
+    width: 100%;
   }
 
   .hero-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    padding: 18px;
+    overflow: hidden;
     box-shadow: var(--shadow-card);
-    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s ease, transform 0.2s ease;
   }
 
   .hero-card:hover {
@@ -1027,154 +1032,200 @@
 
   .hero-card-top {
     display: flex;
-    gap: 14px;
     align-items: center;
-    margin-bottom: 14px;
-  }
-
-  .hero-card-top .hero-thumb {
-    width: 58px;
-    height: 58px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-subtle);
-    object-fit: cover;
-  }
-
-  .hero-player-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--mint);
-    line-height: 1.2;
-  }
-
-  .hero-class-tag {
-    font-size: 11px;
-    color: var(--sage);
-    font-weight: 600;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .level-badge {
-    padding: 2px 8px;
-    border-radius: var(--radius-xs);
-    background: var(--green-primary);
-    color: var(--mint);
-    font-size: 11px;
-    font-weight: 700;
-    display: inline-block;
-  }
-
-  .level-btn-strip {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 4px;
-    margin: 12px 0;
-  }
-
-  .lvl-num-btn {
-    padding: 6px 2px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    color: var(--gray-neutral);
-    font-family: var(--font-main);
-    font-size: 11px;
-    font-weight: 600;
-    border-radius: var(--radius-xs);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background: rgba(119, 146, 103, 0.14);
+    border: 1px solid var(--sage);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    text-align: center;
-    transition: all 0.15s ease;
+    flex-shrink: 0;
+    transition: background 0.2s, transform 0.15s;
   }
 
-  .lvl-num-btn:hover {
-    background: var(--bg-card-elevated);
-    color: var(--mint);
+  .level-badge:hover {
+    background: rgba(119, 146, 103, 0.25);
+    transform: scale(1.04);
   }
 
-  .lvl-num-btn.active {
-    background: var(--green-primary);
-    color: var(--mint);
-    border-color: var(--sage);
+  .level-badge .lbl {
+    font-size: 8.5px;
+    text-transform: uppercase;
+    color: var(--sage);
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    line-height: 1;
+  }
+
+  .level-badge .val {
+    font-size: 19px;
     font-weight: 800;
+    color: var(--mint);
+    line-height: 1.1;
+    margin-top: 1px;
   }
 
+  .hero-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hero-player-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--mint);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.2px;
+  }
+
+  .hero-class-tag {
+    font-size: 11.5px;
+    color: var(--sage);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .hero-top-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  /* Ficha de Arte do Herói (1051x750, 100% visível, enquadramento perfeito) */
+  .hero-img-wrap {
+    width: 100%;
+    background: #020202;
+    border-bottom: 1px solid var(--border-subtle);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1051 / 750;
+    max-height: 420px;
+  }
+
+  .hero-img-wrap.collapsed {
+    display: none !important;
+  }
+
+  .hero-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background: radial-gradient(circle, #0e1217 0%, #020202 100%);
+  }
+
+  .hero-card-body {
+    padding: 16px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Vitals: Vida Total (#B3576C) e Mana Total (#DEECE6 / #779267) */
   .hero-vitals-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin: 14px 0;
   }
 
   .vital-box {
-    padding: 10px 12px;
+    padding: 12px 14px;
     border-radius: var(--radius-sm);
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     text-align: center;
+    position: relative;
   }
 
-  .vital-box.hp-box {
-    border-color: rgba(179, 87, 108, 0.25);
+  .vital-box.hp {
+    border-color: rgba(179, 87, 108, 0.4);
+    background: linear-gradient(180deg, rgba(179, 87, 108, 0.12) 0%, rgba(8, 10, 13, 0.95) 100%);
   }
 
-  .vital-box.mp-box {
-    border-color: rgba(119, 146, 103, 0.25);
+  .vital-box.mp {
+    border-color: rgba(119, 146, 103, 0.4);
+    background: linear-gradient(180deg, rgba(119, 146, 103, 0.12) 0%, rgba(8, 10, 13, 0.95) 100%);
   }
 
-  .vital-title {
-    font-size: 10px;
+  .vital-lbl {
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
     text-transform: uppercase;
     margin-bottom: 2px;
   }
 
-  .hp-box .vital-title { color: var(--rose); }
-  .mp-box .vital-title { color: var(--sage); }
+  .vital-box.hp .vital-lbl {
+    color: var(--rose-accent);
+  }
+
+  .vital-box.mp .vital-lbl {
+    color: var(--mint);
+  }
 
   .vital-val {
-    font-size: 20px;
+    font-size: 30px;
     font-weight: 800;
-    color: var(--mint);
     line-height: 1.1;
+    margin: 2px 0 4px;
+  }
+
+  .vital-box.hp .vital-val {
+    color: var(--rose-accent);
+  }
+
+  .vital-box.mp .vital-val {
+    color: var(--mint);
   }
 
   .vital-sub {
-    font-size: 10px;
-    color: var(--gray-muted);
-    margin-top: 2px;
+    font-size: 11px;
+    color: var(--gray-neutral);
   }
 
-  .bar-track {
-    width: 100%;
-    height: 6px;
-    background: var(--bg-input);
-    border-radius: 9999px;
-    overflow: hidden;
-    margin-top: 6px;
+  .hero-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    color: var(--gray-neutral);
+    padding: 0 2px;
   }
 
-  .bar-fill {
-    height: 100%;
-    border-radius: 9999px;
-    transition: width 0.25s ease;
+  .hero-status-text strong {
+    color: var(--sage);
   }
-
-  .bar-fill.xp { background: var(--mint); }
-  .bar-fill.hp { background: var(--rose); }
-  .bar-fill.mp { background: var(--sage); }
 
   .hero-subbox {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm);
-    padding: 10px 12px;
-    margin-top: 10px;
+    padding: 12px 14px;
   }
 
   .hero-subbox-hdr {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .hero-subbox-title {
@@ -1185,22 +1236,137 @@
     letter-spacing: 0.5px;
   }
 
-  .item-chip-list, .skill-chip-list {
+  .hero-subbox-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--mint);
+  }
+
+  .hero-subbox-hint {
+    font-size: 11px;
+    color: var(--gray-neutral);
+    margin-top: 6px;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* Segmented Nível 1 a 10 */
+  .level-btn-strip {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .lvl-num-btn {
+    padding: 7px 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--gray-neutral);
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+  }
+
+  .lvl-num-btn:hover {
+    border-color: var(--border-hover);
+    color: var(--mint);
+    background: var(--bg-card-elevated);
+  }
+
+  .lvl-num-btn.active {
+    background: var(--green-primary);
+    border-color: var(--sage);
+    color: var(--mint);
+    box-shadow: 0 0 10px rgba(119, 146, 103, 0.35);
+  }
+
+  /* XP Track & Controls */
+  .bar-track {
+    width: 100%;
+    height: 7px;
+    background: #14181f;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .bar-fill.xp {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green-primary) 0%, var(--sage) 100%);
+    transition: width 0.3s ease;
+  }
+
+  .hero-xp-controls {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .hero-xp-input-wrap {
+    display: flex;
+    align-items: center;
     gap: 6px;
   }
 
-  .item-chip, .skill-chip {
-    padding: 6px 10px;
+  .hero-xp-input-wrap label {
+    font-size: 11px;
+    color: var(--gray-neutral);
+    margin: 0;
+  }
+
+  .hero-xp-input-wrap input {
+    width: 64px;
+    text-align: center;
+    padding: 5px;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--mint);
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xs);
+  }
+
+  .hero-xp-input-wrap span {
+    font-size: 11px;
+    color: var(--gray-neutral);
+  }
+
+  .btn-levelup {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px;
     font-size: 12px;
+    font-weight: 700;
+    background: var(--green-primary);
+    border-color: var(--sage);
+    color: var(--mint);
+    border-radius: var(--radius-xs);
+  }
+
+  /* Itens Equipados e Taverna */
+  .item-chip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+
+  .item-chip {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    padding: 7px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+    gap: 6px;
   }
 
   .item-rarity-dot {
@@ -1208,6 +1374,246 @@
     height: 8px;
     border-radius: 50%;
     display: inline-block;
+    flex-shrink: 0;
+  }
+  .item-rarity-dot.rar-Comum { background: #b0b0b0; }
+  .item-rarity-dot.rar-Raro { background: #2cb8d1; }
+  .item-rarity-dot.rar-Épico { background: #9b4dca; }
+  .item-rarity-dot.rar-Lendário { background: #e8c96b; }
+  .item-rarity-dot.rar-Campanha { background: var(--mint); }
+
+  .quick-add-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .quick-add-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 10px;
+    font-size: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+    color: var(--text-primary);
+  }
+
+  .quick-add-row select {
+    width: 96px;
+    padding: 6px 4px;
+    font-size: 11px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+    color: var(--text-primary);
+  }
+
+  /* Espólios */
+  .spoils-subbox {
+    background: rgba(119, 146, 103, 0.08);
+    border-color: rgba(119, 146, 103, 0.25);
+  }
+
+  .spoils-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .spoils-label-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .spoils-icon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+  }
+
+  .spoils-desc {
+    font-size: 11px;
+    color: var(--gray-neutral);
+  }
+
+  .spoils-stepper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .spoils-stepper input {
+    width: 62px;
+    text-align: center;
+    padding: 5px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--mint);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+  }
+
+  /* Bestiary Showcase Roster and Pedestal */
+  .bestiary-showcase-frame {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .bestiary-top-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .bestiary-top-banner h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--mint);
+  }
+
+  .bestiary-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr 340px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .bestiary-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .bestiary-roster-list {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+
+  .bestiary-roster-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .bestiary-roster-item:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-card-elevated);
+  }
+
+  .bestiary-roster-item.active {
+    border-color: var(--sage);
+    background: rgba(119, 146, 103, 0.12);
+  }
+
+  .bestiary-roster-thumb {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-xs);
+    object-fit: cover;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+  }
+
+  .bestiary-roster-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--mint);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bestiary-roster-sub {
+    font-size: 11px;
+    color: var(--gray-neutral);
+  }
+
+  .bestiary-pedestal-stage {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bestiary-pedestal-img-wrap {
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 1051 / 750;
+    background: #020202;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  .bestiary-pedestal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .bestiary-nav-arrows {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .bestiary-arrow-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-xs);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--mint);
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .bestiary-arrow-btn:hover {
+    border-color: var(--sage);
+    background: var(--bg-card-elevated);
   }
 
   /* Bestiary Showcase */
@@ -4229,7 +4635,7 @@ function renderBestiaryShowcase() {
   const box = document.getElementById('bestiary-showcase-container');
   if (!box) return;
   if (!state.players || state.players.length === 0) {
-    box.innerHTML = '<div style="text-align:center;padding:32px;color:var(--tdp-text-dim);font-family:Cinzel,serif;">Nenhum herói registrado na campanha atual.</div>';
+    box.innerHTML = '<div style="text-align:center;padding:32px;color:var(--gray-neutral);font-family:var(--font-main);">Nenhum herói registrado na campanha atual.</div>';
     return;
   }
   if (selectedBestiaryHeroIdx >= state.players.length) selectedBestiaryHeroIdx = 0;
@@ -4258,13 +4664,13 @@ function renderBestiaryShowcase() {
       <div class="bestiary-roster-item ${i === idx ? 'active' : ''}" onclick="selectBestiaryHero(${i})">
         ${pl.heroPhoto
           ? `<img class="bestiary-roster-thumb" src="${pl.heroPhoto}" alt="${escapeHtml(pl.heroName)}">`
-          : `<div class="bestiary-roster-thumb" style="display:flex;align-items:center;justify-content:center;font-size:12px;font-family:Cinzel,serif;color:var(--tdp-gold);">H${i + 1}</div>`
+          : `<div class="bestiary-roster-thumb" style="display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--mint);">H${i + 1}</div>`
         }
         <div style="min-width:0;flex:1;">
           <div class="bestiary-roster-name">${escapeHtml(pl.heroName || `Herói ${i + 1}`)}</div>
           <div class="bestiary-roster-sub">${cObj ? escapeHtml(cObj.name) : ''} • Nível ${pl.level}</div>
         </div>
-        <span style="color:var(--tdp-gold);font-family:Cinzel,serif;font-size:13px;font-weight:700;">#${i + 1}</span>
+        <span style="color:var(--mint);font-size:12px;font-weight:700;">#${i + 1}</span>
       </div>
     `;
   }).join('');
@@ -4285,7 +4691,7 @@ function renderBestiaryShowcase() {
       <div class="bestiary-top-banner">
         <h3>Ficha da Companhia — ${escapeHtml(p.heroName || `Herói ${idx + 1}`)} (${idx + 1}/${state.players.length})</h3>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-gold btn-xs" onclick="openChangeHeroModal(${idx})">Trocar Herói</button>
+          <button class="btn btn-outline btn-xs" onclick="openChangeHeroModal(${idx})">Trocar Herói</button>
           <button class="btn btn-dark btn-xs" onclick="openLevelTableReferenceModal()">Tabela de Níveis (1–10)</button>
         </div>
       </div>
@@ -4293,7 +4699,7 @@ function renderBestiaryShowcase() {
       <div class="bestiary-grid">
         <!-- Coluna 1: Lista da Companhia -->
         <div class="bestiary-roster-list">
-          <div style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:700;">
+          <div style="font-size:11px;color:var(--sage);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px;font-weight:700;">
             Heróis da Partida (${state.players.length})
           </div>
           ${rosterHtml}
@@ -4301,11 +4707,11 @@ function renderBestiaryShowcase() {
 
         <!-- Coluna 2: Pedestal Central com Arte do Herói -->
         <div class="bestiary-pedestal-stage">
-          <div style="text-align:center;margin-bottom:6px;">
-            <div style="font-family:'IM Fell English',serif;font-size:24px;color:var(--tdp-gold-bright);letter-spacing:1px;line-height:1.15;">
+          <div style="text-align:center;margin-bottom:8px;">
+            <div style="font-size:22px;font-weight:700;color:var(--mint);line-height:1.2;">
               ${escapeHtml(p.heroName || `Herói ${idx + 1}`)}
             </div>
-            <div style="font-family:Cinzel,serif;font-size:11px;color:var(--tdp-text-dim);margin-top:4px;letter-spacing:1px;text-transform:uppercase;">
+            <div style="font-size:12px;color:var(--sage);margin-top:3px;font-weight:600;">
               ${cls ? escapeHtml(cls.name) : ''} • Nível ${p.level}
             </div>
           </div>
@@ -4313,76 +4719,76 @@ function renderBestiaryShowcase() {
           <div class="bestiary-pedestal-img-wrap">
             ${p.heroPhoto
               ? `<img class="bestiary-pedestal-img" src="${p.heroPhoto}" alt="${escapeHtml(p.heroName)}">`
-              : `<div style="height:200px;display:flex;align-items:center;justify-content:center;font-size:32px;font-family:Cinzel,serif;color:var(--tdp-gold);">MD2</div>`
+              : `<div style="height:200px;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--mint);font-weight:700;">MD2</div>`
             }
           </div>
 
           <div class="bestiary-nav-arrows">
             <button class="bestiary-arrow-btn" onclick="selectBestiaryHero(${idx - 1})" title="Herói Anterior"></button>
-            <span style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-text-dim);letter-spacing:1px;text-transform:uppercase;">Herói ${idx + 1} de ${state.players.length}</span>
+            <span style="font-size:11px;color:var(--gray-neutral);letter-spacing:0.5px;">Herói ${idx + 1} de ${state.players.length}</span>
             <button class="bestiary-arrow-btn" onclick="selectBestiaryHero(${idx + 1})" title="Próximo Herói"></button>
           </div>
         </div>
 
         <!-- Coluna 3: Ficha Pós-Partida Unificada -->
-        <div style="display:flex;flex-direction:column;gap:12px;background:#111419;border:1px solid var(--tdp-border);padding:16px;border-radius:3px;">
+        <div style="display:flex;flex-direction:column;gap:12px;background:var(--bg-card);border:1px solid var(--border-subtle);padding:18px;border-radius:var(--radius-md);">
           <div>
-            <div style="border-bottom:1px solid var(--tdp-border-subtle);padding-bottom:8px;font-family:'IM Fell English','Cinzel',serif;font-size:16px;color:var(--tdp-gold-bright);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">
-              Atributos &amp; Registro Pós-Partida
+            <div style="border-bottom:1px solid var(--border-subtle);padding-bottom:10px;font-size:14px;font-weight:700;color:var(--mint);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">
+              Atributos & Registro Pós-Partida
             </div>
 
             <!-- Vitals: Vida e Mana Totais -->
             <div class="hero-vitals-grid" style="margin-bottom:12px;">
-              <div class="vital-box hp-vital">
-                <div class="vital-title" style="color:#e55353;">Vida Total (Nv.${p.level})</div>
-                <div class="vital-val" style="color:#e55353;">${p.hpMax}</div>
+              <div class="vital-box hp">
+                <div class="vital-lbl">Vida Total (Nv. ${p.level})</div>
+                <div class="vital-val">${p.hpMax}</div>
                 <div class="vital-sub">Base ${p.hpBase} + Nível (+${lvlInfo.cumHp || 0})</div>
               </div>
-              <div class="vital-box mp-vital">
-                <div class="vital-title" style="color:#6b8afd;">Mana Total (Nv.${p.level})</div>
-                <div class="vital-val" style="color:#6b8afd;">${p.mpMax}</div>
+              <div class="vital-box mp">
+                <div class="vital-lbl">Mana Total (Nv. ${p.level})</div>
+                <div class="vital-val">${p.mpMax}</div>
                 <div class="vital-sub">Base ${p.mpBase} + Nível (+${lvlInfo.cumMp || 0})</div>
               </div>
             </div>
 
             <!-- Nível Alcançado -->
             <div style="margin-bottom:12px;">
-              <label style="font-family:Cinzel,serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Nível Alcançado (1 a ${maxLvl})</label>
+              <label style="font-size:11px;color:var(--sage);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:6px;">Nível Alcançado (1 a ${maxLvl})</label>
               <div class="level-btn-strip">${bestiaryLvlBtns}</div>
             </div>
 
             <!-- XP Restante e Espólios -->
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
               <div class="hero-subbox">
-                <label style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px;">XP Restante</label>
+                <label style="font-size:10.5px;color:var(--sage);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">XP Restante</label>
                 <div style="display:flex;align-items:center;gap:6px;">
-                  <input type="number" value="${p.xp}" min="0" max="999" style="text-align:center;font-weight:700;color:var(--tdp-gold);background:#0b0d11;border:1px solid var(--tdp-border);" onchange="setHeroXPDirect(${idx}, this.value)">
-                  <span style="font-size:11.5px;color:var(--tdp-text-dim);white-space:nowrap;">${xpNeeded ? `/ ${xpNeeded}` : 'Máx'}</span>
+                  <input type="number" value="${p.xp}" min="0" max="999" style="width:65px;text-align:center;font-weight:700;color:var(--mint);background:var(--bg-card);border:1px solid var(--border-subtle);padding:4px;border-radius:var(--radius-xs);" onchange="setHeroXPDirect(${idx}, this.value)">
+                  <span style="font-size:11.5px;color:var(--gray-neutral);white-space:nowrap;">${xpNeeded ? `/ ${xpNeeded}` : 'Máx'}</span>
                 </div>
               </div>
               <div class="hero-subbox">
-                <label style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px;">Espólios</label>
+                <label style="font-size:10.5px;color:var(--sage);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Espólios</label>
                 <div style="display:flex;align-items:center;gap:6px;">
-                  <input type="number" value="${p.spoils || 0}" min="0" max="999" style="text-align:center;font-weight:700;color:var(--tdp-gold);background:#0b0d11;border:1px solid var(--tdp-border);" onchange="setHeroSpoilsDirect(${idx}, this.value)">
+                  <input type="number" value="${p.spoils || 0}" min="0" max="999" style="width:60px;text-align:center;font-weight:700;color:var(--mint);background:var(--bg-card);border:1px solid var(--border-subtle);padding:4px;border-radius:var(--radius-xs);" onchange="setHeroSpoilsDirect(${idx}, this.value)">
                   <button class="btn btn-dark btn-xs" onclick="changeSpoils(${idx}, -1)">-1</button>
-                  <button class="btn btn-gold btn-xs" onclick="changeSpoils(${idx}, 1)">+1</button>
+                  <button class="btn btn-primary btn-xs" onclick="changeSpoils(${idx}, 1)">+1</button>
                 </div>
               </div>
             </div>
 
             <!-- Poder de Conjunto -->
             <div style="margin-bottom:10px;">
-              <label style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px;">Poder de Conjunto (Ruína Sombria)</label>
-              <select style="width:100%;font-size:11.5px;padding:5px 8px;background:#0b0d11;border:1px solid var(--tdp-border);color:var(--tdp-text);" onchange="changeHeroSetPower(${idx}, this.value)">
+              <label style="font-size:10.5px;color:var(--sage);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Poder de Conjunto (Ruína Sombria)</label>
+              <select style="width:100%;font-size:12px;padding:6px 8px;background:var(--bg-card);border:1px solid var(--border-subtle);color:var(--text-primary);border-radius:var(--radius-xs);" onchange="changeHeroSetPower(${idx}, this.value)">
                 ${setOptionsHtml}
               </select>
             </div>
           </div>
 
           <!-- Rodapé de Itens e Taverna -->
-          <div style="font-size:12px;color:var(--tdp-text-dim);border-top:1px solid var(--tdp-border-subtle);padding-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-            <span>Itens em uso: <strong style="color:var(--tdp-gold)">${(p.inventory || []).length}/7</strong> • Taverna: <strong style="color:var(--tdp-gold)">${(p.tavern || []).length}/2</strong></span>
-            <button class="btn btn-gold btn-xs" onclick="openAddItemModal(${idx})">Gerenciar Itens &amp; Taverna</button>
+          <div style="font-size:12px;color:var(--gray-neutral);border-top:1px solid var(--border-subtle);padding-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+            <span>Equipados: <strong style="color:var(--mint)">${(p.inventory || []).length}/7</strong> • Taverna: <strong style="color:var(--mint)">${(p.tavern || []).length}/2</strong></span>
+            <button class="btn btn-outline btn-xs" onclick="openAddItemModal(${idx})">Gerenciar Itens & Taverna</button>
           </div>
         </div>
       </div>
@@ -4392,280 +4798,224 @@ function renderBestiaryShowcase() {
 
 function renderHeroesTab() {
   renderBestiaryShowcase();
+  const grid = document.getElementById('heroes-dash-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const lvlTable = getLevelTable();
+  const maxLvl = getMaxLevel();
+
+  state.players.forEach((p, idx) => {
+    const cls = CLASSES_LIST.find(c => c.id === p.classId);
+    const lvlInfo = lvlTable[p.level] || { xpToNext: null, cumHp: 0, cumMp: 0, catAllowed: 'I', note: '' };
+    const xpNeeded = lvlInfo.xpToNext;
+
+    // Cálculo determinístico de Vida Total e Mana Total pelo Nível atual
+    const hpBase = typeof p.hpBase === 'number' && p.hpBase > 0 ? p.hpBase : (cls ? cls.hpSug : 5);
+    const mpBase = typeof p.mpBase === 'number' && p.mpBase >= 0 ? p.mpBase : (cls ? cls.mpSug : 3);
+    p.hpBase = hpBase;
+    p.mpBase = mpBase;
+    p.hpMax = hpBase + (lvlInfo.cumHp || 0);
+    p.mpMax = mpBase + (lvlInfo.cumMp || 0);
+    p.hp = p.hpMax;
+    p.mp = p.mpMax;
+
+    const xpPct = xpNeeded ? Math.max(0, Math.min(100, (p.xp / xpNeeded) * 100)) : 100;
+
+    // Botões de Nível 1 a 10
+    let levelButtonsHtml = '';
+    for (let lv = 1; lv <= maxLvl; lv++) {
+      const lvData = lvlTable[lv] || {};
+      const activeCls = lv === p.level ? 'active' : '';
+      levelButtonsHtml += `
+        <button class="lvl-num-btn ${activeCls}" onclick="setHeroLevelDirect(${idx}, ${lv})" title="Nível ${lv}: +${lvData.cumHp || 0} Vida / +${lvData.cumMp || 0} Mana (${lvData.note || ''})">
+          ${lv}
+        </button>`;
+    }
+
+    // Itens Equipados (até 7) + Taverna (até 2)
+    const invCount = (p.inventory || []).length;
+    const tavCount = (p.tavern || []).length;
+    const invHtml = invCount === 0
+      ? `<div style="font-size:12px;color:var(--gray-neutral);font-style:italic;padding:4px 0;">Nenhum item equipado registrado. Digite abaixo ou clique em "+ Detalhado".</div>`
+      : (p.inventory || []).map((it, iIdx) => `
+        <div class="item-chip">
+          <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+            <span class="item-rarity-dot rar-${it.rarity || 'Comum'}"></span>
+            <strong style="color:var(--mint);font-size:12px;">${escapeHtml(it.name)}</strong>
+            <span style="font-size:11px;color:var(--gray-neutral);">(${escapeHtml(it.slot || it.rarity || 'Item')})</span>
+          </div>
+          <div style="display:flex;gap:4px;flex-shrink:0;">
+            <button class="btn btn-dark btn-xs" onclick="moveItemToTavern(${idx}, ${iIdx})" title="Guardar na Taverna (máx 2)">Taverna</button>
+            <button class="btn btn-danger btn-xs" onclick="removeHeroItem(${idx}, ${iIdx}, 'inventory')" title="Remover Item">Remover</button>
+          </div>
+        </div>
+      `).join('');
+
+    const card = document.createElement('div');
+    card.className = 'hero-card';
+    card.id = `hcard-${idx}`;
+
+    card.innerHTML = `
+      <!-- 1. SELEÇÃO E TOPO DO HERÓI -->
+      <div class="hero-card-top">
+        <div class="level-badge" onclick="openLevelTableReferenceModal()" title="Ver Tabela Oficial de Níveis (1 a 10)">
+          <span class="lbl">Nível</span>
+          <span class="val">${p.level}</span>
+        </div>
+        <div class="hero-info">
+          <div style="font-size:10px;color:var(--gray-neutral);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Herói #${idx + 1}</div>
+          <div class="hero-player-name">${escapeHtml(p.heroName || p.name || `Herói ${idx + 1}`)}</div>
+          <div class="hero-class-tag">${cls ? escapeHtml(cls.name) : 'Sem Classe'} ${p.expName ? '• ' + escapeHtml(p.expName) : ''}</div>
+        </div>
+        <div class="hero-top-actions">
+          <button class="btn btn-outline btn-xs" onclick="openChangeHeroModal(${idx})" title="Trocar por qualquer um dos 147 heróis do banco">
+            Trocar Herói
+          </button>
+          ${p.heroPhoto ? `
+            <button class="btn btn-dark btn-xs" onclick="toggleHeroArt(${idx})" title="Ocultar ou Exibir Imagem da Carta">
+              ${p.artCollapsed ? 'Exibir Ficha' : 'Ocultar Ficha'}
+            </button>
+          ` : ''}
+        </div>
+      </div>
+
+      <!-- FICHA DE ARTE DO HERÓI (Proporção 1051x750, 100% visível, sem cortes) -->
+      ${p.heroPhoto ? `
+        <div class="hero-img-wrap ${p.artCollapsed ? 'collapsed' : ''}" id="hero-art-${idx}">
+          <img src="${p.heroPhoto}" alt="${escapeHtml(p.heroName)}" loading="lazy">
+        </div>
+      ` : ''}
+
+      <div class="hero-card-body">
+        <!-- VIDA TOTAL E MANA TOTAL -->
+        <div class="hero-vitals-grid">
+          <div class="vital-box hp">
+            <div class="vital-lbl">Vida Total (Nv. ${p.level})</div>
+            <div class="vital-val">${p.hpMax}</div>
+            <div class="vital-sub">Base Nv.1: <strong>${p.hpBase}</strong> + Nível: <strong>+${lvlInfo.cumHp || 0}</strong></div>
+          </div>
+          <div class="vital-box mp">
+            <div class="vital-lbl">Mana Total (Nv. ${p.level})</div>
+            <div class="vital-val">${p.mpMax}</div>
+            <div class="vital-sub">Base Nv.1: <strong>${p.mpBase}</strong> + Nível: <strong>+${lvlInfo.cumMp || 0}</strong></div>
+          </div>
+        </div>
+
+        <div class="hero-status-row">
+          <span class="hero-status-text">
+            <strong>Status Nv. ${p.level}:</strong> ${escapeHtml(lvlInfo.note || 'Talentos padrão')}
+          </span>
+          <button class="btn btn-dark btn-xs" onclick="openEditBaseStatsModal(${idx})" title="Ajustar Vida/Mana Base de Nível 1">
+            Editar Base
+          </button>
+        </div>
+
+        <!-- 2. NÍVEL ALCANÇADO (1 A 10) -->
+        <div class="hero-subbox">
+          <div class="hero-subbox-hdr">
+            <span class="hero-subbox-title">2. Nível Alcançado (1 a ${maxLvl})</span>
+            <span class="hero-subbox-badge">Libera Cat. ${lvlInfo.catAllowed}</span>
+          </div>
+          <div class="level-btn-strip">
+            ${levelButtonsHtml}
+          </div>
+          <div class="hero-subbox-hint">
+            Clique no Nível alcançado ao final da partida — Vida e Mana atualizam automaticamente.
+          </div>
+        </div>
+
+        <!-- 3. QUANTO DE XP FICOU -->
+        <div class="hero-subbox">
+          <div class="hero-subbox-hdr">
+            <span class="hero-subbox-title">3. XP Acumulado</span>
+            <span class="hero-subbox-badge">
+              ${xpNeeded ? `Próx. Nível (${p.level} → ${p.level + 1}): ${xpNeeded} XP` : `Nível Máximo (${maxLvl})`}
+            </span>
+          </div>
+          <div class="bar-track" style="margin-bottom:8px;">
+            <div class="bar-fill xp" style="width:${xpPct}%"></div>
+          </div>
+          <div class="hero-xp-controls">
+            <div class="hero-xp-input-wrap">
+              <label>XP Restante:</label>
+              <input type="number" value="${p.xp}" min="0" max="999" onchange="setHeroXPDirect(${idx}, this.value)">
+              <span>${xpNeeded ? `/ ${xpNeeded} XP` : 'XP'}</span>
+            </div>
+            <div style="display:flex;gap:4px;">
+              <button class="btn btn-dark btn-xs" onclick="adjustHeroXP(${idx}, -1)">-1</button>
+              <button class="btn btn-teal btn-xs" onclick="adjustHeroXP(${idx}, 1)">+1</button>
+              <button class="btn btn-teal btn-xs" onclick="adjustHeroXP(${idx}, 5)">+5</button>
+              <button class="btn btn-dark btn-xs" onclick="setHeroXPDirect(${idx}, 0)" title="Zerar XP">0</button>
+            </div>
+          </div>
+          ${xpNeeded && p.xp >= xpNeeded ? `
+            <div style="margin-top:8px;">
+              <button class="btn btn-primary btn-xs btn-levelup" onclick="spendXPToLevelUp(${idx})">
+                XP Suficiente! Subir para Nível ${p.level + 1} (Descontar ${xpNeeded} XP)
+              </button>
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- 4. QUAIS ITENS ESTÁ USANDO -->
+        <div class="hero-subbox">
+          <div class="hero-subbox-hdr">
+            <span class="hero-subbox-title">4. Equipamentos (${invCount}/7) • Taverna (${tavCount}/2)</span>
+            <button class="btn btn-dark btn-xs" onclick="openAddItemModal(${idx})">+ Detalhado</button>
+          </div>
+          <div class="item-chip-list">${invHtml}</div>
+          <div class="quick-add-row">
+            <input type="text" id="quick-item-name-${idx}" placeholder="Adicionar item rápido..." onkeydown="if(event.key==='Enter')quickAddEquippedItem(${idx})">
+            <select id="quick-item-rar-${idx}">
+              <option value="Comum">Comum</option>
+              <option value="Raro">Raro</option>
+              <option value="Épico">Épico</option>
+              <option value="Lendário">Lendário</option>
+              <option value="Campanha">Campanha</option>
+            </select>
+            <button class="btn btn-outline btn-xs" onclick="quickAddEquippedItem(${idx})">+ Item</button>
+          </div>
+          ${tavCount > 0 ? `
+            <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border-subtle);">
+              <div style="font-size:10px;font-weight:700;color:var(--sage);text-transform:uppercase;margin-bottom:6px;">Guardados na Taverna (${tavCount}/2):</div>
+              ${(p.tavern || []).map((it, tIdx) => `
+                <div class="item-chip" style="opacity:0.9;">
+                  <span style="font-size:12px;color:var(--mint);"><strong>${escapeHtml(it.name)}</strong> (${escapeHtml(it.rarity)})</span>
+                  <div style="display:flex;gap:4px;">
+                    <button class="btn btn-teal btn-xs" onclick="moveItemFromTavern(${idx}, ${tIdx})" title="Equipar no Herói">Equipar</button>
+                    <button class="btn btn-danger btn-xs" onclick="removeHeroItem(${idx}, ${tIdx}, 'tavern')">Remover</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- 5. QUANTOS ESPÓLIOS FICOU -->
+        <div class="hero-subbox spoils-subbox">
+          <div class="spoils-row">
+            <div class="spoils-label-group">
+              <img src="${CITY_IMAGES.spoils}" alt="Espólios" class="spoils-icon">
+              <div>
+                <div class="hero-subbox-title">5. Espólios Guardados</div>
+                <div class="spoils-desc">Moeda para usar na Fase da Cidade</div>
+              </div>
+            </div>
+            <div class="spoils-stepper">
+              <button class="btn btn-dark btn-xs" onclick="changeSpoils(${idx}, -1)">-1</button>
+              <input type="number" value="${p.spoils || 0}" min="0" max="999" onchange="setHeroSpoilsDirect(${idx}, this.value)">
+              <button class="btn btn-primary btn-xs" onclick="changeSpoils(${idx}, 1)">+1</button>
+              <button class="btn btn-primary btn-xs" onclick="changeSpoils(${idx}, 5)">+5</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
 }
 
-function renderHeroesTab() {
-  renderBestiaryShowcase();
-}
-
-function renderHeroesTab() {
-  renderBestiaryShowcase();
-}
-
-function renderHeroesTab() {
-  renderBestiaryShowcase();
-}
-
-function renderHeroesTab() {
-  renderBestiaryShowcase();
-}
-
-function renderHeroesTab() {
-  renderBestiaryShowcase();
-}
-
-function renderHeroesTab() {
-  renderBestiaryShowcase();
-}
-
-function renderHeroesTab() {
-  renderBestiaryShowcase();
-}
-
-function renderHeroesTab() {
- renderBestiaryShowcase();
- const grid = document.getElementById('heroes-dash-grid');
- if (!grid) return;
- grid.innerHTML = '';
-
- const lvlTable = getLevelTable();
- const maxLvl = getMaxLevel();
-
- state.players.forEach((p, idx) => {
- const cls = CLASSES_LIST.find(c => c.id === p.classId);
- const lvlInfo = lvlTable[p.level] || { xpToNext: null, cumHp: 0, cumMp: 0, catAllowed: 'I', note: '' };
- const xpNeeded = lvlInfo.xpToNext;
-
- // Garantir cálculo determinístico de Vida Total e Mana Total pelo Nível atual
- const hpBase = typeof p.hpBase === 'number' && p.hpBase > 0 ? p.hpBase : (cls ? cls.hpSug : 5);
- const mpBase = typeof p.mpBase === 'number' && p.mpBase >= 0 ? p.mpBase : (cls ? cls.mpSug : 3);
- p.hpBase = hpBase;
- p.mpBase = mpBase;
- p.hpMax = hpBase + (lvlInfo.cumHp || 0);
- p.mpMax = mpBase + (lvlInfo.cumMp || 0);
- p.hp = p.hpMax;
- p.mp = p.mpMax;
-
- const xpPct = xpNeeded ? Math.max(0, Math.min(100, (p.xp / xpNeeded) * 100)) : 100;
-
- // Botões de Nível 1 a 10
- let levelButtonsHtml = '';
- for (let lv = 1; lv <= maxLvl; lv++) {
- const lvData = lvlTable[lv] || {};
- const activeCls = lv === p.level ? 'active' : '';
- levelButtonsHtml += `
- <button class="lvl-num-btn ${activeCls}" onclick="setHeroLevelDirect(${idx}, ${lv})" title="Nível ${lv}: +${lvData.cumHp || 0} ️ / +${lvData.cumMp || 0} (${lvData.note || ''})">
- ${lv}
- </button>`;
- }
-
- // Poder de Conjunto
- const setObj = SET_POWERS.find(s => s.id === (p.setPower || 'none')) || SET_POWERS[0];
-
- // Cartas no Deck do Herói
- const skillsHtml = (p.skills || []).length === 0
- ? `<div style="font-size:12px;color:var(--text-muted);font-style:italic;padding:4px 0;">Nenhuma carta registrada no deck. Use o campo rápido abaixo ou abra o Catálogo da Classe!</div>`
- : (p.skills || []).map((sk, sIdx) => {
- const canUpgrade = ['I', 'II', 'III'].includes(sk.category);
- const nextCatMap = { 'I': 'II', 'II': 'III', 'III': 'IV' };
- return `
- <div class="skill-chip cat-${sk.category || 'I'}">
- <div class="skill-chip-top">
- <span class="skill-chip-name">[Cat. ${escapeHtml(sk.category || 'I')}] ${escapeHtml(sk.name)}</span>
- <span class="skill-chip-meta">${escapeHtml(sk.slot || '')} ${sk.cost ? '• ' + escapeHtml(sk.cost) : ''}</span>
- </div>
- ${sk.desc ? `<div class="skill-chip-desc">${escapeHtml(sk.desc)}</div>` : ''}
- <div class="skill-chip-actions">
- ${canUpgrade ? `<button class="btn btn-purple btn-xs" onclick="upgradeHeroSkill(${idx}, ${sIdx})" title="Evoluir para Categoria ${nextCatMap[sk.category]}">⬆️ Evoluir p/ Cat. ${nextCatMap[sk.category]}</button>` : ''}
- <button class="btn btn-crimson btn-xs" style="margin-left:auto;" onclick="removeHeroSkill(${idx}, ${sIdx})" title="Remover Carta do Deck"> Remover</button>
- </div>
- </div>`;
- }).join('');
-
- // Itens Equipados (até 7) + Taverna (até 2)
- const invCount = (p.inventory || []).length;
- const tavCount = (p.tavern || []).length;
- const invHtml = invCount === 0
- ? `<div style="font-size:12px;color:var(--text-muted);font-style:italic;padding:4px 0;">Nenhum item equipado registrado. Digite abaixo ou clique em "+ Modal".</div>`
- : (p.inventory || []).map((it, iIdx) => `
- <div class="item-chip">
- <div style="display:flex;align-items:center;gap:6px;min-width:0;">
- <span class="item-rarity-dot rar-${it.rarity || 'Comum'}"></span>
- <strong style="color:var(--gold-light);font-size:12px;">${escapeHtml(it.name)}</strong>
- <span style="font-size:11px;color:var(--text-dim);">(${escapeHtml(it.slot || it.rarity || 'Item')})</span>
- </div>
- <div style="display:flex;gap:4px;flex-shrink:0;">
- <button class="btn btn-dark btn-xs" onclick="moveItemToTavern(${idx}, ${iIdx})" title="Guardar na Taverna (máx 2)"></button>
- <button class="btn btn-crimson btn-xs" onclick="removeHeroItem(${idx}, ${iIdx}, 'inventory')" title="Remover Item"></button>
- </div>
- </div>
- `).join('');
-
- const card = document.createElement('div');
- card.className = 'hero-card';
- card.id = `hcard-${idx}`;
-
- card.innerHTML = `
- <!-- 1. SELECIONA O HERÓI -->
- <div class="hero-card-top">
- <div class="level-badge" onclick="openLevelTableReferenceModal()" title="Ver Tabela Oficial de Níveis 1 a 10">
- <span class="lbl">Nível</span>
- <span class="val">${p.level}</span>
- </div>
- <div class="hero-info">
- <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">1. Herói Selecionado</div>
- <div class="hero-player-name">${escapeHtml(p.heroName || p.name || `Herói ${idx + 1}`)}</div>
- <div class="hero-class-tag">${cls ? cls.icon + ' ' + cls.name : 'Sem Classe'}</div>
- </div>
- <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
- <button class="btn btn-gold btn-xs" onclick="openChangeHeroModal(${idx})" title="Trocar por qualquer um dos 147 heróis do banco">
- Trocar Herói
- </button>
- ${p.heroPhoto ? `
- <button class="btn btn-dark btn-xs" style="font-size:9px;padding:2px 6px;" onclick="toggleHeroArt(${idx})">
- ${p.artCollapsed ? '️ Mostrar Foto' : ' Ocultar Foto'}
- </button>
- ` : ''}
- </div>
- </div>
-
- ${p.heroPhoto ? `
- <div class="hero-img-wrap ${p.artCollapsed ? 'collapsed' : ''}" id="hero-art-${idx}">
- <img src="${p.heroPhoto}" alt="${escapeHtml(p.heroName)}">
- </div>
- ` : ''}
-
- <div class="hero-card-body">
-
- <!-- VIDA TOTAL E MANA TOTAL (ATUALIZADOS AUTOMATICAMENTE PELO NÍVEL) -->
- <div class="hero-vitals-grid">
- <div class="vital-box hp">
- <div class="vital-lbl">Vida Total (Nv.${p.level})</div>
- <div class="vital-val">${p.hpMax}</div>
- <div class="vital-sub">Base Nv.1: <strong>${p.hpBase}</strong> + Bônus Nv: <strong>+${lvlInfo.cumHp || 0}</strong></div>
- </div>
- <div class="vital-box mp">
- <div class="vital-lbl">Mana Total (Nv.${p.level})</div>
- <div class="vital-val">${p.mpMax}</div>
- <div class="vital-sub">Base Nv.1: <strong>${p.mpBase}</strong> + Bônus Nv: <strong>+${lvlInfo.cumMp || 0}</strong></div>
- </div>
- </div>
- <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-dim);margin-top:-2px;">
- <span> <strong>Status do Nível ${p.level}:</strong> <span style="color:var(--gold-light);">${escapeHtml(lvlInfo.note || '')}</span></span>
- <button class="btn btn-dark btn-xs" style="padding:1px 7px;font-size:9px;" onclick="openEditBaseStatsModal(${idx})" title="Ajustar Vida/Mana Base de Nível 1">️ Editar Base</button>
- </div>
-
- <!-- 2. DIGA QUAL LEVEL ESTÁ (1 A 10) -->
- <div class="hero-subbox">
- <div class="hero-subbox-hdr">
- <span class="hero-subbox-title">⬆️ 2. Qual Level está? (Nível 1 a ${maxLvl})</span>
- <span style="font-size:11px;color:var(--teal-lt);font-family:Cinzel,serif;">Libera Cartas Cat. ${lvlInfo.catAllowed}</span>
- </div>
- <div class="level-btn-strip">
- ${levelButtonsHtml}
- </div>
- <div style="font-size:11px;color:var(--text-muted);margin-top:5px;text-align:center;">
- Clique no Nível alcançado ao final da partida — a <strong>Vida</strong> e a <strong>Mana</strong> acima mudam automaticamente!
- </div>
- </div>
-
- <!-- 3. QUANTO DE XP FICOU -->
- <div class="hero-subbox">
- <div class="hero-subbox-hdr">
- <span class="hero-subbox-title">⭐ 3. Quanto de XP ficou?</span>
- <span style="font-size:11px;color:var(--purple-lt);font-weight:700;">
- ${xpNeeded ? `Próx. Nível (${p.level} → ${p.level + 1}): ${xpNeeded} XP` : `Nível Máximo (${maxLvl})`}
- </span>
- </div>
- <div class="bar-track" style="margin-bottom:8px;">
- <div class="bar-fill xp" style="width:${xpPct}%"></div>
- </div>
- <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
- <div style="display:flex;align-items:center;gap:4px;flex:1;min-width:130px;">
- <label style="margin:0;font-size:10px;white-space:nowrap;">XP Restante:</label>
- <input type="number" value="${p.xp}" min="0" max="999" style="width:70px;text-align:center;padding:5px;font-weight:700;color:var(--gold-light);" onchange="setHeroXPDirect(${idx}, this.value)">
- <span style="font-size:12px;color:var(--text-dim);">${xpNeeded ? `/ ${xpNeeded} XP` : 'XP'}</span>
- </div>
- <div style="display:flex;gap:4px;">
- <button class="btn btn-dark btn-xs" onclick="adjustHeroXP(${idx}, -1)">-1</button>
- <button class="btn btn-purple btn-xs" onclick="adjustHeroXP(${idx}, 1)">+1</button>
- <button class="btn btn-purple btn-xs" onclick="adjustHeroXP(${idx}, 5)">+5</button>
- <button class="btn btn-dark btn-xs" onclick="setHeroXPDirect(${idx}, 0)" title="Zerar XP">0</button>
- </div>
- </div>
- ${xpNeeded && p.xp >= xpNeeded ? `
- <div style="margin-top:8px;">
- <button class="btn btn-gold btn-xs" style="width:100%;" onclick="spendXPToLevelUp(${idx})">
- XP Suficiente! Subir para Nível ${p.level + 1} (Descontar ${xpNeeded} XP)
- </button>
- </div>
- ` : ''}
- </div>
-
- <!-- 4. QUAIS ITENS ESTÁ USANDO -->
- <div class="hero-subbox">
- <div class="hero-subbox-hdr">
- <span class="hero-subbox-title"> 4. Quais Itens está usando (${invCount}/7) • Taverna (${tavCount}/2)</span>
- <button class="btn btn-dark btn-xs" onclick="openAddItemModal(${idx})">+ Detalhado</button>
- </div>
-
- <div class="item-chip-list" style="margin-bottom:8px;">${invHtml}</div>
-
- <!-- Adição rápida de item equipado -->
- <div style="display:flex;gap:5px;">
- <input type="text" id="quick-item-name-${idx}" placeholder="Digite o nome do item equipado..." style="flex:1;padding:5px 8px;font-size:12px;" onkeydown="if(event.key==='Enter')quickAddEquippedItem(${idx})">
- <select id="quick-item-rar-${idx}" style="width:92px;padding:5px 4px;font-size:11px;">
- <option value="Comum"> Comum</option>
- <option value="Raro"> Raro</option>
- <option value="Épico"> Épico</option>
- <option value="Lendário"> Lendário</option>
- <option value="Campanha"> Campanha</option>
- </select>
- <button class="btn btn-gold btn-xs" onclick="quickAddEquippedItem(${idx})">+ Item</button>
- </div>
-
- ${tavCount > 0 ? `
- <div style="margin-top:8px;padding-top:6px;border-top:1px dashed var(--gold-dim);">
- <div style="font-size:10px;font-family:Cinzel,serif;color:var(--gold);margin-bottom:4px;"> GUARDADOS NA TAVERNA (${tavCount}/2):</div>
- ${(p.tavern || []).map((it, tIdx) => `
- <div class="item-chip" style="opacity:0.9;">
- <span style="font-size:12px;"> <strong>${escapeHtml(it.name)}</strong> (${escapeHtml(it.rarity)})</span>
- <div style="display:flex;gap:4px;">
- <button class="btn btn-teal btn-xs" onclick="moveItemFromTavern(${idx}, ${tIdx})" title="Equipar no Herói"></button>
- <button class="btn btn-crimson btn-xs" onclick="removeHeroItem(${idx}, ${tIdx}, 'tavern')"></button>
- </div>
- </div>
- `).join('')}
- </div>
- ` : ''}
- </div>
-
- <!-- 5. QUANTOS ESPÓLIOS FICOU -->
- <div class="hero-subbox" style="background:rgba(201,162,63,0.08);border-color:var(--gold);">
- <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
- <div style="display:flex;align-items:center;gap:8px;">
- <img src="${CITY_IMAGES.spoils}" alt="Espólios" style="width:28px;height:28px;object-fit:contain;">
- <div>
- <div class="hero-subbox-title" style="color:var(--gold-light);"> 5. Quantos Espólios ficou?</div>
- <div style="font-size:11px;color:var(--text-dim);">Para gastar na Fase da Cidade</div>
- </div>
- </div>
- <div style="display:flex;align-items:center;gap:5px;">
- <button class="btn btn-dark btn-xs" onclick="changeSpoils(${idx}, -1)">-1</button>
- <input type="number" value="${p.spoils || 0}" min="0" max="999" style="width:68px;text-align:center;padding:5px;font-weight:700;font-size:15px;color:var(--gold-light);" onchange="setHeroSpoilsDirect(${idx}, this.value)">
- <button class="btn btn-gold btn-xs" onclick="changeSpoils(${idx}, 1)">+1</button>
- <button class="btn btn-gold btn-xs" onclick="changeSpoils(${idx}, 5)">+5</button>
- </div>
- </div>
- </div>
-
- </div>
- `;
- grid.appendChild(card);
- });
-}
-
-// ── Trocar Herói Diretamente no Registro Pós-Partida (Todos os 147 Heróis) ──
 async function openChangeHeroModal(pIdx) {
   if (allHeroesDB.length === 0 && typeof FALLBACK_HEROES_RAW !== 'undefined') {
     allHeroesDB = mapRawHeroesList(FALLBACK_HEROES_RAW);
