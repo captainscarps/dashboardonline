@@ -493,7 +493,7 @@
   /* Dashboard Exhibition Tabs */
   .dash-tabs {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     margin-bottom: 24px;
   }
@@ -1256,12 +1256,7 @@
       Registro oficial para o final de cada partida de Massive Darkness 2. Acompanhamento dos 147 heróis, avanço do Nível 1 ao 10 com bônus automáticos de Vida e Mana, inventário em uso, registro de espólios, resolução do objetivo secundário com as cartas de recompensa e mapas detalhados das masmorras com componentes oficiais.
     </div>
 
-    <div class="tdp-hero-pills">
-      <a href="#sanctuary-section" class="tdp-pill-btn">Forjar Nova Campanha</a>
-      <a href="#saved-campaigns-list" class="tdp-pill-btn">Crônicas Salvas</a>
-      <button class="tdp-pill-btn" onclick="quickJumpTab('heroes')">Registro Pós-Partida</button>
-      <button class="tdp-pill-btn" onclick="quickJumpTab('missions')">Consultar Mapas</button>
-    </div>
+
   </div>
 
   <!-- Sanctuary Section (Saved Chronicles & Forge Campaign) -->
@@ -1413,20 +1408,13 @@
   <!-- Navegação por Abas (Morhen Con 4-Block Icon Bar — bm_11) -->
   <div class="dash-tabs">
     <button class="dash-tab-btn active" id="tabbtn-heroes" onclick="switchDashTab('heroes')">
-      <span class="tab-ico">️</span>
-      <span>1. Registro Pós-Partida (Heróis &amp; Fim da Missão)</span>
+      <span>Companhia de Heróis</span>
     </button>
     <button class="dash-tab-btn" id="tabbtn-missions" onclick="switchDashTab('missions')">
-      <span class="tab-ico">️</span>
-      <span>2. Missões, Mapas &amp; Recompensas</span>
-    </button>
-    <button class="dash-tab-btn" id="tabbtn-city" onclick="switchDashTab('city')">
-      <span class="tab-ico"></span>
-      <span>3. A Cidade &amp; Taverna (Espólios)</span>
+      <span>Livro de Missões &amp; Mapas</span>
     </button>
     <button class="dash-tab-btn" id="tabbtn-cards" onclick="switchDashTab('cards')">
-      <span class="tab-ico"></span>
-      <span>4. Cartas (1–30), Feitos &amp; Bolsa</span>
+      <span>Arsenal da Campanha &amp; Cidade</span>
     </button>
   </div>
 
@@ -3485,40 +3473,28 @@ function startCampaignDashboard() {
 // DASHBOARD PRINCIPAL: ABAS E RENDERIZAÇÃO COMPLETA
 // ════════════════════════════════════════════════════════════════
 function switchDashTab(tabName) {
- const curtain = document.getElementById('bnf-chapter-curtain');
- if (curtain) {
- curtain.classList.add('active');
- setTimeout(() => {
- ['heroes', 'missions', 'city', 'cards'].forEach(t => {
- document.getElementById(`tabbtn-${t}`)?.classList.toggle('active', t === tabName);
- document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tabName);
- });
- renderDashboardAll();
- const activeTabEl = document.getElementById(`tab-${tabName}`);
- if (activeTabEl) {
- activeTabEl.querySelectorAll('.card').forEach((card, idx) => {
- card.style.animation = 'none';
- card.offsetHeight;
- card.style.animation = `BnFCardFadeIn 0.42s cubic-bezier(0.25, 0.1, 0.67, 0.99) ${idx * 0.05}s both`;
- });
- }
- setTimeout(() => {
- curtain.classList.remove('active');
- }, 90);
- }, 110);
- } else {
- ['heroes', 'missions', 'city', 'cards'].forEach(t => {
- document.getElementById(`tabbtn-${t}`)?.classList.toggle('active', t === tabName);
- document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tabName);
- });
- renderDashboardAll();
- }
-}
-
-function openHubFromDashboard() {
- saveCampaignNow(false);
- renderSavedCampaignsList();
- showScreen('screen-intro');
+  if (tabName === 'city') tabName = 'cards';
+  const curtain = document.getElementById('bnf-chapter-curtain');
+  const validTabs = ['heroes', 'missions', 'cards'];
+  if (curtain) {
+    curtain.classList.add('active');
+    setTimeout(() => {
+      validTabs.forEach(t => {
+        document.getElementById(`tabbtn-${t}`)?.classList.toggle('active', t === tabName);
+        document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tabName);
+      });
+      renderDashboardAll();
+      setTimeout(() => {
+        curtain.classList.remove('active');
+      }, 90);
+    }, 110);
+  } else {
+    validTabs.forEach(t => {
+      document.getElementById(`tabbtn-${t}`)?.classList.toggle('active', t === tabName);
+      document.getElementById(`tab-${t}`)?.classList.toggle('active', t === tabName);
+    });
+    renderDashboardAll();
+  }
 }
 
 function renderDashboardAll() {
@@ -3569,7 +3545,7 @@ function renderBestiaryShowcase() {
   const box = document.getElementById('bestiary-showcase-container');
   if (!box) return;
   if (!state.players || state.players.length === 0) {
-    box.innerHTML = '';
+    box.innerHTML = '<div style="text-align:center;padding:32px;color:var(--tdp-text-dim);font-family:Cinzel,serif;">Nenhum herói registrado na campanha atual.</div>';
     return;
   }
   if (selectedBestiaryHeroIdx >= state.players.length) selectedBestiaryHeroIdx = 0;
@@ -3581,42 +3557,59 @@ function renderBestiaryShowcase() {
   const lvlInfo = lvlTable[p.level] || { xpToNext: null, cumHp: 0, cumMp: 0, note: '' };
   const xpNeeded = lvlInfo.xpToNext;
 
+  // Cálculo determinístico de Vida e Mana
+  const hpBase = typeof p.hpBase === 'number' && p.hpBase > 0 ? p.hpBase : (cls ? cls.hpSug : 5);
+  const mpBase = typeof p.mpBase === 'number' && p.mpBase >= 0 ? p.mpBase : (cls ? cls.mpSug : 3);
+  p.hpBase = hpBase;
+  p.mpBase = mpBase;
+  p.hpMax = hpBase + (lvlInfo.cumHp || 0);
+  p.mpMax = mpBase + (lvlInfo.cumMp || 0);
+  p.hp = p.hpMax;
+  p.mp = p.mpMax;
+
+  // Roster lateral
   const rosterHtml = state.players.map((pl, i) => {
     const cObj = CLASSES_LIST.find(c => c.id === pl.classId);
     return `
       <div class="bestiary-roster-item ${i === idx ? 'active' : ''}" onclick="selectBestiaryHero(${i})">
         ${pl.heroPhoto
           ? `<img class="bestiary-roster-thumb" src="${pl.heroPhoto}" alt="${escapeHtml(pl.heroName)}">`
-          : `<div class="bestiary-roster-thumb" style="display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Cinzel',serif;color:var(--tdp-gold);">H${i + 1}</div>`
+          : `<div class="bestiary-roster-thumb" style="display:flex;align-items:center;justify-content:center;font-size:12px;font-family:Cinzel,serif;color:var(--tdp-gold);">H${i + 1}</div>`
         }
         <div style="min-width:0;flex:1;">
           <div class="bestiary-roster-name">${escapeHtml(pl.heroName || `Herói ${i + 1}`)}</div>
           <div class="bestiary-roster-sub">${cObj ? escapeHtml(cObj.name) : ''} • Nível ${pl.level}</div>
         </div>
-        <span style="color:var(--tdp-gold);font-family:'Cinzel',serif;font-size:13px;font-weight:700;">#${i + 1}</span>
+        <span style="color:var(--tdp-gold);font-family:Cinzel,serif;font-size:13px;font-weight:700;">#${i + 1}</span>
       </div>
     `;
   }).join('');
 
+  // Botões de Nível 1 a 10
   let bestiaryLvlBtns = '';
   for (let lv = 1; lv <= maxLvl; lv++) {
     bestiaryLvlBtns += `<button class="lvl-num-btn ${lv === p.level ? 'active' : ''}" onclick="setHeroLevelDirect(${idx}, ${lv})">${lv}</button>`;
   }
 
+  // Opções de Poder de Conjunto
+  const setOptionsHtml = (typeof SET_POWERS !== 'undefined' ? SET_POWERS : []).map(s => `
+    <option value="${s.id}" ${p.setPower === s.id ? 'selected' : ''}>${escapeHtml(s.name)}</option>
+  `).join('');
+
   box.innerHTML = `
     <div class="bestiary-showcase-frame">
       <div class="bestiary-top-banner">
-        <h3>Bestiário da Companhia — Herói em Destaque (${idx + 1}/${state.players.length})</h3>
+        <h3>Ficha da Companhia — ${escapeHtml(p.heroName || `Herói ${idx + 1}`)} (${idx + 1}/${state.players.length})</h3>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="btn btn-gold btn-xs" onclick="openChangeHeroModal(${idx})">Trocar Herói</button>
-          <a href="#hcard-${idx}" class="btn btn-dark btn-xs" style="text-decoration:none;">Ficha Completa</a>
+          <button class="btn btn-dark btn-xs" onclick="openLevelTableReferenceModal()">Tabela de Níveis (1–10)</button>
         </div>
       </div>
 
       <div class="bestiary-grid">
         <!-- Coluna 1: Lista da Companhia -->
         <div class="bestiary-roster-list">
-          <div style="font-family:'Cinzel',serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;font-weight:700;">
+          <div style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:700;">
             Heróis da Partida (${state.players.length})
           </div>
           ${rosterHtml}
@@ -3625,10 +3618,10 @@ function renderBestiaryShowcase() {
         <!-- Coluna 2: Pedestal Central com Arte do Herói -->
         <div class="bestiary-pedestal-stage">
           <div style="text-align:center;margin-bottom:6px;">
-            <div style="font-family:'IM Fell English',serif;font-size:24px;color:var(--tdp-gold);letter-spacing:1.5px;line-height:1.1;">
+            <div style="font-family:'IM Fell English',serif;font-size:24px;color:var(--tdp-gold-bright);letter-spacing:1px;line-height:1.15;">
               ${escapeHtml(p.heroName || `Herói ${idx + 1}`)}
             </div>
-            <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--tdp-text-dim);margin-top:4px;letter-spacing:1px;text-transform:uppercase;">
+            <div style="font-family:Cinzel,serif;font-size:11px;color:var(--tdp-text-dim);margin-top:4px;letter-spacing:1px;text-transform:uppercase;">
               ${cls ? escapeHtml(cls.name) : ''} • Nível ${p.level}
             </div>
           </div>
@@ -3636,24 +3629,25 @@ function renderBestiaryShowcase() {
           <div class="bestiary-pedestal-img-wrap">
             ${p.heroPhoto
               ? `<img class="bestiary-pedestal-img" src="${p.heroPhoto}" alt="${escapeHtml(p.heroName)}">`
-              : `<div style="height:200px;display:flex;align-items:center;justify-content:center;font-size:32px;font-family:'Cinzel',serif;color:var(--tdp-gold);">MD2</div>`
+              : `<div style="height:200px;display:flex;align-items:center;justify-content:center;font-size:32px;font-family:Cinzel,serif;color:var(--tdp-gold);">MD2</div>`
             }
           </div>
 
           <div class="bestiary-nav-arrows">
             <button class="bestiary-arrow-btn" onclick="selectBestiaryHero(${idx - 1})" title="Herói Anterior"></button>
-            <span style="font-family:'Cinzel',serif;font-size:10.5px;color:var(--tdp-text-dim);letter-spacing:1px;text-transform:uppercase;">Herói ${idx + 1} de ${state.players.length}</span>
+            <span style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-text-dim);letter-spacing:1px;text-transform:uppercase;">Herói ${idx + 1} de ${state.players.length}</span>
             <button class="bestiary-arrow-btn" onclick="selectBestiaryHero(${idx + 1})" title="Próximo Herói"></button>
           </div>
         </div>
 
-        <!-- Coluna 3: Registro Rápido Pós-Partida do Herói em Destaque -->
-        <div style="display:flex;flex-direction:column;gap:10px;justify-content:space-between;background:#111419;border:1px solid var(--tdp-border);padding:16px;border-radius:2px;">
+        <!-- Coluna 3: Ficha Pós-Partida Unificada -->
+        <div style="display:flex;flex-direction:column;gap:12px;background:#111419;border:1px solid var(--tdp-border);padding:16px;border-radius:3px;">
           <div>
-            <div style="border-bottom:1px solid var(--tdp-border);padding-bottom:8px;font-family:'IM Fell English','Cinzel',serif;font-size:16px;color:var(--tdp-gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;">
-              Registro Pós-Partida — ${escapeHtml(p.heroName)}
+            <div style="border-bottom:1px solid var(--tdp-border-subtle);padding-bottom:8px;font-family:'IM Fell English','Cinzel',serif;font-size:16px;color:var(--tdp-gold-bright);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">
+              Atributos &amp; Registro Pós-Partida
             </div>
 
+            <!-- Vitals: Vida e Mana Totais -->
             <div class="hero-vitals-grid" style="margin-bottom:12px;">
               <div class="vital-box hp-vital">
                 <div class="vital-title" style="color:#e55353;">Vida Total (Nv.${p.level})</div>
@@ -3667,37 +3661,65 @@ function renderBestiaryShowcase() {
               </div>
             </div>
 
-            <div style="margin-bottom:10px;">
-              <label>2. Nível Alcançado (1 a ${maxLvl})</label>
+            <!-- Nível Alcançado -->
+            <div style="margin-bottom:12px;">
+              <label style="font-family:Cinzel,serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Nível Alcançado (1 a ${maxLvl})</label>
               <div class="level-btn-strip">${bestiaryLvlBtns}</div>
             </div>
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <!-- XP Restante e Espólios -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
               <div class="hero-subbox">
-                <label>3. XP Restante</label>
+                <label style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px;">XP Restante</label>
                 <div style="display:flex;align-items:center;gap:6px;">
-                  <input type="number" value="${p.xp}" min="0" max="999" style="text-align:center;font-weight:700;color:var(--tdp-gold);" onchange="setHeroXPDirect(${idx}, this.value)">
+                  <input type="number" value="${p.xp}" min="0" max="999" style="text-align:center;font-weight:700;color:var(--tdp-gold);background:#0b0d11;border:1px solid var(--tdp-border);" onchange="setHeroXPDirect(${idx}, this.value)">
                   <span style="font-size:11.5px;color:var(--tdp-text-dim);white-space:nowrap;">${xpNeeded ? `/ ${xpNeeded}` : 'Máx'}</span>
                 </div>
               </div>
               <div class="hero-subbox">
-                <label>5. Espólios Obtidos</label>
+                <label style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px;">Espólios</label>
                 <div style="display:flex;align-items:center;gap:6px;">
-                  <input type="number" value="${p.spoils || 0}" min="0" max="999" style="text-align:center;font-weight:700;color:var(--tdp-gold);" onchange="setHeroSpoilsDirect(${idx}, this.value)">
-                  <button class="btn btn-gold btn-xs" onclick="adjustHeroSpoils(${idx}, 1)">+1</button>
+                  <input type="number" value="${p.spoils || 0}" min="0" max="999" style="text-align:center;font-weight:700;color:var(--tdp-gold);background:#0b0d11;border:1px solid var(--tdp-border);" onchange="setHeroSpoilsDirect(${idx}, this.value)">
+                  <button class="btn btn-dark btn-xs" onclick="changeSpoils(${idx}, -1)">-1</button>
+                  <button class="btn btn-gold btn-xs" onclick="changeSpoils(${idx}, 1)">+1</button>
                 </div>
               </div>
             </div>
+
+            <!-- Poder de Conjunto -->
+            <div style="margin-bottom:10px;">
+              <label style="font-family:Cinzel,serif;font-size:10.5px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px;">Poder de Conjunto (Ruína Sombria)</label>
+              <select style="width:100%;font-size:11.5px;padding:5px 8px;background:#0b0d11;border:1px solid var(--tdp-border);color:var(--tdp-text);" onchange="changeHeroSetPower(${idx}, this.value)">
+                ${setOptionsHtml}
+              </select>
+            </div>
           </div>
 
-          <div style="font-size:12px;color:var(--tdp-text-dim);border-top:1px solid var(--tdp-border);padding-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+          <!-- Rodapé de Itens e Taverna -->
+          <div style="font-size:12px;color:var(--tdp-text-dim);border-top:1px solid var(--tdp-border-subtle);padding-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
             <span>Itens em uso: <strong style="color:var(--tdp-gold)">${(p.inventory || []).length}/7</strong> • Taverna: <strong style="color:var(--tdp-gold)">${(p.tavern || []).length}/2</strong></span>
-            <button class="btn btn-dark btn-xs" onclick="openAddItemModal(${idx})">Gerenciar Itens</button>
+            <button class="btn btn-gold btn-xs" onclick="openAddItemModal(${idx})">Gerenciar Itens &amp; Taverna</button>
           </div>
         </div>
       </div>
     </div>
   `;
+}
+
+function renderHeroesTab() {
+  renderBestiaryShowcase();
+}
+
+function renderHeroesTab() {
+  renderBestiaryShowcase();
+}
+
+function renderHeroesTab() {
+  renderBestiaryShowcase();
+}
+
+function renderHeroesTab() {
+  renderBestiaryShowcase();
 }
 
 function renderHeroesTab() {
@@ -3837,7 +3859,7 @@ function renderHeroesTab() {
  <div class="hero-subbox">
  <div class="hero-subbox-hdr">
  <span class="hero-subbox-title">⬆️ 2. Qual Level está? (Nível 1 a ${maxLvl})</span>
- <span style="font-size:11px;color:var(--teal-lt);font-family:'Cinzel',serif;">Libera Cartas Cat. ${lvlInfo.catAllowed}</span>
+ <span style="font-size:11px;color:var(--teal-lt);font-family:Cinzel,serif;">Libera Cartas Cat. ${lvlInfo.catAllowed}</span>
  </div>
  <div class="level-btn-strip">
  ${levelButtonsHtml}
@@ -3904,7 +3926,7 @@ function renderHeroesTab() {
 
  ${tavCount > 0 ? `
  <div style="margin-top:8px;padding-top:6px;border-top:1px dashed var(--gold-dim);">
- <div style="font-size:10px;font-family:'Cinzel',serif;color:var(--gold);margin-bottom:4px;"> GUARDADOS NA TAVERNA (${tavCount}/2):</div>
+ <div style="font-size:10px;font-family:Cinzel,serif;color:var(--gold);margin-bottom:4px;"> GUARDADOS NA TAVERNA (${tavCount}/2):</div>
  ${(p.tavern || []).map((it, tIdx) => `
  <div class="item-chip" style="opacity:0.9;">
  <span style="font-size:12px;"> <strong>${escapeHtml(it.name)}</strong> (${escapeHtml(it.rarity)})</span>
@@ -3956,15 +3978,15 @@ async function openChangeHeroModal(pIdx) {
   openCustomModal(`Selecionar Herói — Posição ${pIdx + 1}`, `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
       <div>
-        <label style="font-family:'Cinzel',serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Filtrar por Classe</label>
+        <label style="font-family:Cinzel,serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Filtrar por Classe</label>
         <select id="modal-hero-cls-filter" onchange="renderChangeHeroModalGrid(${pIdx})">${classOptions}</select>
       </div>
       <div>
-        <label style="font-family:'Cinzel',serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Buscar por Nome ou Expansão</label>
+        <label style="font-family:Cinzel,serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Buscar por Nome ou Expansão</label>
         <input type="text" id="modal-hero-search" placeholder="Ex: Elysa, Silas, Zombicide, Heavenfall..." oninput="renderChangeHeroModalGrid(${pIdx})">
       </div>
     </div>
-    <div style="font-size:11px;color:var(--tdp-text-dim);margin-bottom:10px;font-family:'Cinzel',serif;" id="modal-heroes-count-badge"></div>
+    <div style="font-size:11px;color:var(--tdp-text-dim);margin-bottom:10px;font-family:Cinzel,serif;" id="modal-heroes-count-badge"></div>
     <div id="modal-hero-picker-grid" class="heroes-grid" style="max-height:460px;overflow-y:auto;padding:10px;background:#0d1015;border:1px solid var(--tdp-border);border-radius:4px;"></div>
   `);
   renderChangeHeroModalGrid(pIdx);
@@ -3993,7 +4015,7 @@ function renderChangeHeroModalGrid(pIdx) {
   }
 
   if (filtered.length === 0) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:32px 16px;color:var(--tdp-text-dim);font-family:'Cinzel',serif;">Nenhum herói encontrado com esses filtros.</div>`;
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:32px 16px;color:var(--tdp-text-dim);font-family:Cinzel,serif;">Nenhum herói encontrado com esses filtros.</div>`;
     return;
   }
 
@@ -4190,7 +4212,7 @@ function openLevelTableReferenceModal() {
  </p>
  <table style="width:100%;border-collapse:collapse;font-size:13px;text-align:left;">
  <thead>
- <tr style="border-bottom:1px solid var(--gold);color:var(--gold);font-family:'Cinzel',serif;font-size:11px;">
+ <tr style="border-bottom:1px solid var(--gold);color:var(--gold);font-family:Cinzel,serif;font-size:11px;">
  <th style="padding:7px;">Nível</th>
  <th style="padding:7px;">XP p/ Subir</th>
  <th style="padding:7px;">Ganho no Nível</th>
@@ -4238,7 +4260,7 @@ function openAddSkillModal(pIdx) {
  return `
  <div style="background:var(--bg-card2);border:1px solid var(--gold-dim);border-radius:4px;padding:10px 12px;margin-bottom:8px;">
  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
- <strong style="font-family:'Cinzel',serif;color:var(--gold-light);font-size:13px;">${escapeHtml(sk.name)}</strong>
+ <strong style="font-family:Cinzel,serif;color:var(--gold-light);font-size:13px;">${escapeHtml(sk.name)}</strong>
  <span style="font-size:11px;color:var(--teal-lt);">${escapeHtml(sk.slot)} • ${escapeHtml(sk.cost)}</span>
  </div>
  <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px;">
@@ -4497,8 +4519,8 @@ function renderPostMatchClosureBox() {
  return cMeta ? `
  <div style="background:rgba(10,8,18,0.85);border:1px solid var(--gold-light);border-radius:6px;padding:10px 14px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
  <div>
- <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold-light);"> ${escapeHtml(cMeta.name)}</div>
- <div style="font-size:11px;color:var(--teal-lt);font-family:'Cinzel',serif;">${escapeHtml(cMeta.type)}</div>
+ <div style="font-family:Cinzel,serif;font-size:14px;font-weight:700;color:var(--gold-light);"> ${escapeHtml(cMeta.name)}</div>
+ <div style="font-size:11px;color:var(--teal-lt);font-family:Cinzel,serif;">${escapeHtml(cMeta.type)}</div>
  <div style="font-size:13px;color:var(--text-main);margin-top:3px;">${escapeHtml(cMeta.desc)}</div>
  </div>
  <span class="badge-pill" style="background:rgba(39,174,96,0.25);border-color:#6ce68e;color:#6ce68e;"> Carta Desbloqueada!</span>
@@ -4515,7 +4537,7 @@ function renderPostMatchClosureBox() {
  <div style="background:linear-gradient(135deg, rgba(26,107,122,0.18), rgba(20,16,32,0.95));border:2px solid ${isYes ? 'var(--gold-light)' : 'var(--teal-lt)'};border-radius:6px;padding:16px;margin-bottom:18px;">
  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
  <div style="flex:1;min-width:260px;">
- <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold-light);margin-bottom:4px;">
+ <div style="font-family:Cinzel,serif;font-size:15px;font-weight:700;color:var(--gold-light);margin-bottom:4px;">
  Pergunta Final do Registro: O Objetivo Secundário foi resolvido?
  </div>
  <div style="font-size:14px;color:var(--text-main);">
@@ -4645,7 +4667,7 @@ function renderPostMatchClosureBox() {
  <div>
  <div class="mission-map-frame">
  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:8px;">
- <span style="font-family:'Cinzel',serif;font-size:12px;color:var(--gold-light);font-weight:700;">️ 2. Mapa Oficial da Missão</span>
+ <span style="font-family:Cinzel,serif;font-size:12px;color:var(--gold-light);font-weight:700;">️ 2. Mapa Oficial da Missão</span>
  <button class="btn btn-dark btn-xs" onclick="openMapZoomModal('${curM.mapImg}', '${escapeHtml(curM.name)}')"> Ampliar Mapa</button>
  </div>
  <img src="${curM.mapImg}" alt="Mapa ${escapeHtml(curM.name)}" onclick="openMapZoomModal('${curM.mapImg}', '${escapeHtml(curM.name)}')" title="Clique para ampliar o Mapa da Missão">
