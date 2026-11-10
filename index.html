@@ -1225,17 +1225,11 @@
       </div>
     </div>
 
-    <nav class="tdp-nav-links">
+        <nav class="tdp-nav-links">
       <button class="tdp-nav-link" onclick="openHubFromDashboard()">Hub de Campanhas</button>
-      <button class="tdp-nav-link" onclick="showScreen('screen-dashboard');switchDashTab('heroes')">Registro Pós-Partida</button>
-      <button class="tdp-nav-link" onclick="showScreen('screen-dashboard');switchDashTab('missions')">Missões e Mapas</button>
-      <button class="tdp-nav-link" onclick="showScreen('screen-dashboard');switchDashTab('city')">A Cidade e Taverna</button>
-      <button class="tdp-nav-link" onclick="showScreen('screen-dashboard');switchDashTab('cards')">Cartas de Campanha</button>
+      <button class="tdp-nav-link" onclick="syncFromSupabase()">Sincronizar Nuvem</button>
+      <button class="tdp-nav-link" onclick="openLevelTableReferenceModal()">Tabela de Niveis (1-10)</button>
     </nav>
-
-    <div>
-      <button class="btn btn-crimson btn-xs" onclick="saveCampaignNow(true)">Salvar Registro</button>
-    </div>
   </div>
 </header>
 
@@ -3704,6 +3698,10 @@ function renderBestiaryShowcase() {
       </div>
     </div>
   `;
+}
+
+function renderHeroesTab() {
+  renderBestiaryShowcase();
 }
 
 function renderHeroesTab() {
