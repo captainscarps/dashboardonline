@@ -1444,7 +1444,6 @@
           <option value="heavenfall">🌟 Heavenfall — Campanha Oficial (Níveis 1–10 · Missões A a N)</option>
           <option value="horsemen">🐎 Quatro Cavaleiros — Campanha Apocalipse (Missões A, B, C, D e Final)</option>
           <option value="demondragon">🐉 Dragão Demônio — Campanha Grundarkjell (Missões A a E)</option>
-          <option value="hellscape">🔥 Hellscape — Missões da Caixa Base (Tutorial + Missões 1 a 10)</option>
         </select>
         <div id="mode-desc-box" style="font-size:13.5px;color:var(--text-dim);margin-top:8px;font-style:italic;padding:9px 12px;background:rgba(0,0,0,0.45);border-left:3px solid var(--gold);">
           Níveis 1 a 10 (XP: 10 / 15 / 20 / 25 / 30 / 33 / 35 / 37 / 40), aumento automático de Vida e Mana por nível, registro de Itens, Espólios, Objetivo Secundário, Mapas Detalhados e Resultados das 14 Missões (A–N).
@@ -2742,129 +2741,6 @@ const MAP_COMPONENTS_DB = {
     spawns: '🔑 Pontos de pouso do Dragão.',
     chests: '📦 Tesouro do Covil do Dragão.',
     specialTerrain: '🐉 Cratera do Dragão Demônio (use a Lança Caça-Dragões!).'
-  },
-
-  // HELLSCAPE BASE (HS_0 a HS_10)
-  'HS_0': {
-    tilesList: ['1A', '2A'],
-    startZone: '🟢 Zona Inicial dos Heróis na Peça 1A.',
-    doors: '🚪 Portas Fechadas entre 1A e 2A.',
-    portals: '🌀 1 Portal de Monstros + 1 Portal de Monstro Vagante em 2A.',
-    objectives: '🎯 Derrotar o Monstro Vagante no final de 2A.',
-    mobs: '💀 Zonas de Turba iniciais.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús de Tesouro de treinamento.',
-    specialTerrain: '⚔️ Corredor Tutorial.'
-  },
-  'HS_1': {
-    tilesList: ['1A', '3B', '5B'],
-    startZone: '🟢 Zona Inicial dos Heróis em 1A.',
-    doors: '🚪 Portas Fechadas conectando 1A, 3B e 5B.',
-    portals: '🌀 Portais de Monstros + Portal de Monstro Vagante.',
-    objectives: '🎯 Coletar os 3 Cristais de Luz e escapar pela Saída.',
-    mobs: '💀 Zonas de Turba guardando os Cristais.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús Normais e Superiores.',
-    specialTerrain: '💎 3 Pedestais de Cristais de Luz + Zona de Saída.'
-  },
-  'HS_2': {
-    tilesList: ['2B', '4A', '6B'],
-    startZone: '🟢 Zona Inicial dos Heróis em 2B.',
-    doors: '🚪 Portas Fechadas entre 2B, 4A e 6B.',
-    portals: '🌀 Portais de Monstros + Portal de Monstro Vagante.',
-    objectives: '🎯 Destruir os 2 Portais de Invasão.',
-    mobs: '💀 Zonas de Turba ao redor dos Portais.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús de Tesouro.',
-    specialTerrain: '🌀 2 Portais de Invasão Destrutíveis.'
-  },
-  'HS_3': {
-    tilesList: ['3A', '7B', '8A'],
-    startZone: '🟢 Zona Inicial dos Heróis em 3A.',
-    doors: '🚪 Portas Fechadas conectando 3A, 7B e 8A.',
-    portals: '🌀 Portais de Monstros + Portal do Ceifador.',
-    objectives: '🎯 Acender as 3 Piras Sagradas e derrotar o Ceifador.',
-    mobs: '💀 Zonas de Turba nas sombras.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús Normais e Superiores.',
-    specialTerrain: '🔥 3 Piras Sagradas (convertem Zonas de Sombra em Zonas de Luz).'
-  },
-  'HS_4': {
-    tilesList: ['1B', '4B', '5A'],
-    startZone: '🟢 Zona Inicial dos Heróis em 1B.',
-    doors: '🚪 Portas Fechadas entre 1B, 4B e 5A.',
-    portals: '🌀 Portais de Monstros + Portal de Monstro Vagante.',
-    objectives: '🎯 Carregar os Lingotes Sagrados até a Forja Central e derrotar o Guardião.',
-    mobs: '💀 Zonas de Turba guardando os Lingotes.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús de Tesouro.',
-    specialTerrain: '⚒️ Forja Central e Depósitos de Lingotes.'
-  },
-  'HS_5': {
-    tilesList: ['2A', '6A', '7A', '8B'],
-    startZone: '🟢 Zona Inicial dos Heróis em 2A + Tabuleiro de Chefe de Belial.',
-    doors: '🚪 Portas Fechadas nas 4 peças.',
-    portals: '🌀 Portais de Monstros + Portal de Monstro Vagante.',
-    objectives: '🎯 Encontrar a Chave do Trono e derrotar o Chefe Belial.',
-    mobs: '💀 Zonas de Turba de elite.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús Normais e Superiores.',
-    specialTerrain: '👑 Entrada do Trono e Tabuleiro de Chefe de Belial.'
-  },
-  'HS_6': {
-    tilesList: ['1A', '4B', '6A', '7B'],
-    startZone: '🟢 Zona Inicial dos Heróis em 1A.',
-    doors: '🚪 Portas Fechadas nas 4 peças.',
-    portals: '🌀 Portais de Monstros + Portal de Monstro Vagante.',
-    objectives: '🎯 Purificar as 3 Fontes Corrompidas.',
-    mobs: '💀 Zonas de Turba ao redor das Fontes.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús Normais e Superiores.',
-    specialTerrain: '⛲ 3 Fontes Corrompidas.'
-  },
-  'HS_7': {
-    tilesList: ['2B', '3B', '5A', '8B'],
-    startZone: '🟢 Zona Inicial dos Heróis em 2B.',
-    doors: '🚪 Portas Fechadas no labirinto de 4 peças.',
-    portals: '🌀 Portais de Monstros + Portal de 2 Monstros Vagantes.',
-    objectives: '🎯 Encontrar os 2 Tomos Proibidos e derrotar os 2 Guardiões Vagantes.',
-    mobs: '💀 Zonas de Turba nos corredores da biblioteca.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús Normais e Superiores.',
-    specialTerrain: '📚 Estantes e Pedestais dos Tomos Proibidos.'
-  },
-  'HS_8': {
-    tilesList: ['3A', '4A', '6B', '7A'],
-    startZone: '🟢 Zona Inicial dos Heróis em 3A.',
-    doors: '🚪 Portas Fechadas conectando 3A, 4A, 6B e 7A.',
-    portals: '🌀 Portais de Monstros + Portais de Demônios Maiores.',
-    objectives: '🎯 Ativar as 2 Alavancas da Ponte e cruzar o Abismo.',
-    mobs: '💀 Zonas de Turba guardando as Alavancas.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús Normais e Superiores.',
-    specialTerrain: '🌉 Ponte Abissal e 2 Alavancas de Controle.'
-  },
-  'HS_9': {
-    tilesList: ['1B', '2A', '5B', '8A'],
-    startZone: '🟢 Zona Inicial dos Heróis em 1B.',
-    doors: '🚪 Portas Fechadas nas 4 peças.',
-    portals: '🌀 Portais de Monstros + Portais dos 3 Generais.',
-    objectives: '🎯 Destruir os 3 Pilares de Sangue guardados por Monstros Vagantes.',
-    mobs: '💀 Zonas de Turba de elite.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús Normais e Superiores.',
-    specialTerrain: '🩸 3 Pilares de Sangue.'
-  },
-  'HS_10': {
-    tilesList: ['3B', '4B', '6B', '7B'],
-    startZone: '🟢 Zona Inicial dos Heróis em 3B + Tabuleiro de Chefe.',
-    doors: '🚪 Portas Fechadas até o Portão Final.',
-    portals: '🌀 Portais de Monstros em todas as peças.',
-    objectives: '🎯 Abrir o Portão Final e derrotar o Chefe Supremo!',
-    mobs: '💀 Zonas de Turba finais.',
-    spawns: '🔑 Marcadores de Aparecimento.',
-    chests: '📦 Baús Normais e Superiores.',
-    specialTerrain: '🔥 Portão Final do Abismo e Arena do Chefe Supremo.'
   }
 };
 
@@ -3112,7 +2988,6 @@ function renderSavedCampaignsList() {
     heavenfall: 'Heavenfall (A–N)',
     horsemen: '4 Cavaleiros',
     demondragon: 'Dragão Demônio',
-    hellscape: 'Hellscape Base',
     oneshot: 'One-Shot'
   };
 
@@ -3306,14 +3181,12 @@ function updateModeDesc() {
   const map = {
     heavenfall: 'Níveis 1 a 10 (XP: 10 / 15 / 20 / 25 / 30 / 33 / 35 / 37 / 40), aumento automático de Vida e Mana por nível, registro de Deck, Itens, Espólios, Objetivo Secundário, Mapas Oficiais e Resultados das 14 Missões (A–N).',
     horsemen: 'Campanha completa dos Quatro Cavaleiros (5 Missões: A, B, C, D e Final) com Objetivos, Mapas Oficiais, Progresso da Campanha (Fome, Peste, Guerra e Morte) e Recompensas.',
-    demondragon: 'Campanha completa do Dragão Demônio Grundarkjell (5 Missões: A a E) com Objetivos, Mapas Oficiais, Escamas de Dragão, Resultados e Recompensas.',
-    hellscape: 'As 11 Missões da Caixa Base Hellscape (Tutorial + Missões 1 a 10) com Objetivos, Mapas Oficiais, Resultados narrativos e Recompensas.'
+    demondragon: 'Campanha completa do Dragão Demônio Grundarkjell (5 Missões: A a E) com Objetivos, Mapas Oficiais, Escamas de Dragão, Resultados e Recompensas.'
   };
   const defaultNames = {
     heavenfall: 'Campanha Heavenfall',
     horsemen: 'Campanha Quatro Cavaleiros',
-    demondragon: 'Campanha Dragão Demônio',
-    hellscape: 'Campanha Hellscape'
+    demondragon: 'Campanha Dragão Demônio'
   };
   if (descEl) descEl.textContent = map[mode] || '';
   if (nameInput && Object.values(defaultNames).includes(nameInput.value.trim())) {
@@ -3676,7 +3549,6 @@ function renderTopBar() {
     heavenfall: 'Heavenfall (Missões A–N)',
     horsemen: 'Quatro Cavaleiros (A–Final)',
     demondragon: 'Dragão Demônio (A–E)',
-    hellscape: 'Hellscape Base (0–10)',
     oneshot: 'One-Shot'
   };
   document.getElementById('dash-camp-name').textContent = state.name || 'Campanha';
@@ -4850,7 +4722,7 @@ function completeCurrentMissionFromClosure(code) {
 }
 
 function openMapZoomModal(mapUrl, missionTitle, missionCode) {
-  const allM = [...(MISSIONS_DB.heavenfall||[]), ...(MISSIONS_DB.four_horsemen||[]), ...(MISSIONS_DB.demon_dragon||[]), ...(MISSIONS_DB.hellscape||[])];
+  const allM = [...(MISSIONS_DB.heavenfall||[]), ...(MISSIONS_DB.four_horsemen||[]), ...(MISSIONS_DB.demon_dragon||[])];
   const mObj = allM.find(x => x.code === missionCode || x.mapImg === mapUrl || x.name === missionTitle);
   openCustomModal(`🗺️ Mapa Oficial Detalhado — ${missionTitle}`, `
     <div style="text-align:center;background:#07050a;padding:10px;border-radius:6px;border:1px solid var(--gold);">
@@ -4902,7 +4774,6 @@ function renderMissionsTab() {
         <button class="btn ${activeCampKey === 'heavenfall' ? 'btn-gold' : 'btn-dark'} btn-xs" onclick="switchMissionTabCampaign('heavenfall')">🌟 Heavenfall (14)</button>
         <button class="btn ${activeCampKey === 'horsemen' ? 'btn-gold' : 'btn-dark'} btn-xs" onclick="switchMissionTabCampaign('horsemen')">🐎 4 Cavaleiros (5)</button>
         <button class="btn ${activeCampKey === 'demondragon' ? 'btn-gold' : 'btn-dark'} btn-xs" onclick="switchMissionTabCampaign('demondragon')">🐉 Dragão Demônio (5)</button>
-        <button class="btn ${activeCampKey === 'hellscape' ? 'btn-gold' : 'btn-dark'} btn-xs" onclick="switchMissionTabCampaign('hellscape')">🔥 Hellscape Base (11)</button>
       </div>
       <div style="display:flex;gap:6px;">
         <button class="btn ${!showAllMissionsInTab ? 'btn-teal' : 'btn-dark'} btn-xs" onclick="toggleShowAllMissions(false)">🔍 Ver Missão Selecionada</button>
