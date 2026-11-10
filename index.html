@@ -8,11 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+
   /* ================================================================
      AROUNDA AI SAAS DESIGN SYSTEM — MASSIVE DARKNESS 2
      Reference: https://dribbble.com/shots/27747004-AI-Dashboard-UX-UI-Product-Design
      - Charcoal Black Background: #040404
-     - Graphite Surfaces & Cards: #0C0E12, #12161C, #181D24
+     - Graphite Surfaces & Cards: #080A0D, #0C0E12, #12161C, #181D24
      - Mint / Light Green: #DEECE6
      - Institutional Forest Green: #324938
      - Sage Green: #779267
@@ -93,7 +94,16 @@
     --shadow-gold:      none;
   }
 
-  /* Reset & Box Sizing */
+  /* Override medieval fonts to clean modern Plus Jakarta Sans */
+  @font-face {
+    font-family: 'Cinzel';
+    src: local('Plus Jakarta Sans'), local('Inter'), sans-serif;
+  }
+  @font-face {
+    font-family: 'IM Fell English';
+    src: local('Plus Jakarta Sans'), local('Inter'), sans-serif;
+  }
+
   *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -472,18 +482,6 @@
     border-color: var(--border-hover);
   }
 
-  .btn-saas-danger {
-    background-color: rgba(179, 87, 108, 0.12);
-    color: var(--mint);
-    border-color: rgba(179, 87, 108, 0.35);
-  }
-
-  .btn-saas-danger:hover {
-    background-color: var(--rose);
-    color: #ffffff;
-    box-shadow: 0 4px 14px rgba(179, 87, 108, 0.45);
-  }
-
   /* Standard compatibility classes for buttons used in part3/4/5 */
   .btn {
     display: inline-flex;
@@ -513,6 +511,7 @@
   }
   .btn-primary:hover, .btn-green:hover {
     background-color: var(--green-hover);
+    color: #ffffff;
   }
   .btn-dark {
     background-color: var(--bg-card);
@@ -545,6 +544,11 @@
     background-color: var(--green-primary);
     color: var(--mint);
     border-color: rgba(119, 146, 103, 0.3);
+  }
+  .btn-purple {
+    background-color: rgba(119, 146, 103, 0.2);
+    color: var(--mint);
+    border-color: rgba(119, 146, 103, 0.4);
   }
   .btn-xs {
     padding: 4px 10px;
@@ -803,10 +807,207 @@
     animation: saasFadeIn 0.2s ease;
   }
 
-  /* Hero Cards Grid */
+  /* Wizard Steps (Classes, Heroes, Stats) */
+  .classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .class-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    user-select: none;
+  }
+
+  .class-card:hover:not(.taken) {
+    transform: translateY(-2px);
+    border-color: var(--border-hover);
+    background: var(--bg-card-elevated);
+  }
+
+  .class-card.selected {
+    border-color: var(--sage);
+    background: rgba(50, 73, 56, 0.35);
+  }
+
+  .class-card.taken {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .class-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--mint);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .class-exp {
+    font-size: 11px;
+    color: var(--gray-neutral);
+    display: block;
+  }
+
+  .taken-by {
+    font-size: 10px;
+    color: var(--rose);
+    margin-top: 4px;
+    display: block;
+    font-weight: 600;
+  }
+
+  .player-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 14px;
+  }
+
+  .player-num-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-xs);
+    background: var(--green-primary);
+    color: var(--mint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .p-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--mint);
+  }
+
+  .p-chosen {
+    font-size: 12px;
+    color: var(--sage);
+    font-weight: 600;
+  }
+
+  .heroes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+
+  .hero-select-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    text-align: center;
+    position: relative;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-select-card:hover:not(.taken) {
+    transform: translateY(-3px);
+    border-color: var(--border-hover);
+  }
+
+  .hero-select-card.selected {
+    border-color: var(--sage);
+    background: rgba(50, 73, 56, 0.3);
+  }
+
+  .hero-select-card.taken {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .hero-select-card .hero-thumb {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    background: var(--bg-card);
+  }
+
+  .hero-select-card .hero-card-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--mint);
+    padding: 8px 6px 2px;
+  }
+
+  .hero-select-card .hero-card-exp {
+    font-size: 10px;
+    color: var(--gray-neutral);
+    padding: 0 6px 8px;
+  }
+
+  .hero-select-card .selected-check {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: var(--sage);
+    color: #040404;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .hero-select-card.selected .selected-check {
+    display: flex;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .stat-input-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-input-box label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sage);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-input-box input {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    max-width: 120px;
+    margin: 0 auto;
+  }
+
+  /* Hero Cards in Dashboard */
   .heroes-dash-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
     gap: 20px;
     margin-bottom: 24px;
   }
@@ -824,7 +1025,408 @@
     border-color: var(--border-hover);
   }
 
-  /* Map Components Panel (with 100% transparent treated tokens) */
+  .hero-card-top {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .hero-card-top .hero-thumb {
+    width: 58px;
+    height: 58px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    object-fit: cover;
+  }
+
+  .hero-player-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--mint);
+    line-height: 1.2;
+  }
+
+  .hero-class-tag {
+    font-size: 11px;
+    color: var(--sage);
+    font-weight: 600;
+  }
+
+  .level-badge {
+    padding: 2px 8px;
+    border-radius: var(--radius-xs);
+    background: var(--green-primary);
+    color: var(--mint);
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+  }
+
+  .level-btn-strip {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin: 12px 0;
+  }
+
+  .lvl-num-btn {
+    padding: 6px 2px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--gray-neutral);
+    font-family: var(--font-main);
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+  }
+
+  .lvl-num-btn:hover {
+    background: var(--bg-card-elevated);
+    color: var(--mint);
+  }
+
+  .lvl-num-btn.active {
+    background: var(--green-primary);
+    color: var(--mint);
+    border-color: var(--sage);
+    font-weight: 800;
+  }
+
+  .hero-vitals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .vital-box {
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    text-align: center;
+  }
+
+  .vital-box.hp-box {
+    border-color: rgba(179, 87, 108, 0.25);
+  }
+
+  .vital-box.mp-box {
+    border-color: rgba(119, 146, 103, 0.25);
+  }
+
+  .vital-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .hp-box .vital-title { color: var(--rose); }
+  .mp-box .vital-title { color: var(--sage); }
+
+  .vital-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--mint);
+    line-height: 1.1;
+  }
+
+  .vital-sub {
+    font-size: 10px;
+    color: var(--gray-muted);
+    margin-top: 2px;
+  }
+
+  .bar-track {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-input);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.25s ease;
+  }
+
+  .bar-fill.xp { background: var(--mint); }
+  .bar-fill.hp { background: var(--rose); }
+  .bar-fill.mp { background: var(--sage); }
+
+  .hero-subbox {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-top: 10px;
+  }
+
+  .hero-subbox-hdr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .hero-subbox-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--sage);
+    letter-spacing: 0.5px;
+  }
+
+  .item-chip-list, .skill-chip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .item-chip, .skill-chip {
+    padding: 6px 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xs);
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .item-rarity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* Bestiary Showcase */
+  .bestiary-showcase-frame {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    margin-bottom: 24px;
+  }
+
+  .bestiary-top-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .bestiary-top-banner h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--mint);
+    letter-spacing: -0.2px;
+  }
+
+  .bestiary-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr 1.15fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 1024px) {
+    .bestiary-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .bestiary-roster-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 380px;
+    overflow-y: auto;
+  }
+
+  .bestiary-roster-item {
+    padding: 8px 12px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+
+  .bestiary-roster-item:hover, .bestiary-roster-item.active {
+    background: var(--bg-card-elevated);
+    border-color: var(--border-hover);
+  }
+
+  .bestiary-roster-item.active {
+    border-color: var(--sage);
+  }
+
+  .bestiary-roster-thumb {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-subtle);
+    object-fit: cover;
+  }
+
+  .bestiary-roster-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--mint);
+    line-height: 1.2;
+  }
+
+  .bestiary-roster-sub {
+    font-size: 11px;
+    color: var(--gray-neutral);
+  }
+
+  .bestiary-pedestal-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .bestiary-pedestal-img-wrap {
+    position: relative;
+    max-width: 240px;
+    width: 100%;
+    text-align: center;
+    margin: 8px 0;
+  }
+
+  .bestiary-pedestal-img {
+    max-width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+  }
+
+  .bestiary-nav-arrows {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .bestiary-arrow-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--mint);
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    transition: all 0.18s ease;
+  }
+
+  .bestiary-arrow-btn:hover {
+    background: var(--green-primary);
+    border-color: var(--sage);
+  }
+
+  .parchment-lore-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 18px;
+  }
+
+  /* Mission Progression Tree */
+  .mission-tree-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 14px;
+  }
+
+  .mission-stage-row {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+  }
+
+  .mission-stage-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mission-nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .mission-node {
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .mission-node:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-card-elevated);
+  }
+
+  .mission-node.status-completed {
+    border-color: rgba(119, 146, 103, 0.45);
+    background: rgba(50, 73, 56, 0.15);
+  }
+
+  .mission-node.status-current {
+    border-color: var(--mint);
+    background: rgba(50, 73, 56, 0.35);
+    box-shadow: 0 0 12px rgba(119, 146, 103, 0.25);
+  }
+
+  .mission-node.status-locked {
+    opacity: 0.5;
+  }
+
+  .mission-code-badge {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--sage);
+  }
+
+  /* Map Components Panel with Official Game Tokens */
   .tdp-map-components-panel {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -934,6 +1536,29 @@
     color: var(--mint);
   }
 
+  /* City Cards */
+  .city-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    transition: border-color 0.2s;
+  }
+
+  .city-card:hover {
+    border-color: var(--border-hover);
+  }
+
+  .city-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--mint);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   /* Modals */
   .modal-overlay {
     display: none;
@@ -1006,7 +1631,6 @@
     z-index: 95;
   }
 
-  /* Responsive Rules */
   @media (max-width: 1024px) {
     .saas-sidebar {
       transform: translateX(-100%);
@@ -1036,9 +1660,14 @@
       padding: 18px 16px 36px;
     }
   }
+
 </style>
 </head>
 <body>
+
+<!-- Hidden elements for complete backwards compatibility -->
+<img id="header-logo" src="logo-registro.png" style="display:none;" alt="Logo">
+<div id="sanctuary-section" style="display:none;"></div>
 
 <div class="saas-layout">
   <!-- 1. SIDEBAR LATERAL MODERNA (Arounda SaaS Design) -->
@@ -1269,11 +1898,11 @@
             <div style="margin-bottom:20px;">
               <label>Quantidade de Personagens na Companhia</label>
               <div style="display:grid;grid-template-columns:repeat(5, 1fr);gap:8px;margin-top:4px;">
-                <button class="btn btn-dark" type="button" onclick="startCampaignCreation(1)" style="font-size:13px;padding:10px;">1 Herói</button>
-                <button class="btn btn-dark" type="button" onclick="startCampaignCreation(2)" style="font-size:13px;padding:10px;">2 Heróis</button>
-                <button class="btn btn-dark" type="button" onclick="startCampaignCreation(3)" style="font-size:13px;padding:10px;">3 Heróis</button>
-                <button class="btn btn-primary" type="button" onclick="startCampaignCreation(4)" style="font-size:13px;padding:10px;">4 Heróis</button>
-                <button class="btn btn-dark" type="button" onclick="startCampaignCreation(5)" style="font-size:13px;padding:10px;">5 Heróis</button>
+                <button class="btn btn-dark" type="button" onclick="selectCount(1)" style="font-size:13px;padding:10px;">1 Herói</button>
+                <button class="btn btn-dark" type="button" onclick="selectCount(2)" style="font-size:13px;padding:10px;">2 Heróis</button>
+                <button class="btn btn-dark" type="button" onclick="selectCount(3)" style="font-size:13px;padding:10px;">3 Heróis</button>
+                <button class="btn btn-primary" type="button" onclick="selectCount(4)" style="font-size:13px;padding:10px;">4 Heróis</button>
+                <button class="btn btn-dark" type="button" onclick="selectCount(5)" style="font-size:13px;padding:10px;">5 Heróis</button>
               </div>
             </div>
 
@@ -1487,7 +2116,11 @@
 </div>
 
 <script>
-  // Helper de Navegação da Sidebar SaaS
+  // Aliases e Helpers do SaaS
+  function startCampaignCreation(n) {
+    if (typeof selectCount === 'function') selectCount(n);
+  }
+
   function toggleSidebar(forceState) {
     const sb = document.getElementById('saas-sidebar');
     const bd = document.getElementById('saas-sidebar-backdrop');
@@ -1499,12 +2132,10 @@
   }
 
   function navigateToModule(modKey) {
-    // Atualiza botão ativo na sidebar
     document.querySelectorAll('.saas-nav-item').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.module === modKey);
     });
 
-    // Fecha sidebar no mobile
     if (window.innerWidth <= 1024) {
       toggleSidebar(false);
     }
@@ -1535,7 +2166,6 @@
       return;
     }
 
-    // Se estiver em outra tela, garante que há campanha carregada
     if (typeof currentCampId === 'undefined' || !currentCampId || !currentCampaign) {
       if (typeof savedCampaigns !== 'undefined' && Object.keys(savedCampaigns).length > 0) {
         const firstId = Object.keys(savedCampaigns)[0];
@@ -2781,7 +3411,7 @@ function initBnfParallax() {
 
 window.addEventListener('DOMContentLoaded', async () => {
  initBnfParallax();
- document.getElementById('header-logo').src = LOGO_DATA;
+ const hLogo = document.getElementById('header-logo'); if (hLogo) hLogo.src = LOGO_DATA;
  document.querySelectorAll('.header-logo-clone').forEach(el => { el.src = LOGO_DATA; });
 
  loadLocalCampaigns();
@@ -2977,7 +3607,7 @@ function renderSavedCampaignsList() {
   }).join('');
 }
 
-function loadSavedCampaign(campId) {
+async function loadSavedCampaign(campId) {
  const camp = savedCampaigns[campId];
  if (!camp) return;
  await fetchGameData();
@@ -3758,6 +4388,14 @@ function renderBestiaryShowcase() {
       </div>
     </div>
   `;
+}
+
+function renderHeroesTab() {
+  renderBestiaryShowcase();
+}
+
+function renderHeroesTab() {
+  renderBestiaryShowcase();
 }
 
 function renderHeroesTab() {
