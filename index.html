@@ -574,6 +574,289 @@
     border-color: var(--tdp-gold-dim);
   }
 
+  
+  /* ==============================================================
+     ESTÉTICA THE DRAGON PRINCE & FANTASY BNF - SELEÇÃO DE HERÓIS E CLASSES
+     ============================================================== */
+  .bnf-compact-header {
+    text-align: center;
+    padding: 30px 20px 20px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--tdp-border-subtle);
+  }
+  .header-logo-clone {
+    max-width: 260px;
+    height: auto;
+    display: block;
+    margin: 0 auto 12px;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
+  }
+  .bnf-compact-header .subtitle {
+    font-family: 'IM Fell English', 'Cinzel', serif;
+    font-size: 16px;
+    color: var(--tdp-gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .classes-player-block, .heroes-player-block, .stats-player-block {
+    margin-bottom: 24px;
+    background: #13171e;
+    border: 1px solid var(--tdp-border);
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+  .player-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--tdp-border-subtle);
+  }
+  .player-num-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--tdp-panel);
+    border: 1px solid var(--tdp-gold-dim);
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--tdp-gold);
+    flex-shrink: 0;
+  }
+  .p-name {
+    font-family: 'IM Fell English', 'Cinzel', serif;
+    font-size: 19px;
+    color: var(--tdp-gold-bright);
+    letter-spacing: 0.8px;
+  }
+  .p-chosen {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--tdp-gold);
+    background: rgba(201, 168, 76, 0.1);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    padding: 5px 12px;
+    border-radius: 3px;
+  }
+
+  /* Grid de Classes */
+  .classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 12px;
+  }
+  .class-card {
+    background: #11141a;
+    border: 1px solid var(--tdp-border-subtle);
+    border-radius: 4px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    user-select: none;
+    position: relative;
+  }
+  .class-card:hover:not(.taken) {
+    transform: translateY(-3px);
+    border-color: rgba(201, 168, 76, 0.45);
+    background: #161a22;
+  }
+  .class-card.selected {
+    border-color: var(--tdp-gold);
+    background: #191f2a;
+    box-shadow: 0 0 14px rgba(201, 168, 76, 0.25);
+  }
+  .class-card.taken {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.8);
+  }
+  .class-card .class-icon { display: none; }
+  .class-card .class-name {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--tdp-gold-bright);
+    letter-spacing: 0.8px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .class-card .class-exp {
+    font-size: 10.5px;
+    color: var(--tdp-text-dim);
+    display: block;
+    font-style: italic;
+    line-height: 1.2;
+  }
+  .class-card .taken-by {
+    font-size: 10px;
+    color: #e55353;
+    margin-top: 4px;
+    display: block;
+    font-weight: 600;
+  }
+
+  /* Grid de Heróis (The Dragon Prince Cards) */
+  .heroes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 14px;
+  }
+  .hero-select-card {
+    background: #111419;
+    border: 1px solid var(--tdp-border);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    text-align: center;
+    position: relative;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-select-card:hover:not(.taken) {
+    transform: translateY(-4px);
+    border-color: rgba(201, 168, 76, 0.5);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  }
+  .hero-select-card.selected {
+    border: 2px solid var(--tdp-gold);
+    background: #171b23;
+    box-shadow: 0 0 16px rgba(201, 168, 76, 0.3);
+  }
+  .hero-select-card.taken {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.85);
+  }
+  .hero-select-card .hero-thumb {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    background: radial-gradient(circle at 50% 35%, #252b36 0%, #0d0f14 80%);
+    border-bottom: 1px solid var(--tdp-border-subtle);
+    transition: transform 0.25s ease;
+  }
+  .hero-select-card:hover:not(.taken) .hero-thumb {
+    transform: scale(1.03);
+  }
+  .hero-select-card .hero-thumb-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 700;
+    background: radial-gradient(circle at 50% 35%, #222731 0%, #0d0f14 80%);
+    color: var(--tdp-gold-dim);
+    border-bottom: 1px solid var(--tdp-border-subtle);
+  }
+  .hero-select-card .hero-card-name {
+    font-family: 'IM Fell English', 'Cinzel', serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--tdp-gold-bright);
+    letter-spacing: 0.6px;
+    padding: 8px 6px 2px;
+    line-height: 1.25;
+  }
+  .hero-select-card .hero-card-exp {
+    font-size: 10px;
+    color: var(--tdp-text-dim);
+    padding: 0 6px 8px;
+    font-style: italic;
+    line-height: 1.2;
+  }
+  .hero-select-card .selected-check {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: var(--tdp-gold);
+    color: #0b0d11;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  }
+  .hero-select-card.selected .selected-check {
+    display: flex;
+  }
+
+  /* Stats Screen Step */
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .stat-input-box {
+    background: #11141a;
+    border: 1px solid var(--tdp-border);
+    border-radius: 4px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-input-box label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--tdp-gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .stat-input-box input {
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    padding: 8px;
+    max-width: 120px;
+    margin: 0 auto;
+    border-radius: 3px;
+    background: #0b0d11;
+  }
+  .stat-input-box.hp-box input {
+    color: #e55353;
+    border: 1px solid #732626;
+  }
+  .stat-input-box.mp-box input {
+    color: #6b8afd;
+    border: 1px solid #2d4585;
+  }
+  .stat-input-box .stat-icon { display: none; }
+
+  /* Modal Title */
+  .modal-title {
+    font-family: 'IM Fell English', 'Cinzel', serif;
+    font-size: 20px;
+    color: var(--tdp-gold-bright);
+    letter-spacing: 1px;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--tdp-border);
+  }
+
   /* Modals */
   .modal-overlay {
     position: fixed;
@@ -585,7 +868,7 @@
     justify-content: center;
     padding: 20px;
   }
-  .modal-overlay.active { display: flex; }
+  .modal-overlay.active, .modal-overlay.open { display: flex; }
   .modal-box {
     background: var(--tdp-panel);
     border: 1px solid var(--tdp-border);
@@ -2872,32 +3155,34 @@ function mapRawHeroesList(rawArr) {
 let allHeroesLoadedFromCloud = false;
 
 async function fetchGameData() {
- // Inicializa imediatamente com os 147 heróis embutidos caso ainda esteja vazio
- if (allHeroesDB.length === 0 && typeof FALLBACK_HEROES_RAW !== 'undefined') {
- allHeroesDB = mapRawHeroesList(FALLBACK_HEROES_RAW);
- }
- if (allHeroesLoadedFromCloud) return;
- try {
- const expRes = await fetch(`${SUPA_URL}/rest/v1/expansions?select=id,name`, { headers: SUPA_HEADERS });
- if (expRes.ok) {
- const expData = await expRes.json();
- expData.forEach(e => { expansionsMap[e.id] = e.name; });
- }
- const charRes = await fetch(`${SUPA_URL}/rest/v1/global_settings?select=value&key=eq.personagens_items`, { headers: SUPA_HEADERS });
- if (charRes.ok) {
- const charData = await charRes.json();
- if (charData && charData.length > 0 && charData[0].value) {
- const rawVal = charData[0].value;
- const parsedArr = typeof rawVal === 'string' ? JSON.parse(rawVal) : rawVal;
- if (Array.isArray(parsedArr) && parsedArr.length > 0) {
- allHeroesDB = mapRawHeroesList(parsedArr);
- allHeroesLoadedFromCloud = true;
- }
- }
- }
- } catch (e) {
- console.warn('Usando banco de 147 heróis pré-carregado:', e);
- }
+  if (allHeroesDB.length === 0 && typeof FALLBACK_HEROES_RAW !== 'undefined') {
+    allHeroesDB = mapRawHeroesList(FALLBACK_HEROES_RAW);
+  }
+  if (allHeroesLoadedFromCloud) return;
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
+    const expRes = await fetch(`${SUPA_URL}/rest/v1/expansions?select=id,name`, { headers: SUPA_HEADERS, signal: controller.signal });
+    if (expRes.ok) {
+      const expData = await expRes.json();
+      expData.forEach(e => { expansionsMap[e.id] = e.name; });
+    }
+    const charRes = await fetch(`${SUPA_URL}/rest/v1/global_settings?select=value&key=eq.personagens_items`, { headers: SUPA_HEADERS, signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (charRes.ok) {
+      const charData = await charRes.json();
+      if (charData && charData.length > 0 && charData[0].value) {
+        const rawVal = charData[0].value;
+        const parsedArr = typeof rawVal === 'string' ? JSON.parse(rawVal) : rawVal;
+        if (Array.isArray(parsedArr) && parsedArr.length > 0) {
+          allHeroesDB = mapRawHeroesList(parsedArr);
+          allHeroesLoadedFromCloud = true;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Usando banco de 147 heróis pré-carregado:', e);
+  }
 }
 
 function selectCount(n) {
@@ -2948,149 +3233,168 @@ function goToClasses() {
 }
 
 function renderClassesScreen() {
- const container = document.getElementById('classes-container');
- container.innerHTML = '';
+  const container = document.getElementById('classes-container');
+  if (!container) return;
+  container.innerHTML = '';
 
- state.players.forEach((player, pIdx) => {
- const block = document.createElement('div');
- block.className = 'card classes-player-block';
+  state.players.forEach((player, pIdx) => {
+    const block = document.createElement('div');
+    block.className = 'card classes-player-block';
 
- const chosenClass = CLASSES_LIST.find(c => c.id === player.classId);
- const chosenLabel = chosenClass ? `${chosenClass.icon} ${chosenClass.name}` : 'Nenhuma escolhida';
+    const chosenClass = CLASSES_LIST.find(c => c.id === player.classId);
+    const chosenLabel = chosenClass ? chosenClass.name : 'Nenhuma escolhida';
 
- block.innerHTML = `
- <div class="player-header-bar">
- <div class="player-num-badge">${pIdx + 1}</div>
- <span class="p-name">Herói ${pIdx + 1}</span>
- <span class="p-chosen" id="pchosen-cls-${pIdx}">${chosenLabel}</span>
- </div>
- <div class="classes-grid" id="cgrid-${pIdx}"></div>
- `;
- container.appendChild(block);
+    block.innerHTML = `
+      <div class="player-header-bar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="player-num-badge">${pIdx + 1}</div>
+          <span class="p-name">${escapeHtml(player.name || `Herói ${pIdx + 1}`)}</span>
+        </div>
+        <span class="p-chosen" id="pchosen-cls-${pIdx}">${escapeHtml(chosenLabel)}</span>
+      </div>
+      <div class="classes-grid" id="cgrid-${pIdx}"></div>
+    `;
+    container.appendChild(block);
 
- const grid = block.querySelector(`#cgrid-${pIdx}`);
- CLASSES_LIST.forEach(cls => {
- const takenByIdx = state.players.findIndex((p, i) => i !== pIdx && p.classId === cls.id);
- const isTaken = takenByIdx !== -1;
- const isSelected = player.classId === cls.id;
+    const grid = block.querySelector(`#cgrid-${pIdx}`);
+    CLASSES_LIST.forEach(cls => {
+      const takenByIdx = state.players.findIndex((p, i) => i !== pIdx && p.classId === cls.id);
+      const isTaken = takenByIdx !== -1;
+      const isSelected = player.classId === cls.id;
 
- const card = document.createElement('div');
- card.className = 'class-card' + (isSelected ? ' selected' : '') + (isTaken ? ' taken' : '');
- card.innerHTML = `
- <span class="class-icon">${cls.icon}</span>
- <span class="class-name">${cls.name}</span>
- <span class="class-exp">${cls.exp}</span>
- ${isTaken ? `<span class="taken-by">(Herói ${takenByIdx + 1})</span>` : ''}
- `;
- if (!isTaken) card.onclick = () => selectClass(pIdx, cls.id);
- grid.appendChild(card);
- });
- });
+      const card = document.createElement('div');
+      card.className = 'class-card' + (isSelected ? ' selected' : '') + (isTaken ? ' taken' : '');
+      card.innerHTML = `
+        <div class="class-name">${escapeHtml(cls.name)}</div>
+        <div class="class-exp">${escapeHtml(cls.exp)}</div>
+        <div class="class-exp" style="color:var(--tdp-gold-dim);margin-top:6px;font-size:10px;">${cls.hpSug} HP • ${cls.mpSug} Mana</div>
+        ${isTaken ? `<span class="taken-by">(Escolhido por Herói ${takenByIdx + 1})</span>` : ''}
+      `;
+      if (!isTaken) card.onclick = () => selectClass(pIdx, cls.id);
+      grid.appendChild(card);
+    });
+  });
 }
 
 function selectClass(pIdx, classId) {
- const cls = CLASSES_LIST.find(c => c.id === classId);
- if (!cls) return;
- if (state.players[pIdx].classId !== classId) {
- state.players[pIdx].heroId = null;
- state.players[pIdx].heroName = null;
- state.players[pIdx].heroPhoto = null;
- }
- state.players[pIdx].classId = cls.id;
- state.players[pIdx].className = cls.name;
- state.players[pIdx].classIcon = cls.icon;
- state.players[pIdx].hpBase = cls.hpSug || 5;
- state.players[pIdx].mpBase = cls.mpSug ?? 3;
- document.getElementById('classes-error').style.display = 'none';
- renderClassesScreen();
+  const cls = CLASSES_LIST.find(c => c.id === classId);
+  if (!cls) return;
+  if (state.players[pIdx].classId !== classId) {
+    state.players[pIdx].heroId = null;
+    state.players[pIdx].heroName = null;
+    state.players[pIdx].heroPhoto = null;
+  }
+  state.players[pIdx].classId = cls.id;
+  state.players[pIdx].className = cls.name;
+  state.players[pIdx].classIcon = '';
+  state.players[pIdx].hpBase = cls.hpSug || 5;
+  state.players[pIdx].mpBase = cls.mpSug ?? 3;
+  const err = document.getElementById('classes-error');
+  if (err) err.style.display = 'none';
+  renderClassesScreen();
 }
 
 async function goToHeroes() {
- if (state.players.some(p => !p.classId)) {
- document.getElementById('classes-error').style.display = 'block';
- return;
- }
- document.getElementById('classes-error').style.display = 'none';
- showScreen('screen-heroes');
- const container = document.getElementById('heroes-container');
- container.innerHTML = '<div class="loading-spinner">⏳ Carregando todos os heróis do projeto original...</div>';
- await fetchGameData();
- renderHeroesScreen();
+  if (state.players.some(p => !p.classId)) {
+    const err = document.getElementById('classes-error');
+    if (err) err.style.display = 'block';
+    return;
+  }
+  const err = document.getElementById('classes-error');
+  if (err) err.style.display = 'none';
+  showScreen('screen-heroes');
+  
+  if (allHeroesDB.length === 0 && typeof FALLBACK_HEROES_RAW !== 'undefined') {
+    allHeroesDB = mapRawHeroesList(FALLBACK_HEROES_RAW);
+  }
+  renderHeroesScreen();
+  
+  fetchGameData().then(() => {
+    renderHeroesScreen();
+  });
 }
 
 function renderHeroesScreen() {
- const container = document.getElementById('heroes-container');
- container.innerHTML = '';
+  const container = document.getElementById('heroes-container');
+  if (!container) return;
+  container.innerHTML = '';
 
- state.players.forEach((player, pIdx) => {
- const cls = CLASSES_LIST.find(c => c.id === player.classId);
- const heroesOfClass = allHeroesDB.filter(h => h.classId === player.classId);
+  state.players.forEach((player, pIdx) => {
+    const cls = CLASSES_LIST.find(c => c.id === player.classId);
+    const heroesOfClass = allHeroesDB.filter(h => h.classId === player.classId);
 
- const block = document.createElement('div');
- block.className = 'card heroes-player-block';
- const chosenLabel = player.heroName ? ` ${player.heroName}` : 'Nenhum herói escolhido';
+    const block = document.createElement('div');
+    block.className = 'card heroes-player-block';
+    const chosenLabel = player.heroName ? player.heroName : 'Nenhum herói escolhido';
 
- block.innerHTML = `
- <div class="player-header-bar">
- <div class="player-num-badge">${pIdx + 1}</div>
- <span class="p-name">Herói ${pIdx + 1}</span>
- <span style="font-size:14px; color:var(--gold); font-family:'Cinzel',serif;">${cls ? cls.icon + ' ' + cls.name : ''} (${heroesOfClass.length} opções)</span>
- <span class="p-chosen" id="pchosen-hero-${pIdx}">${escapeHtml(chosenLabel)}</span>
- </div>
- <div class="heroes-grid" id="hgrid-${pIdx}"></div>
- `;
- container.appendChild(block);
+    block.innerHTML = `
+      <div class="player-header-bar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="player-num-badge">${pIdx + 1}</div>
+          <div>
+            <div class="p-name">${escapeHtml(player.heroName || `Herói ${pIdx + 1}`)}</div>
+            <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;margin-top:2px;">
+              ${cls ? escapeHtml(cls.name) : 'Sem Classe'} — ${heroesOfClass.length} heróis disponíveis
+            </div>
+          </div>
+        </div>
+        <span class="p-chosen" id="pchosen-hero-${pIdx}">${escapeHtml(chosenLabel)}</span>
+      </div>
+      <div class="heroes-grid" id="hgrid-${pIdx}"></div>
+    `;
+    container.appendChild(block);
 
- const grid = block.querySelector(`#hgrid-${pIdx}`);
+    const grid = block.querySelector(`#hgrid-${pIdx}`);
 
- if (heroesOfClass.length === 0) {
- const card = document.createElement('div');
- card.className = 'hero-select-card selected';
- card.innerHTML = `
- <div class="hero-thumb-placeholder">${cls ? cls.icon : '️'}</div>
- <div class="hero-card-name">${cls ? cls.name : 'Herói'}</div>
- <div class="hero-card-exp">Padrão</div>
- <div class="selected-check"></div>
- `;
- state.players[pIdx].heroId = 'generic_' + player.classId;
- state.players[pIdx].heroName = cls ? cls.name : 'Herói';
- state.players[pIdx].name = state.players[pIdx].heroName;
- state.players[pIdx].heroPhoto = '';
- grid.appendChild(card);
- return;
- }
+    if (heroesOfClass.length === 0) {
+      const card = document.createElement('div');
+      card.className = 'hero-select-card selected';
+      card.innerHTML = `
+        <div class="hero-thumb-placeholder">${cls ? escapeHtml(cls.name.slice(0, 3).toUpperCase()) : 'MD2'}</div>
+        <div class="hero-card-name">${cls ? escapeHtml(cls.name) : 'Herói'}</div>
+        <div class="hero-card-exp">Padrão da Classe</div>
+        <div class="selected-check"></div>
+      `;
+      state.players[pIdx].heroId = 'generic_' + player.classId;
+      state.players[pIdx].heroName = cls ? cls.name : 'Herói';
+      state.players[pIdx].name = state.players[pIdx].heroName;
+      state.players[pIdx].heroPhoto = '';
+      grid.appendChild(card);
+      return;
+    }
 
- heroesOfClass.forEach(hero => {
- const takenByIdx = state.players.findIndex((p, i) => i !== pIdx && p.heroId === hero.id);
- const isTaken = takenByIdx !== -1;
- const isSelected = player.heroId === hero.id;
+    heroesOfClass.forEach(hero => {
+      const takenByIdx = state.players.findIndex((p, i) => i !== pIdx && p.heroId === hero.id);
+      const isTaken = takenByIdx !== -1;
+      const isSelected = player.heroId === hero.id;
 
- const card = document.createElement('div');
- card.className = 'hero-select-card' + (isSelected ? ' selected' : '') + (isTaken ? ' taken' : '');
- card.innerHTML = `
- ${hero.photo
- ? `<img class="hero-thumb" src="${hero.photo}" alt="${escapeHtml(hero.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
- <div class="hero-thumb-placeholder" style="display:none;">${cls ? cls.icon : '️'}</div>`
- : `<div class="hero-thumb-placeholder">${cls ? cls.icon : '️'}</div>`
- }
- <div class="hero-card-name">${escapeHtml(hero.name)}</div>
- <div class="hero-card-exp">${escapeHtml(hero.expName)}</div>
- ${isTaken ? `<div style="font-size:10px;color:var(--crimson-lt);padding-bottom:6px;">(Herói ${takenByIdx + 1})</div>` : ''}
- <div class="selected-check"></div>
- `;
- if (!isTaken) card.onclick = () => selectHero(pIdx, hero);
- grid.appendChild(card);
- });
- });
+      const card = document.createElement('div');
+      card.className = 'hero-select-card' + (isSelected ? ' selected' : '') + (isTaken ? ' taken' : '');
+      card.innerHTML = `
+        ${hero.photo
+          ? `<img class="hero-thumb" src="${hero.photo}" alt="${escapeHtml(hero.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+             <div class="hero-thumb-placeholder" style="display:none;">${cls ? escapeHtml(cls.name.slice(0, 3).toUpperCase()) : 'MD2'}</div>`
+          : `<div class="hero-thumb-placeholder">${cls ? escapeHtml(cls.name.slice(0, 3).toUpperCase()) : 'MD2'}</div>`
+        }
+        <div class="hero-card-name">${escapeHtml(hero.name)}</div>
+        <div class="hero-card-exp">${escapeHtml(hero.expName || 'Massive Darkness 2')}</div>
+        ${isTaken ? `<div style="font-size:10px;color:#e55353;padding-bottom:6px;font-weight:600;">(Escolhido por Herói ${takenByIdx + 1})</div>` : ''}
+        <div class="selected-check"></div>
+      `;
+      if (!isTaken) card.onclick = () => selectHero(pIdx, hero);
+      grid.appendChild(card);
+    });
+  });
 }
 
 function selectHero(pIdx, hero) {
- state.players[pIdx].heroId = hero.id;
- state.players[pIdx].heroName = hero.name;
- state.players[pIdx].name = hero.name;
- state.players[pIdx].heroPhoto = hero.photo;
- document.getElementById('heroes-error').style.display = 'none';
- renderHeroesScreen();
+  state.players[pIdx].heroId = hero.id;
+  state.players[pIdx].heroName = hero.name;
+  state.players[pIdx].name = hero.name;
+  state.players[pIdx].heroPhoto = hero.photo || '';
+  const err = document.getElementById('heroes-error');
+  if (err) err.style.display = 'none';
+  renderHeroesScreen();
 }
 
 function goToStats() {
@@ -3641,62 +3945,75 @@ function renderHeroesTab() {
 
 // ── Trocar Herói Diretamente no Registro Pós-Partida (Todos os 147 Heróis) ──
 async function openChangeHeroModal(pIdx) {
- await fetchGameData();
- const p = state.players[pIdx];
+  if (allHeroesDB.length === 0 && typeof FALLBACK_HEROES_RAW !== 'undefined') {
+    allHeroesDB = mapRawHeroesList(FALLBACK_HEROES_RAW);
+  }
+  const p = state.players[pIdx];
 
- const classOptions = `<option value="ALL">Todas as Classes (${allHeroesDB.length} Heróis)</option>` +
- CLASSES_LIST.map(c => `<option value="${c.id}" ${p.classId === c.id ? 'selected' : ''}>${c.icon} ${escapeHtml(c.name)}</option>`).join('');
+  const classOptions = `<option value="ALL">Todas as Classes (${allHeroesDB.length} Heróis)</option>` +
+    CLASSES_LIST.map(c => `<option value="${c.id}" ${p.classId === c.id ? 'selected' : ''}>${escapeHtml(c.name)}</option>`).join('');
 
- openCustomModal(` Selecionar Herói — Posição ${pIdx + 1}`, `
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
- <div>
- <label>Filtrar por Classe</label>
- <select id="modal-hero-cls-filter" onchange="renderChangeHeroModalGrid(${pIdx})">${classOptions}</select>
- </div>
- <div>
- <label>Buscar por Nome do Herói ou Expansão</label>
- <input type="text" id="modal-hero-search" placeholder="Ex: Elysa, Zombicide, Heavenfall..." oninput="renderChangeHeroModalGrid(${pIdx})">
- </div>
- </div>
- <div id="modal-hero-picker-grid" class="heroes-grid" style="max-height:420px;overflow-y:auto;padding:8px;background:var(--bg-deep);border:1px solid var(--gold-dim);border-radius:4px;"></div>
- `);
- renderChangeHeroModalGrid(pIdx);
+  openCustomModal(`Selecionar Herói — Posição ${pIdx + 1}`, `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div>
+        <label style="font-family:'Cinzel',serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Filtrar por Classe</label>
+        <select id="modal-hero-cls-filter" onchange="renderChangeHeroModalGrid(${pIdx})">${classOptions}</select>
+      </div>
+      <div>
+        <label style="font-family:'Cinzel',serif;font-size:11px;color:var(--tdp-gold);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Buscar por Nome ou Expansão</label>
+        <input type="text" id="modal-hero-search" placeholder="Ex: Elysa, Silas, Zombicide, Heavenfall..." oninput="renderChangeHeroModalGrid(${pIdx})">
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--tdp-text-dim);margin-bottom:10px;font-family:'Cinzel',serif;" id="modal-heroes-count-badge"></div>
+    <div id="modal-hero-picker-grid" class="heroes-grid" style="max-height:460px;overflow-y:auto;padding:10px;background:#0d1015;border:1px solid var(--tdp-border);border-radius:4px;"></div>
+  `);
+  renderChangeHeroModalGrid(pIdx);
+
+  fetchGameData().then(() => {
+    renderChangeHeroModalGrid(pIdx);
+  });
 }
 
 function renderChangeHeroModalGrid(pIdx) {
- const grid = document.getElementById('modal-hero-picker-grid');
- if (!grid) return;
- const clsFilter = document.getElementById('modal-hero-cls-filter')?.value || 'ALL';
- const query = (document.getElementById('modal-hero-search')?.value || '').trim().toLowerCase();
- const p = state.players[pIdx];
+  const grid = document.getElementById('modal-hero-picker-grid');
+  if (!grid) return;
+  const clsFilter = document.getElementById('modal-hero-cls-filter')?.value || 'ALL';
+  const query = (document.getElementById('modal-hero-search')?.value || '').trim().toLowerCase();
+  const p = state.players[pIdx];
 
- const filtered = allHeroesDB.filter(h => {
- if (clsFilter !== 'ALL' && h.classId !== clsFilter) return false;
- if (query && !h.name.toLowerCase().includes(query) && !(h.expName || '').toLowerCase().includes(query)) return false;
- return true;
- });
+  const filtered = allHeroesDB.filter(h => {
+    if (clsFilter !== 'ALL' && h.classId !== clsFilter) return false;
+    if (query && !h.name.toLowerCase().includes(query) && !(h.expName || '').toLowerCase().includes(query)) return false;
+    return true;
+  });
 
- if (filtered.length === 0) {
- grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);">Nenhum herói encontrado para este filtro.</div>`;
- return;
- }
+  const countBadge = document.getElementById('modal-heroes-count-badge');
+  if (countBadge) {
+    countBadge.textContent = `Exibindo ${filtered.length} heróis disponíveis`;
+  }
 
- grid.innerHTML = filtered.map(h => {
- const cls = CLASSES_LIST.find(c => c.id === h.classId);
- const isSelected = p.heroId === h.id;
- return `
- <div class="hero-select-card ${isSelected ? 'selected' : ''}" onclick="applyChangedHero(${pIdx}, '${h.id}')">
- ${h.photo
- ? `<img class="hero-thumb" src="${h.photo}" alt="${escapeHtml(h.name)}" loading="lazy">`
- : `<div class="hero-thumb-placeholder">${cls ? cls.icon : '️'}</div>`
- }
- <div class="hero-card-name">${escapeHtml(h.name)}</div>
- <div class="hero-card-exp">${cls ? cls.icon + ' ' + escapeHtml(cls.name) : ''}</div>
- <div class="hero-card-exp" style="font-size:9px;opacity:0.75;">${escapeHtml(h.expName)}</div>
- <div class="selected-check"></div>
- </div>
- `;
- }).join('');
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:32px 16px;color:var(--tdp-text-dim);font-family:'Cinzel',serif;">Nenhum herói encontrado com esses filtros.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(h => {
+    const cls = CLASSES_LIST.find(c => c.id === h.classId);
+    const isSelected = p.heroId === h.id;
+    return `
+      <div class="hero-select-card ${isSelected ? 'selected' : ''}" onclick="applyChangedHero(${pIdx}, '${h.id}')" title="Selecionar ${escapeHtml(h.name)}">
+        ${h.photo
+          ? `<img class="hero-thumb" src="${h.photo}" alt="${escapeHtml(h.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+             <div class="hero-thumb-placeholder" style="display:none;">${cls ? escapeHtml(cls.name.slice(0, 3).toUpperCase()) : 'MD2'}</div>`
+          : `<div class="hero-thumb-placeholder">${cls ? escapeHtml(cls.name.slice(0, 3).toUpperCase()) : 'MD2'}</div>`
+        }
+        <div class="hero-card-name">${escapeHtml(h.name)}</div>
+        <div class="hero-card-exp">${cls ? escapeHtml(cls.name) : ''}</div>
+        <div class="hero-card-exp" style="font-size:9px;opacity:0.75;">${escapeHtml(h.expName || '')}</div>
+        <div class="selected-check"></div>
+      </div>
+    `;
+  }).join('');
 }
 
 function applyChangedHero(pIdx, heroId) {
