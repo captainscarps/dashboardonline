@@ -2354,6 +2354,128 @@
     }
   }
 
+  
+  /* ================================================================
+     RESPONSIVE IMAGES & PHOTO ATTACHMENTS (MOBILE & DESKTOP)
+     ================================================================ */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Map frames in closure and missions */
+  .mission-map-frame {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .mission-map-frame img {
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    object-fit: contain;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    background: #000;
+    transition: transform 0.2s ease;
+  }
+
+  .mission-map-frame img:hover {
+    transform: scale(1.01);
+  }
+
+  /* Photo attachments in items and skills */
+  .chip-photo-thumb {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-xs);
+    object-fit: cover;
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    flex-shrink: 0;
+    background: #000;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+
+  .chip-photo-thumb:hover {
+    transform: scale(1.1);
+    border-color: var(--mint);
+  }
+
+  .photo-preview-box {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-xs);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .photo-preview-box img {
+    max-width: 90px;
+    max-height: 90px;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid var(--border-subtle);
+    background: #000;
+  }
+
+  /* Mobile specific image adjustments */
+  @media (max-width: 768px) {
+    .mission-map-frame {
+      padding: 10px 8px;
+    }
+    .mission-map-frame img {
+      max-height: 340px;
+    }
+    .hero-img-wrap {
+      max-height: 280px;
+    }
+    .bestiary-pedestal-img-wrap {
+      max-height: 260px;
+    }
+    .city-card-img {
+      max-height: 140px;
+      object-fit: cover;
+      width: 100%;
+    }
+    .chip-photo-thumb {
+      width: 34px;
+      height: 34px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .mission-map-frame img {
+      max-height: 260px;
+    }
+    .hero-img-wrap {
+      max-height: 220px;
+    }
+    .bestiary-pedestal-img-wrap {
+      max-height: 200px;
+    }
+    .photo-preview-box {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .photo-preview-box img {
+      max-width: 100%;
+      max-height: 140px;
+    }
+  }
+
   </style>
 </head>
 <body>
@@ -5130,11 +5252,11 @@ function renderHeroesTab() {
     const invCount = (p.inventory || []).length;
     const tavCount = (p.tavern || []).length;
     const invHtml = invCount === 0
-      ? `<div style="font-size:12px;color:var(--gray-neutral);font-style:italic;padding:4px 0;">Nenhum item equipado registrado. Digite abaixo ou clique em "+ Detalhado".</div>`
+      ? `<div style="font-size:12px;color:var(--gray-neutral);font-style:italic;padding:4px 0;">Nenhum item equipado registrado. Digite abaixo ou abra "+ Detalhado".</div>`
       : (p.inventory || []).map((it, iIdx) => `
         <div class="item-chip">
           <div style="display:flex;align-items:center;gap:6px;min-width:0;">
-            <span class="item-rarity-dot rar-${it.rarity || 'Comum'}"></span>
+            ${it.photo ? `<img src="${it.photo}" class="chip-photo-thumb" alt="${escapeHtml(it.name)}" onclick="openImageZoomModal('${it.photo}', '${escapeHtml(it.name)}')" title="Toque para ampliar foto">` : `<span class="item-rarity-dot rar-${it.rarity || 'Comum'}"></span>`}
             <strong style="color:var(--mint);font-size:12px;">${escapeHtml(it.name)}</strong>
             <span style="font-size:11px;color:var(--gray-neutral);">(${escapeHtml(it.slot || it.rarity || 'Item')})</span>
           </div>
@@ -5144,6 +5266,29 @@ function renderHeroesTab() {
           </div>
         </div>
       `).join('');
+
+    // Habilidades / Deck Ativo do Herói
+    const skillsList = p.skills || [];
+    const skillsCount = skillsList.length;
+    const skillsHtml = skillsCount === 0
+      ? `<div style="font-size:12px;color:var(--gray-neutral);font-style:italic;padding:4px 0;">Nenhuma habilidade registrada no deck. Clique em "+ Detalhado" para adicionar ou fotografar cartas.</div>`
+      : skillsList.map((sk, sIdx) => {
+          const canUpgrade = ['I', 'II', 'III'].includes(sk.category);
+          const nextCatMap = { 'I': 'II', 'II': 'III', 'III': 'IV' };
+          return `
+            <div class="item-chip">
+              <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+                ${sk.photo ? `<img src="${sk.photo}" class="chip-photo-thumb" alt="${escapeHtml(sk.name)}" onclick="openImageZoomModal('${sk.photo}', '${escapeHtml(sk.name)}')" title="Toque para ampliar foto">` : `<span class="item-rarity-dot rar-Campanha"></span>`}
+                <strong style="color:var(--mint);font-size:12px;">[Cat. ${escapeHtml(sk.category || 'I')}] ${escapeHtml(sk.name)}</strong>
+                ${sk.cost ? `<span style="font-size:11px;color:var(--gray-neutral);">(${escapeHtml(sk.cost)})</span>` : ''}
+              </div>
+              <div style="display:flex;gap:4px;flex-shrink:0;">
+                ${canUpgrade ? `<button class="btn btn-outline btn-xs" onclick="upgradeHeroSkill(${idx}, ${sIdx})" title="Evoluir para Cat. ${nextCatMap[sk.category]}">+Cat.${nextCatMap[sk.category]}</button>` : ''}
+                <button class="btn btn-danger btn-xs" onclick="removeHeroSkill(${idx}, ${sIdx})" title="Remover Habilidade">Remover</button>
+              </div>
+            </div>
+          `;
+        }).join('');
 
     const card = document.createElement('div');
     card.className = 'hero-card';
@@ -5283,6 +5428,15 @@ function renderHeroesTab() {
               `).join('')}
             </div>
           ` : ''}
+        </div>
+
+        <!-- 4.1 HABILIDADES / DECK ATIVO (COM SUPORTE A FOTO/CÂMERA) -->
+        <div class="hero-subbox">
+          <div class="hero-subbox-hdr">
+            <span class="hero-subbox-title">Habilidades Ativas (${skillsCount})</span>
+            <button class="btn btn-dark btn-xs" onclick="openAddSkillModal(${idx})">+ Detalhado / Foto</button>
+          </div>
+          <div class="item-chip-list">${skillsHtml}</div>
         </div>
 
         <!-- 5. QUANTOS ESPÓLIOS FICOU -->
@@ -5594,40 +5748,6 @@ function quickAddDeckCard(pIdx) {
  renderHeroesTab();
 }
 
-function openAddSkillModal(pIdx) {
- const p = state.players[pIdx];
- const catalog = getSkillsForClass(p.classId);
-
- const itemsHtml = catalog.map(sk => {
- const cats = Object.keys(sk.desc);
- return `
- <div style="background:var(--bg-card2);border:1px solid var(--gold-dim);border-radius:4px;padding:10px 12px;margin-bottom:8px;">
- <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
- <strong style="font-family:Cinzel,serif;color:var(--gold-light);font-size:13px;">${escapeHtml(sk.name)}</strong>
- <span style="font-size:11px;color:var(--teal-lt);">${escapeHtml(sk.slot)} • ${escapeHtml(sk.cost)}</span>
- </div>
- <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px;">
- ${cats.map(cat => `
- <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--bg-deep);padding:5px 8px;border-radius:3px;">
- <div style="font-size:12px;color:var(--text-dim);">
- <strong style="color:var(--gold);">[Cat. ${cat}]</strong> ${escapeHtml(sk.desc[cat])}
- </div>
- <button class="btn btn-gold btn-xs" onclick="equipCatalogSkill(${pIdx}, '${sk.id}', '${cat}')">+ Usar Cat. ${cat}</button>
- </div>
- `).join('')}
- </div>
- </div>
- `;
- }).join('');
-
- openCustomModal(` Catálogo de Cartas da Classe — ${p.heroName} (Nível ${p.level})`, `
- <p style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">
- Selecione as cartas que <strong>${escapeHtml(p.heroName)}</strong> está usando em seu Deck: Categorias <strong>I</strong> (Nv 1+), <strong>II</strong> (Nv 3+), <strong>III</strong> (Nv 5+), <strong>IV</strong> (Nv 7+) e <strong>Híbridas (Cat. H — Nv 9+)</strong>.
- </p>
- <div style="max-height:420px;overflow-y:auto;padding-right:4px;">${itemsHtml}</div>
- `);
-}
-
 function equipCatalogSkill(pIdx, skillId, category) {
  const p = state.players[pIdx];
  const catalog = getSkillsForClass(p.classId);
@@ -5712,388 +5832,568 @@ function quickAddEquippedItem(pIdx) {
  renderDashboardAll();
 }
 
-function openAddItemModal(pIdx) {
- const p = state.players[pIdx];
- openCustomModal(` Registrar Item ou Poção — ${p.heroName}`, `
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
- <div>
- <label>Nome do Item / Equipamento</label>
- <input type="text" id="cit-name" placeholder="Ex: Espada Vorpal / Armadura Real">
- </div>
- <div>
- <label>Raridade</label>
- <select id="cit-rarity">
- <option value="Comum"> Comum (Câmbio: 1 Espólio)</option>
- <option value="Raro"> Raro (Câmbio: 3 Espólios)</option>
- <option value="Épico"> Épico (Câmbio: 9 Espólios)</option>
- <option value="Lendário"> Lendário (Câmbio: 27 Espólios)</option>
- <option value="Campanha"> Carta de Campanha / Relíquia</option>
- </select>
- </div>
- </div>
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
- <div>
- <label>Tipo / Slot (Mão, Armadura, Consumível)</label>
- <input type="text" id="cit-slot" placeholder="Ex: Arma 1 Mão / Armadura / Poção">
- </div>
- <div>
- <label>Onde Guardar?</label>
- <select id="cit-dest">
- <option value="inventory"> Equipado no Herói (${(p.inventory||[]).length}/7)</option>
- <option value="tavern"> Guardar na Taverna (${(p.tavern||[]).length}/2)</option>
- </select>
- </div>
- </div>
- <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
- <span style="font-size:12px;color:var(--text-dim);">Atalhos Rápidos:</span>
- <button class="btn btn-dark btn-xs" onclick="quickAddPotion(${pIdx}, 'Poção de Vida', 'Comum')"> +Poção de Vida</button>
- <button class="btn btn-dark btn-xs" onclick="quickAddPotion(${pIdx}, 'Poção de Mana', 'Comum')"> +Poção de Mana</button>
- </div>
- <div style="text-align:center;">
- <button class="btn btn-gold btn-sm" onclick="saveNewHeroItem(${pIdx})">Salvar Item no Herói</button>
- </div>
- `);
+// ================================================================
+// SUPORTE A FOTO / CÂMERA DE ITENS E HABILIDADES (MOBILE & DESKTOP)
+// ================================================================
+let currentItemPhotoBase64 = null;
+let currentSkillPhotoBase64 = null;
+
+function compressImageFile(file, maxWidth, maxHeight, quality, callback) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      let w = img.width;
+      let h = img.height;
+      if (w > maxWidth || h > maxHeight) {
+        if (w / h > maxWidth / maxHeight) {
+          h = Math.round((h * maxWidth) / w);
+          w = maxWidth;
+        } else {
+          w = Math.round((w * maxHeight) / h);
+          h = maxHeight;
+        }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+      callback(null, dataUrl);
+    };
+    img.onerror = function() { callback(new Error('Erro ao carregar imagem')); };
+    img.src = e.target.result;
+  };
+  reader.onerror = function() { callback(new Error('Erro ao ler arquivo')); };
+  reader.readAsDataURL(file);
 }
 
-function quickAddPotion(pIdx, name, rarity) {
- const p = state.players[pIdx];
- if ((p.inventory || []).length >= 7) {
- alert('Mochila cheia (máximo de 7 itens por herói)!');
- return;
- }
- p.inventory.push({ name, rarity, slot: 'Consumível' });
- addLog(` ${p.heroName} adicionou ${name}.`);
- closeModal('custom-modal-overlay');
- saveCampaignNow(false);
- renderDashboardAll();
+function handleItemPhotoSelect(ev) {
+  const file = ev.target.files && ev.target.files[0];
+  if (!file) return;
+  compressImageFile(file, 800, 800, 0.82, function(err, b64) {
+    if (err || !b64) {
+      alert('Não foi possível processar a foto.');
+      return;
+    }
+    currentItemPhotoBase64 = b64;
+    const previewBox = document.getElementById('item-photo-preview-box');
+    const previewImg = document.getElementById('item-photo-preview-img');
+    if (previewBox && previewImg) {
+      previewImg.src = b64;
+      previewBox.style.display = 'flex';
+    }
+  });
+}
+
+function removeItemPhotoPreview() {
+  currentItemPhotoBase64 = null;
+  const previewBox = document.getElementById('item-photo-preview-box');
+  const fileInput = document.getElementById('cit-photo-file');
+  if (previewBox) previewBox.style.display = 'none';
+  if (fileInput) fileInput.value = '';
+}
+
+function handleSkillPhotoSelect(ev) {
+  const file = ev.target.files && ev.target.files[0];
+  if (!file) return;
+  compressImageFile(file, 800, 800, 0.82, function(err, b64) {
+    if (err || !b64) {
+      alert('Não foi possível processar a foto.');
+      return;
+    }
+    currentSkillPhotoBase64 = b64;
+    const previewBox = document.getElementById('skill-photo-preview-box');
+    const previewImg = document.getElementById('skill-photo-preview-img');
+    if (previewBox && previewImg) {
+      previewImg.src = b64;
+      previewBox.style.display = 'flex';
+    }
+  });
+}
+
+function removeSkillPhotoPreview() {
+  currentSkillPhotoBase64 = null;
+  const previewBox = document.getElementById('skill-photo-preview-box');
+  const fileInput = document.getElementById('csk-photo-file');
+  if (previewBox) previewBox.style.display = 'none';
+  if (fileInput) fileInput.value = '';
+}
+
+function openImageZoomModal(imgSrc, title) {
+  if (!imgSrc) return;
+  openCustomModal(title || 'Visualizar Foto', `
+    <div style="text-align:center;padding:10px 0;">
+      <img src="${imgSrc}" alt="${escapeHtml(title || 'Foto')}" style="max-width:100%;max-height:75vh;object-fit:contain;border-radius:6px;border:1px solid var(--border-subtle);background:#000;box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+    </div>
+  `);
+}
+
+function openAddItemModal(pIdx) {
+  const p = state.players[pIdx];
+  currentItemPhotoBase64 = null;
+  openCustomModal(`Registrar Item / Equipamento — ${p.heroName}`, `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div>
+        <label>Nome do Item / Equipamento</label>
+        <input type="text" id="cit-name" placeholder="Ex: Espada Vorpal / Armadura Real">
+      </div>
+      <div>
+        <label>Raridade</label>
+        <select id="cit-rarity">
+          <option value="Comum">Comum (Câmbio: 1 Espólio)</option>
+          <option value="Raro">Raro (Câmbio: 3 Espólios)</option>
+          <option value="Épico">Épico (Câmbio: 9 Espólios)</option>
+          <option value="Lendário">Lendário (Câmbio: 27 Espólios)</option>
+          <option value="Campanha">Carta de Campanha / Relíquia</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <div>
+        <label>Tipo / Slot (Mão, Armadura, Poção)</label>
+        <input type="text" id="cit-slot" placeholder="Ex: Arma 1 Mão / Armadura / Consumível">
+      </div>
+      <div>
+        <label>Onde Guardar?</label>
+        <select id="cit-dest">
+          <option value="inventory">Equipado no Herói (${(p.inventory||[]).length}/7)</option>
+          <option value="tavern">Guardar na Taverna (${(p.tavern||[]).length}/2)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Foto do Item / Câmera -->
+    <div style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:12px;margin-bottom:14px;">
+      <label style="margin-bottom:6px;color:var(--sage);font-weight:700;">Foto da Carta / Item Físico (Câmera ou Arquivo)</label>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <input type="file" id="cit-photo-file" accept="image/*" capture="environment" style="display:none;" onchange="handleItemPhotoSelect(event)">
+        <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('cit-photo-file').click()" style="display:flex;align-items:center;gap:6px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+          <span>Tirar Foto / Carregar</span>
+        </button>
+        <span style="font-size:11px;color:var(--gray-neutral);">Fotografe sua carta física ou miniatura</span>
+      </div>
+
+      <div id="item-photo-preview-box" class="photo-preview-box" style="display:none;">
+        <img id="item-photo-preview-img" src="" alt="Preview">
+        <div>
+          <div style="font-size:11.5px;color:var(--mint);font-weight:700;">Foto anexada com sucesso!</div>
+          <button type="button" class="btn btn-danger btn-xs" style="margin-top:4px;" onclick="removeItemPhotoPreview()">Remover Foto</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+      <span style="font-size:11.5px;color:var(--gray-neutral);align-self:center;">Atalhos Rápidos:</span>
+      <button type="button" class="btn btn-dark btn-xs" onclick="quickAddPotion(${pIdx}, 'Poção de Vida', 'Comum')">+ Poção de Vida</button>
+      <button type="button" class="btn btn-dark btn-xs" onclick="quickAddPotion(${pIdx}, 'Poção de Mana', 'Comum')">+ Poção de Mana</button>
+    </div>
+
+    <div style="text-align:right;">
+      <button type="button" class="btn btn-primary btn-sm" onclick="saveNewHeroItem(${pIdx})">Salvar Item no Herói</button>
+    </div>
+  `);
 }
 
 function saveNewHeroItem(pIdx) {
- const p = state.players[pIdx];
- const name = (document.getElementById('cit-name')?.value || '').trim();
- const rarity = document.getElementById('cit-rarity')?.value || 'Comum';
- const slot = (document.getElementById('cit-slot')?.value || 'Equipamento').trim();
- const dest = document.getElementById('cit-dest')?.value || 'inventory';
- if (!name) { alert('Informe o nome do item.'); return; }
+  const p = state.players[pIdx];
+  const name = (document.getElementById('cit-name')?.value || '').trim();
+  const rarity = document.getElementById('cit-rarity')?.value || 'Comum';
+  const slot = (document.getElementById('cit-slot')?.value || 'Equipamento').trim();
+  const dest = document.getElementById('cit-dest')?.value || 'inventory';
+  if (!name) { alert('Informe o nome do item.'); return; }
 
- if (dest === 'inventory' && (p.inventory || []).length >= 7) {
- alert('O herói comporta no máximo 7 itens equipados! Guarde na Taverna (máx 2).');
- return;
- }
- if (dest === 'tavern' && (p.tavern || []).length >= 2) {
- alert('A Taverna comporta no máximo 2 itens guardados por herói!');
- return;
- }
+  if (dest === 'inventory' && (p.inventory || []).length >= 7) {
+    alert('O herói comporta no máximo 7 itens equipados! Guarde na Taverna (máx 2).');
+    return;
+  }
+  if (dest === 'tavern' && (p.tavern || []).length >= 2) {
+    alert('A Taverna comporta no máximo 2 itens guardados por herói!');
+    return;
+  }
 
- p[dest].push({ name, rarity, slot });
- addLog(` ${p.heroName} registrou [${rarity}] "${name}".`);
- closeModal('custom-modal-overlay');
- saveCampaignNow(false);
- renderDashboardAll();
+  const newItem = { name, rarity, slot };
+  if (currentItemPhotoBase64) {
+    newItem.photo = currentItemPhotoBase64;
+  }
+
+  p[dest].push(newItem);
+  addLog(` ${p.heroName} registrou [${rarity}] "${name}"${newItem.photo ? ' (com foto)' : ''}.`);
+  closeModal('custom-modal-overlay');
+  saveCampaignNow(false);
+  renderDashboardAll();
 }
 
-function moveItemToTavern(pIdx, iIdx) {
- const p = state.players[pIdx];
- if ((p.tavern || []).length >= 2) {
- alert('A Taverna já tem 2 itens guardados para este herói!');
- return;
- }
- const it = p.inventory.splice(iIdx, 1)[0];
- if (it) {
- p.tavern.push(it);
- addLog(` ${p.heroName} guardou "${it.name}" na Taverna.`);
- }
- saveCampaignNow(false);
- renderDashboardAll();
+function openAddSkillModal(pIdx) {
+  const p = state.players[pIdx];
+  currentSkillPhotoBase64 = null;
+  const catalog = getSkillsForClass(p.classId);
+
+  const catalogItemsHtml = catalog.map(sk => {
+    const cats = Object.keys(sk.desc);
+    return `
+      <div style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+          <strong style="color:var(--mint);font-size:13px;">${escapeHtml(sk.name)}</strong>
+          <span style="font-size:11px;color:var(--sage);">${escapeHtml(sk.slot)} • ${escapeHtml(sk.cost)}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px;">
+          ${cats.map(cat => `
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--bg-card);padding:6px 10px;border-radius:var(--radius-xs);">
+              <div style="font-size:11.5px;color:var(--gray-neutral);">
+                <strong style="color:var(--mint);">[Cat. ${cat}]</strong> ${escapeHtml(sk.desc[cat])}
+              </div>
+              <button class="btn btn-outline btn-xs" onclick="equipCatalogSkill(${pIdx}, '${sk.id}', '${cat}')">+ Cat. ${cat}</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  openCustomModal(`Habilidades da Classe & Foto — ${p.heroName} (Nível ${p.level})`, `
+    <!-- Opção 1: Registrar Habilidade Customizada com Câmera/Foto -->
+    <div style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:12px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:700;color:var(--sage);text-transform:uppercase;margin-bottom:8px;letter-spacing:0.5px;">
+        Registrar Habilidade ou Tirar Foto da Carta
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 110px;gap:8px;margin-bottom:8px;">
+        <input type="text" id="csk-custom-name" placeholder="Nome da habilidade ou talento...">
+        <select id="csk-custom-cat">
+          <option value="I">Cat. I</option>
+          <option value="II">Cat. II</option>
+          <option value="III">Cat. III</option>
+          <option value="IV">Cat. IV</option>
+          <option value="H">Cat. H (Híbrida)</option>
+        </select>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+        <input type="file" id="csk-photo-file" accept="image/*" capture="environment" style="display:none;" onchange="handleSkillPhotoSelect(event)">
+        <button type="button" class="btn btn-outline btn-xs" onclick="document.getElementById('csk-photo-file').click()" style="display:flex;align-items:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+          <span>Tirar Foto da Habilidade</span>
+        </button>
+        <span style="font-size:11px;color:var(--gray-neutral);">Anexe a foto da sua carta de talento</span>
+      </div>
+
+      <div id="skill-photo-preview-box" class="photo-preview-box" style="display:none;margin-bottom:10px;">
+        <img id="skill-photo-preview-img" src="" alt="Preview">
+        <div>
+          <div style="font-size:11.5px;color:var(--mint);font-weight:700;">Foto anexada com sucesso!</div>
+          <button type="button" class="btn btn-danger btn-xs" style="margin-top:4px;" onclick="removeSkillPhotoPreview()">Remover Foto</button>
+        </div>
+      </div>
+
+      <div style="text-align:right;">
+        <button type="button" class="btn btn-primary btn-xs" onclick="saveCustomHeroSkill(${pIdx})">Salvar Habilidade</button>
+      </div>
+    </div>
+
+    <!-- Opção 2: Catálogo Oficial da Classe -->
+    <div style="font-size:12px;font-weight:700;color:var(--mint);text-transform:uppercase;margin-bottom:8px;letter-spacing:0.5px;">
+      Ou Escolha do Catálogo Oficial da Classe
+    </div>
+    <div style="max-height:340px;overflow-y:auto;padding-right:4px;">${catalogItemsHtml}</div>
+  `);
 }
 
-function moveItemFromTavern(pIdx, tIdx) {
- const p = state.players[pIdx];
- if ((p.inventory || []).length >= 7) {
- alert('Mochila cheia (7/7 itens)!');
- return;
- }
- const it = p.tavern.splice(tIdx, 1)[0];
- if (it) {
- p.inventory.push(it);
- addLog(` ${p.heroName} equipou "${it.name}" da Taverna.`);
- }
- saveCampaignNow(false);
- renderDashboardAll();
+function saveCustomHeroSkill(pIdx) {
+  const p = state.players[pIdx];
+  const name = (document.getElementById('csk-custom-name')?.value || '').trim();
+  const cat = document.getElementById('csk-custom-cat')?.value || 'I';
+  if (!name && !currentSkillPhotoBase64) {
+    alert('Informe o nome da habilidade ou tire uma foto da carta.');
+    return;
+  }
+
+  const finalName = name || `Habilidade [Cat. ${cat}]`;
+  const newEntry = {
+    uid: 'sk_c_' + Date.now(),
+    skillId: 'custom_' + Date.now(),
+    name: finalName,
+    category: cat,
+    slot: 'Deck Ativo',
+    cost: '',
+    desc: ''
+  };
+
+  if (currentSkillPhotoBase64) {
+    newEntry.photo = currentSkillPhotoBase64;
+  }
+
+  if (!Array.isArray(p.skills)) p.skills = [];
+  p.skills.push(newEntry);
+  addLog(` ${p.heroName} registrou a habilidade "${finalName}" [Cat. ${cat}]${newEntry.photo ? ' (com foto)' : ''}.`);
+  closeModal('custom-modal-overlay');
+  saveCampaignNow(false);
+  renderDashboardAll();
 }
 
-function removeHeroItem(pIdx, itemIdx, listName) {
- const p = state.players[pIdx];
- const it = p[listName]?.splice(itemIdx, 1)?.[0];
- if (it) addLog(`️ ${p.heroName} removeu o item "${it.name}".`);
- saveCampaignNow(false);
- renderDashboardAll();
-}
 
-// ════════════════════════════════════════════════════════════════
-// PAINEL DE FECHAMENTO PÓS-PARTIDA:
-// PERGUNTA DO OBJETIVO SECUNDÁRIO + CARTA GANHA + MAPA, OBJETIVOS, RESULTADO E RECOMPENSAS
-// ════════════════════════════════════════════════════════════════
+
+
+
+
+// ================================================================
+// REGISTRO POS-PARTIDA DE CAMPANHA (FECHAMENTO OFICIAL)
+// ================================================================
 function renderPostMatchClosureBox() {
- const box = document.getElementById('post-match-closure-box');
- if (!box) return;
+  const box = document.getElementById('post-match-closure-box');
+  if (!box) return;
 
- const mList = MISSIONS_DB[state.mode] || MISSIONS_DB.heavenfall;
- const curM = mList.find(m => m.code === state.currentMission) || mList[0];
- if (!curM) return;
+  const mList = MISSIONS_DB[state.mode] || MISSIONS_DB.heavenfall;
+  const curM  = mList.find(m => m.code === state.currentMission) || mList[0];
+  if (!curM) return;
 
- if (!state.missions[curM.code]) {
- state.missions[curM.code] = { status: 'current', defeats: 0, secondaryDone: null, choiceNotes: '' };
- }
- const ms = state.missions[curM.code];
- const pCount = state.players.length || 4;
- const bracketIdx = pCount <= 2 ? 0 : (pCount <= 4 ? 1 : 2);
- const xpPool = curM.xpRewards ? curM.xpRewards[bracketIdx] : 0;
+  if (!state.missions[curM.code]) {
+    state.missions[curM.code] = { status: 'current', defeats: 0, secondaryDone: null, choiceNotes: '' };
+  }
+  const ms = state.missions[curM.code];
+  const pCount = state.players.length || 4;
+  const bracketIdx = pCount <= 2 ? 0 : (pCount <= 4 ? 1 : 2);
+  const xpPool = curM.xpRewards ? curM.xpRewards[bracketIdx] : 0;
 
- const missionOptions = mList.map(m => {
- const st = state.missions?.[m.code]?.status;
- const tag = st === 'completed' ? ' ' : (m.code === state.currentMission ? ' ' : '');
- return `<option value="${m.code}" ${m.code === curM.code ? 'selected' : ''}>${tag}${escapeHtml(m.name)}</option>`;
- }).join('');
+  const missionOptions = mList.map(m => {
+    const st = state.missions?.[m.code]?.status;
+    const tag = st === 'completed' ? ' ' : (m.code === state.currentMission ? ' ' : '');
+    return `<option value="${m.code}" ${m.code === curM.code ? 'selected' : ''}>${tag}${escapeHtml(m.name)}</option>`;
+  }).join('');
 
- // Detalhes das cartas desbloqueadas pelo Objetivo Secundário
- const secCardsDetails = (curM.secondaryUnlocksCards || []).map(cNum => {
- const cMeta = CAMPAIGN_CARDS_DB.find(c => c.num === cNum);
- return cMeta ? `
- <div style="background:rgba(10,8,18,0.85);border:1px solid var(--gold-light);border-radius:6px;padding:10px 14px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
- <div>
- <div style="font-family:Cinzel,serif;font-size:14px;font-weight:700;color:var(--gold-light);"> ${escapeHtml(cMeta.name)}</div>
- <div style="font-size:11px;color:var(--teal-lt);font-family:Cinzel,serif;">${escapeHtml(cMeta.type)}</div>
- <div style="font-size:13px;color:var(--text-main);margin-top:3px;">${escapeHtml(cMeta.desc)}</div>
- </div>
- <span class="badge-pill" style="background:rgba(39,174,96,0.25);border-color:#6ce68e;color:#6ce68e;"> Carta Desbloqueada!</span>
- </div>
- ` : '';
- }).join('');
+  // Detalhes das cartas desbloqueadas pelo Objetivo Secundário
+  const secCardsDetails = (curM.secondaryUnlocksCards || []).map(cNum => {
+    const cMeta = CAMPAIGN_CARDS_DB.find(c => c.num === cNum);
+    return cMeta ? `
+      <div style="background:rgba(10,8,18,0.85);border:1px solid var(--mint);border-radius:6px;padding:10px 14px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--mint);"> ${escapeHtml(cMeta.name)}</div>
+          <div style="font-size:11px;color:var(--sage);font-family:'Cinzel',serif;">${escapeHtml(cMeta.type)}</div>
+          <div style="font-size:13px;color:var(--text-main);margin-top:3px;">${escapeHtml(cMeta.desc)}</div>
+        </div>
+        <span class="badge-pill" style="background:rgba(39,174,96,0.25);border-color:#6ce68e;color:#6ce68e;"> Carta Desbloqueada!</span>
+      </div>
+    ` : '';
+  }).join('');
 
- // Bloco da Pergunta do Objetivo Secundário
- let secondaryQuestionHtml = '';
- if (curM.hasSecondary) {
- const isYes = ms.secondaryDone === true;
- const isNo = ms.secondaryDone === false;
- secondaryQuestionHtml = `
- <div style="background:linear-gradient(135deg, rgba(26,107,122,0.18), rgba(20,16,32,0.95));border:2px solid ${isYes ? 'var(--gold-light)' : 'var(--teal-lt)'};border-radius:6px;padding:16px;margin-bottom:18px;">
- <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
- <div style="flex:1;min-width:260px;">
- <div style="font-family:Cinzel,serif;font-size:15px;font-weight:700;color:var(--gold-light);margin-bottom:4px;">
- Pergunta Final do Registro: O Objetivo Secundário foi resolvido?
- </div>
- <div style="font-size:14px;color:var(--text-main);">
- <strong>${escapeHtml(curM.secondaryTitle || 'Missão Secundária')}:</strong> ${escapeHtml(curM.secondaryObjective)}
- </div>
- </div>
- <div style="display:flex;gap:10px;flex-wrap:wrap;">
- <button class="btn ${isYes ? 'btn-gold' : 'btn-dark'} btn-sm" onclick="setSecondaryObjectiveResolved('${curM.code}', true)" style="${isYes ? 'box-shadow:0 0 18px rgba(201,162,63,0.6);' : ''}">
- SIM, FOI RESOLVIDO!
- </button>
- <button class="btn ${isNo ? 'btn-crimson' : 'btn-dark'} btn-sm" onclick="setSecondaryObjectiveResolved('${curM.code}', false)">
- NÃO FOI RESOLVIDO
- </button>
- </div>
- </div>
+  // Bloco da Pergunta do Objetivo Secundário
+  let secondaryQuestionHtml = '';
+  if (curM.hasSecondary) {
+    const isYes = ms.secondaryDone === true;
+    const isNo  = ms.secondaryDone === false;
+    secondaryQuestionHtml = `
+      <div style="background:linear-gradient(135deg, rgba(26,107,122,0.18), rgba(20,16,32,0.95));border:2px solid ${isYes ? 'var(--mint)' : 'var(--sage)'};border-radius:6px;padding:16px;margin-bottom:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div style="flex:1;min-width:260px;">
+            <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--mint);margin-bottom:4px;">
+               Pergunta Final do Registro: O Objetivo Secundário foi resolvido?
+            </div>
+            <div style="font-size:14px;color:var(--text-main);">
+              <strong>${escapeHtml(curM.secondaryTitle || 'Missão Secundária')}:</strong> ${escapeHtml(curM.secondaryObjective)}
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn ${isYes ? 'btn-gold' : 'btn-dark'} btn-sm" onclick="setSecondaryObjectiveResolved('${curM.code}', true)" style="${isYes ? 'box-shadow:0 0 18px rgba(201,162,63,0.6);' : ''}">
+               SIM, FOI RESOLVIDO!
+            </button>
+            <button class="btn ${isNo ? 'btn-crimson' : 'btn-dark'} btn-sm" onclick="setSecondaryObjectiveResolved('${curM.code}', false)">
+               NÃO FOI RESOLVIDO
+            </button>
+          </div>
+        </div>
 
- ${isYes ? `
- <div class="secondary-reward-banner" style="margin-top:14px;">
- <div style="font-family:'Cinzel Decorative',serif;font-size:15px;color:var(--gold-light);font-weight:700;margin-bottom:4px;">
- RECOMPENSA DO OBJETIVO SECUNDÁRIO CONQUISTADA!
- </div>
- <div style="font-size:15px;color:var(--text-main);">
- O grupo ganha: <strong style="color:var(--gold-light);">${escapeHtml(curM.secondaryRewardText || 'Recompensa Secundária')}</strong>
- </div>
- ${secCardsDetails}
- </div>
- ` : ''}
+        ${isYes ? `
+          <div class="secondary-reward-banner" style="margin-top:14px;">
+            <div style="font-family:'Cinzel Decorative',serif;font-size:15px;color:var(--mint);font-weight:700;margin-bottom:4px;">
+               RECOMPENSA DO OBJETIVO SECUNDÁRIO CONQUISTADA!
+            </div>
+            <div style="font-size:15px;color:var(--text-main);">
+               O grupo ganha: <strong style="color:var(--mint);">${escapeHtml(curM.secondaryRewardText || 'Recompensa Secundária')}</strong>
+            </div>
+            ${secCardsDetails}
+          </div>
+        ` : ''}
 
- ${isNo ? `
- <div style="margin-top:10px;padding:8px 12px;background:rgba(139,26,26,0.2);border:1px solid var(--crimson);border-radius:4px;font-size:13px;color:var(--text-dim);">
- Objetivo Secundário registrado como <strong>não resolvido</strong> nesta partida (nenhuma carta secundária adicionada).
- </div>
- ` : ''}
- </div>
- `;
- } else {
- secondaryQuestionHtml = `
- <div style="background:var(--bg-card2);border:1px solid var(--gold-dim);border-radius:6px;padding:12px 16px;margin-bottom:18px;font-size:14px;color:var(--text-dim);">
- ℹ️ <strong>Objetivo Secundário:</strong> Esta missão (${escapeHtml(curM.name)}) possui apenas o Objetivo Principal no manual.
- </div>
- `;
- }
+        ${isNo ? `
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(139,26,26,0.2);border:1px solid var(--crimson);border-radius:4px;font-size:13px;color:var(--text-dim);">
+            Objetivo Secundário registrado como <strong>não resolvido</strong> nesta partida (nenhuma carta secundária adicionada).
+          </div>
+        ` : ''}
+      </div>
+    `;
+  } else {
+    secondaryQuestionHtml = `
+      <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:6px;padding:12px 16px;margin-bottom:18px;font-size:14px;color:var(--text-dim);">
+        ℹ️ <strong>Objetivo Secundário:</strong> Esta missão (${escapeHtml(curM.name)}) possui apenas o Objetivo Principal no manual.
+      </div>
+    `;
+  }
 
- // Opções especiais de conclusão (Missão D ou Missão H de Heavenfall)
- let specialClosureOptionsHtml = '';
- if (curM.code === 'D') {
- specialClosureOptionsHtml = `
- <div style="background:rgba(155,77,202,0.15);border:1px solid var(--purple-lt);padding:10px 12px;border-radius:4px;margin-top:10px;">
- <label style="color:var(--gold-light);">Escolha de Resultado da Missão D (Artefato Demoníaco):</label>
- <div style="font-size:13px;color:var(--text-dim);">
- • 0 Derrotas nesta missão → Ganha <strong>Carta de Campanha 18</strong>.<br>
- • 1 ou 2 Derrotas nesta missão → Ganha <strong>Carta de Campanha 19</strong> (Derrotas atuais: <strong>${ms.defeats || 0}</strong>).
- </div>
- </div>`;
- } else if (curM.code === 'H') {
- specialClosureOptionsHtml = `
- <div style="background:rgba(201,162,63,0.15);border:1px solid var(--gold);padding:10px 12px;border-radius:4px;margin-top:10px;">
- <label style="color:var(--gold-light);">Escolha do Destino do Arcanjo Miguel (Resultado da Missão H):</label>
- <select id="closure-mission-h-choice" style="margin-top:4px;">
- <option value="23"> Miguel vai para o Paraíso → Ganha Carta 23 (Bênção com 5 fichas + Rota p/ Missão L)</option>
- <option value="24"> Miguel permanece no Inferno → Ganha Carta 24 (Fúria de Miguel no Inferno)</option>
- </select>
- </div>`;
- }
+  // Opções especiais de conclusão (Missão D ou Missão H de Heavenfall)
+  let specialClosureOptionsHtml = '';
+  if (curM.code === 'D') {
+    specialClosureOptionsHtml = `
+      <div style="background:rgba(155,77,202,0.15);border:1px solid var(--purple-lt);padding:10px 12px;border-radius:4px;margin-top:10px;">
+        <label style="color:var(--mint);">Escolha de Resultado da Missão D (Artefato Demoníaco):</label>
+        <div style="font-size:13px;color:var(--text-dim);">
+          • 0 Derrotas nesta missão → Ganha <strong>Carta de Campanha 18</strong>.<br>
+          • 1 ou 2 Derrotas nesta missão → Ganha <strong>Carta de Campanha 19</strong> (Derrotas atuais: <strong>${ms.defeats || 0}</strong>).
+        </div>
+      </div>`;
+  } else if (curM.code === 'H') {
+    specialClosureOptionsHtml = `
+      <div style="background:rgba(201,162,63,0.15);border:1px solid var(--mint);padding:10px 12px;border-radius:4px;margin-top:10px;">
+        <label style="color:var(--mint);">Escolha do Destino do Arcanjo Miguel (Resultado da Missão H):</label>
+        <select id="closure-mission-h-choice" style="margin-top:4px;">
+          <option value="23"> Miguel vai para o Paraíso → Ganha Carta 23 (Bênção com 5 fichas + Rota p/ Missão L)</option>
+          <option value="24"> Miguel permanece no Inferno → Ganha Carta 24 (Fúria de Miguel no Inferno)</option>
+        </select>
+      </div>`;
+  }
 
- const nextChoicesHtml = (curM.nextChoices || []).length > 0
- ? `
- <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;">
- <label style="margin:0;color:var(--gold-light);">Próxima Missão da Campanha:</label>
- <select id="closure-next-mission-select" style="width:auto;min-width:260px;">
- ${curM.nextChoices.map(nc => {
- const nm = mList.find(x => x.code === nc);
- return `<option value="${nc}">${escapeHtml(nm ? nm.name : 'Missão ' + nc)}</option>`;
- }).join('')}
- </select>
- <span style="font-size:12px;color:var(--text-dim);font-style:italic;">(${escapeHtml(curM.nextRule || '')})</span>
- </div>`
- : `<div style="margin-top:10px;color:var(--gold-light);font-weight:700;"> Esta é a Missão Final da Campanha!</div>`;
+  const nextChoicesHtml = (curM.nextChoices || []).length > 0
+    ? `
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;">
+        <label style="margin:0;color:var(--mint);">Próxima Missão da Campanha:</label>
+        <select id="closure-next-mission-select" style="width:auto;min-width:260px;">
+          ${curM.nextChoices.map(nc => {
+            const nm = mList.find(x => x.code === nc);
+            return `<option value="${nc}">${escapeHtml(nm ? nm.name : 'Missão ' + nc)}</option>`;
+          }).join('')}
+        </select>
+        <span style="font-size:12px;color:var(--text-dim);font-style:italic;">(${escapeHtml(curM.nextRule || '')})</span>
+      </div>`
+    : `<div style="margin-top:10px;color:var(--mint);font-weight:700;"> Esta é a Missão Final da Campanha!</div>`;
 
- box.innerHTML = `
- <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--gold-dim);">
- <div>
- <div class="card-title" style="margin-bottom:2px;"> Fechamento da Partida — Objetivo Secundário, Mapa, Resultado &amp; Recompensas</div>
- <p style="font-size:13px;color:var(--text-dim);">
- Após registrar os dados de todos os heróis acima, responda sobre o Objetivo Secundário e confira o Resultado e as Recompensas da missão!
- </p>
- </div>
- <div style="display:flex;align-items:center;gap:8px;">
- <label style="margin:0;white-space:nowrap;">Missão Jogada:</label>
- <select style="width:auto;min-width:250px;font-weight:700;color:var(--gold-light);" onchange="setAsCurrentMission(this.value)">
- ${missionOptions}
- </select>
- </div>
- </div>
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border-subtle);">
+      <div>
+        <div class="card-title" style="margin-bottom:2px;"> Fechamento da Partida — Objetivo Secundário, Mapa, Resultado &amp; Recompensas</div>
+        <p style="font-size:13px;color:var(--text-dim);">
+          Após registrar os dados de todos os heróis acima, responda sobre o Objetivo Secundário e confira o Resultado e as Recompensas da missão!
+        </p>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <label style="margin:0;white-space:nowrap;">Missão Jogada:</label>
+        <select style="width:auto;min-width:250px;font-weight:700;color:var(--mint);" onchange="setAsCurrentMission(this.value)">
+          ${missionOptions}
+        </select>
+      </div>
+    </div>
 
- ${secondaryQuestionHtml}
+    ${secondaryQuestionHtml}
 
- <!-- Os 4 Blocos da Missão: Objetivos, Mapa, Resultado e Recompensas -->
- <div class="mission-detail-grid">
- <!-- Coluna Esquerda: 1) Objetivos + 3) Resultado + 4) Recompensas -->
- <div style="display:flex;flex-direction:column;gap:12px;">
- <div class="mission-section-box">
- <h4> 1. Objetivos da Missão (${escapeHtml(curM.name)})</h4>
- <p style="font-size:14px;margin-bottom:6px;"><strong style="color:var(--gold-light);">Objetivo Principal:</strong> ${escapeHtml(curM.mainObjective)}</p>
- <p style="font-size:13px;color:var(--text-dim);margin-bottom:6px;"><strong> Preparação &amp; Regras Especiais:</strong> ${escapeHtml(curM.prepRules)}</p>
- <p style="font-size:13px;color:var(--teal-lt);"><strong> Objetivo Secundário:</strong> ${escapeHtml(curM.secondaryObjective)} ${curM.secondaryRewardText ? `→ <em>Ganha: ${escapeHtml(curM.secondaryRewardText)}</em>` : ''}</p>
- </div>
+    <!-- Os 4 Blocos da Missão: Objetivos, Mapa, Resultado e Recompensas -->
+    <div class="mission-detail-grid">
+      <!-- Coluna Esquerda: 1) Objetivos + 3) Resultado + 4) Recompensas -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="mission-section-box">
+          <h4> 1. Objetivos da Missão (${escapeHtml(curM.name)})</h4>
+          <p style="font-size:14px;margin-bottom:6px;"><strong style="color:var(--mint);">Objetivo Principal:</strong> ${escapeHtml(curM.mainObjective)}</p>
+          <p style="font-size:13px;color:var(--text-dim);margin-bottom:6px;"><strong> Preparação &amp; Regras Especiais:</strong> ${escapeHtml(curM.prepRules)}</p>
+          <p style="font-size:13px;color:var(--sage);"><strong> Objetivo Secundário:</strong> ${escapeHtml(curM.secondaryObjective)} ${curM.secondaryRewardText ? `→ <em>Ganha: ${escapeHtml(curM.secondaryRewardText)}</em>` : ''}</p>
+        </div>
 
- <div class="mission-section-box parchment-lore-box">
- <h4 style="color:#d2a8ff;"> 3. Resultado da Missão (Progresso da Campanha no Manual)</h4>
- <p style="font-size:14px;color:var(--text-main);line-height:1.5;font-style:italic;">
- "${escapeHtml(curM.resultText || '')}"
- </p>
- ${specialClosureOptionsHtml}
- </div>
+        <div class="mission-section-box" style="border-color:var(--purple-lt);background:rgba(107,47,160,0.08);">
+          <h4 style="color:#d2a8ff;"> 3. Resultado da Missão (Progresso da Campanha no Manual)</h4>
+          <p style="font-size:14px;color:var(--text-main);line-height:1.5;font-style:italic;">
+            "${escapeHtml(curM.resultText || '')}"
+          </p>
+          ${specialClosureOptionsHtml}
+        </div>
 
- <div class="mission-section-box" style="border-color:#6ce68e;background:rgba(39,174,96,0.08);">
- <h4 style="color:#6ce68e;"> 4. Recompensas da Missão</h4>
- <p style="font-size:14px;margin-bottom:6px;"><strong style="color:var(--gold-light);">Recompensa de Vitória:</strong> ${escapeHtml(curM.rewardText)}</p>
- ${curM.xpRewards ? `<p style="font-size:13px;color:var(--purple-lt);margin-bottom:6px;"><strong>XP de Vitória (${pCount} Heróis):</strong> +${xpPool} XP para dividir entre o grupo (1–2 Heróis: ${curM.xpRewards[0]} XP | 3–4 Heróis: ${curM.xpRewards[1]} XP | 5–6 Heróis: ${curM.xpRewards[2]} XP)</p>` : ''}
- ${curM.bagUpdate ? `<p style="font-size:13px;color:var(--teal-lt);"><strong> Aprimoramento da Bolsa de Tesouros:</strong> ${escapeHtml(curM.bagUpdate.label)}</p>` : ''}
- ${nextChoicesHtml}
- </div>
- </div>
+        <div class="mission-section-box" style="border-color:#6ce68e;background:rgba(39,174,96,0.08);">
+          <h4 style="color:#6ce68e;"> 4. Recompensas da Missão</h4>
+          <p style="font-size:14px;margin-bottom:6px;"><strong style="color:var(--mint);">Recompensa de Vitória:</strong> ${escapeHtml(curM.rewardText)}</p>
+          ${curM.xpRewards ? `<p style="font-size:13px;color:var(--purple-lt);margin-bottom:6px;"><strong>⭐ XP de Vitória (${pCount} Heróis):</strong> +${xpPool} XP para dividir entre o grupo (1–2 Heróis: ${curM.xpRewards[0]} XP | 3–4 Heróis: ${curM.xpRewards[1]} XP | 5–6 Heróis: ${curM.xpRewards[2]} XP)</p>` : ''}
+          ${curM.bagUpdate ? `<p style="font-size:13px;color:var(--sage);"><strong> Aprimoramento da Bolsa de Tesouros:</strong> ${escapeHtml(curM.bagUpdate.label)}</p>` : ''}
+          ${nextChoicesHtml}
+        </div>
+      </div>
 
- <!-- Coluna Direita: 2) O Mapa da Missão -->
- <div>
- <div class="mission-map-frame">
- <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:8px;">
- <span style="font-family:Cinzel,serif;font-size:12px;color:var(--gold-light);font-weight:700;">️ 2. Mapa Oficial da Missão</span>
- <button class="btn btn-dark btn-xs" onclick="openMapZoomModal('${curM.mapImg}', '${escapeHtml(curM.name)}')"> Ampliar Mapa</button>
- </div>
- <img src="${curM.mapImg}" alt="Mapa ${escapeHtml(curM.name)}" onclick="openMapZoomModal('${curM.mapImg}', '${escapeHtml(curM.name)}')" title="Clique para ampliar o Mapa da Missão">
- ${renderMapComponentsDetailsHtml(curM)}
- </div>
- </div>
- </div>
+      <!-- Coluna Direita: 2) O Mapa da Missão -->
+      <div>
+        <div class="mission-map-frame">
+          <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:8px;">
+            <span style="font-family:'Cinzel',serif;font-size:12px;color:var(--mint);font-weight:700;">️ 2. Mapa Oficial da Missão</span>
+            <button class="btn btn-dark btn-xs" onclick="openMapZoomModal('${curM.mapImg}', '${escapeHtml(curM.name)}')"> Ampliar Mapa</button>
+          </div>
+          <img src="${curM.mapImg}" alt="Mapa ${escapeHtml(curM.name)}" onclick="openMapZoomModal('${curM.mapImg}', '${escapeHtml(curM.name)}')" title="Clique para ampliar o Mapa da Missão">
+          <div class="map-caption">
+             <strong>Peças (Tiles):</strong> ${escapeHtml(curM.tiles || 'Ver diagrama')} • <strong>Dificuldade:</strong> ${escapeHtml(curM.difficulty || 'Normal')}
+          </div>
+        </div>
+      </div>
+    </div>
 
- <div class="gold-line" style="margin:16px 0;"></div>
+    <div class="gold-line" style="margin:16px 0;"></div>
 
- <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
- <div style="font-size:13px;color:var(--text-dim);">
- Status de <strong>${escapeHtml(curM.name)}</strong>:
- <strong style="color:var(--gold-light);">${ms.status === 'completed' ? ' Concluída' : '️ Em Andamento'}</strong> •
- Derrotas registradas: <strong style="color:${(ms.defeats||0)>=2 ? 'var(--crimson-lt)' : 'var(--text-main)'}">${ms.defeats || 0}/3</strong>
- </div>
- <div style="display:flex;gap:10px;flex-wrap:wrap;">
- <button class="btn btn-green btn-sm" onclick="completeCurrentMissionFromClosure('${curM.code}')">
- Concluir Missão (Vitória), Desbloquear Cartas &amp; Avançar
- </button>
- <button class="btn btn-crimson btn-sm" onclick="registerMissionDefeat('${curM.code}')">
- Registrar Derrota (${(ms.defeats||0)+1}/3)
- </button>
- <button class="btn btn-gold btn-sm" onclick="saveCampaignNow(true)">
- Salvar Todos os Dados da Partida
- </button>
- </div>
- </div>
- `;
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div style="font-size:13px;color:var(--text-dim);">
+        Status de <strong>${escapeHtml(curM.name)}</strong>:
+        <strong style="color:var(--mint);">${ms.status === 'completed' ? ' Concluída' : '️ Em Andamento'}</strong> •
+        Derrotas registradas: <strong style="color:${(ms.defeats||0)>=2 ? 'var(--crimson-lt)' : 'var(--text-main)'}">${ms.defeats || 0}/3</strong>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-green btn-sm" onclick="completeCurrentMissionFromClosure('${curM.code}')">
+           Concluir Missão (Vitória), Desbloquear Cartas &amp; Avançar
+        </button>
+        <button class="btn btn-crimson btn-sm" onclick="registerMissionDefeat('${curM.code}')">
+           Registrar Derrota (${(ms.defeats||0)+1}/3)
+        </button>
+        <button class="btn btn-gold btn-sm" onclick="saveCampaignNow(true)">
+          ️ Salvar Todos os Dados da Partida
+        </button>
+      </div>
+    </div>
+  `;
 }
+
 
 function setSecondaryObjectiveResolved(code, resolved) {
- const mList = MISSIONS_DB[state.mode] || MISSIONS_DB.heavenfall;
- const m = mList.find(x => x.code === code);
- if (!m) return;
+  const mList = MISSIONS_DB[state.mode] || MISSIONS_DB.heavenfall;
+  const m = mList.find(x => x.code === code);
+  if (!m) return;
 
- if (!state.missions[code]) {
- state.missions[code] = { status: 'current', defeats: 0, secondaryDone: resolved, choiceNotes: '' };
- } else {
- state.missions[code].secondaryDone = resolved;
- }
+  if (!state.missions[code]) {
+    state.missions[code] = { status: 'current', defeats: 0, secondaryDone: resolved, choiceNotes: '' };
+  } else {
+    state.missions[code].secondaryDone = resolved;
+  }
 
- if (resolved) {
- (m.secondaryUnlocksCards || []).forEach(cNum => {
- unlockCampaignCard(cNum, `Objetivo Secundário resolvido na ${m.name}`);
- });
- addLog(` Objetivo Secundário da ${m.name} RESOLVIDO! Recompensa ganha: ${m.secondaryRewardText || 'Concluído'}.`);
- } else {
- addLog(` Objetivo Secundário da ${m.name} marcado como não resolvido.`);
- }
+  if (resolved) {
+    (m.secondaryUnlocksCards || []).forEach(cNum => {
+      unlockCampaignCard(cNum, `Objetivo Secundario resolvido na ${m.name}`);
+    });
+    addLog(`Objetivo Secundario da ${m.name} RESOLVIDO! Recompensa ganha: ${m.secondaryRewardText || 'Concluido'}.`);
+  } else {
+    addLog(`Objetivo Secundario da ${m.name} marcado como nao resolvido.`);
+  }
 
- saveCampaignNow(false);
- renderDashboardAll();
+  saveCampaignNow(false);
+  renderDashboardAll();
 }
 
 function completeCurrentMissionFromClosure(code) {
- const mList = MISSIONS_DB[state.mode] || MISSIONS_DB.heavenfall;
- const m = mList.find(x => x.code === code);
- if (!m) return;
+  const mList = MISSIONS_DB[state.mode] || MISSIONS_DB.heavenfall;
+  const m = mList.find(x => x.code === code);
+  if (!m) return;
 
- if (!state.missions[code]) state.missions[code] = { status: 'current', defeats: 0, secondaryDone: null };
- const ms = state.missions[code];
+  if (!state.missions[code]) state.missions[code] = { status: 'current', defeats: 0, secondaryDone: null };
+  const ms = state.missions[code];
 
- if (m.hasSecondary && ms.secondaryDone === null) {
- const resp = confirm(`Você ainda não marcou se o Objetivo Secundário ("${m.secondaryTitle}") foi resolvido!\n\nClique em OK se o grupo RESOLVEU o Objetivo Secundário (ganha ${m.secondaryRewardText}), ou Cancelar se NÃO resolveu.`);
- ms.secondaryDone = resp;
- }
+  if (m.hasSecondary && ms.secondaryDone === null) {
+    const resp = confirm(`Voce ainda nao marcou se o Objetivo Secundario ("${m.secondaryTitle}") foi resolvido!\n\nClique em OK se o grupo RESOLVEU o Objetivo Secundario (ganha ${m.secondaryRewardText}), ou Cancelar se NAO resolveu.`);
+    ms.secondaryDone = resp;
+  }
 
- const nextSelected = document.getElementById('closure-next-mission-select')?.value || (m.nextChoices?.[0] || '');
- const hChoice = document.getElementById('closure-mission-h-choice')?.value || '23';
+  const nextSelected = document.getElementById('closure-next-mission-select')?.value || (m.nextChoices?.[0] || '');
+  const hChoice = document.getElementById('closure-mission-h-choice')?.value || '23';
 
- executeMissionVictoryLogic(code, ms.secondaryDone === true, nextSelected, hChoice);
-}
-
-function openMapZoomModal(mapUrl, missionTitle, missionCode) {
- const allM = [...(MISSIONS_DB.heavenfall||[]), ...(MISSIONS_DB.four_horsemen||[]), ...(MISSIONS_DB.demon_dragon||[])];
- const mObj = allM.find(x => x.code === missionCode || x.mapImg === mapUrl || x.name === missionTitle);
- openCustomModal(`️ Mapa Oficial Detalhado — ${missionTitle}`, `
- <div style="text-align:center;background:#07050a;padding:10px;border-radius:6px;border:1px solid var(--gold);">
- <img src="${mapUrl}" alt="${escapeHtml(missionTitle)}" style="max-width:100%;max-height:72vh;object-fit:contain;border-radius:4px;">
- </div>
- ${mObj ? renderMapComponentsDetailsHtml(mObj) : ''}
- `);
+  executeMissionVictoryLogic(code, ms.secondaryDone === true, nextSelected, hChoice);
 }
 
 
