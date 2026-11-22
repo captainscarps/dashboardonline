@@ -221,7 +221,6 @@
   .tag.done { color: #7fb88a; background: rgba(127,184,138,.12); }
 
   /* ---------- Detalhe da missão ---------- */
-  .sheet.wide { padding-left: 0; padding-right: 0; padding-top: 0; }
   .sheet.wide .grab { position: absolute; left: 50%; transform: translateX(-50%); top: 10px; z-index: 3; background: rgba(255,255,255,.35); margin: 0; }
   .sheet.wide .map { border-radius: 22px 22px 0 0; }
   .md { padding: 0 20px; margin-top: -48px; position: relative; z-index: 2; }
@@ -250,8 +249,32 @@
   .comp img { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; }
   .comp .cl { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
   .comp .cd { font-size: 13px; color: #c9c5be; line-height: 1.5; }
-  .md-cta { position: sticky; bottom: calc(-22px - env(safe-area-inset-bottom)); padding: 18px 20px calc(22px + env(safe-area-inset-bottom)); background: linear-gradient(rgba(21,23,26,0), var(--surface) 18px); margin: 18px 0 calc(-22px - env(safe-area-inset-bottom)); }
-  .md-cta .btn-ghost { background: var(--surface); }
+  /* folha larga: área rolável + rodapé fixo (sem sticky, que falha no iOS) */
+  .sheet.wide { display: flex; flex-direction: column; overflow: hidden; padding: 0; height: 92vh; height: 92dvh; }
+  .sheet.wide #sheet-body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .ws-scroll { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding-bottom: 24px; }
+  .ws-foot { padding: 12px 20px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--surface); display: flex; gap: 10px; }
+  .ws-foot .btn { flex: 1; }
+  .sheet-x { position: absolute; top: 12px; right: 12px; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; z-index: 5; color: var(--text); background: rgba(13,14,16,.62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line-2); }
+  .sheet-x svg { width: 18px; height: 18px; }
+
+  /* ---------- Trilha de campanha ---------- */
+  .trail { display: flex; flex-direction: column; align-items: center; padding: 20px 12px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 28px; }
+  .tr-stage { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .tr-stage.group { border: 1px solid var(--line-2); border-radius: 14px; padding: 7px 10px 10px; }
+  .tr-lbl { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .tr-row { display: flex; gap: 6px; }
+  .tr-box { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; font-family: var(--serif); font-size: 21px; font-weight: 700; background: var(--surface-2); border: 1px solid var(--line); color: var(--faint); transition: transform .1s; }
+  .tr-box:active { transform: scale(.94); }
+  .tr-box.next { color: var(--text); border-color: rgba(212,179,108,.55); border-style: dashed; }
+  .tr-box.cur { background: var(--gold); border-color: var(--gold); color: #121315; box-shadow: 0 0 0 4px rgba(212,179,108,.15); }
+  .tr-box.done { background: rgba(127,184,138,.12); border-color: rgba(127,184,138,.3); color: #8fc79a; }
+  .tr-box.skip { opacity: .3; text-decoration: line-through; }
+  .tr-line { width: 1px; height: 14px; background: var(--line-2); }
+  .legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 14px; font-size: 11px; color: var(--muted); }
+  .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .tag.next { color: var(--gold); border: 1px dashed rgba(212,179,108,.5); }
+  .m-row.skip { opacity: .4; }
 
   /* ---------- Fluxo de salvar partida ---------- */
   .ask-icon { width: 56px; height: 56px; margin-bottom: 14px; object-fit: contain; }
@@ -264,12 +287,13 @@
   .choice .t { font-weight: 600; font-size: 14px; }
   .choice .s { font-size: 12px; color: var(--muted); }
   .choice.sel { border-color: var(--gold); background: var(--gold-soft); }
-  .steps-dots { display: flex; gap: 5px; margin-bottom: 16px; }
+  .steps-dots { display: flex; gap: 5px; margin: 6px 52px 16px 0; }
+  .sheet:not(.wide) h2 { padding-right: 44px; }
   .steps-dots i { height: 3px; flex: 1; border-radius: 3px; background: var(--line-2); }
   .steps-dots i.on { background: var(--gold); }
 
   @media (min-width: 640px) {
-    .sheet.wide { max-width: 640px; }
+    .sheet.wide { max-width: 640px; height: min(88vh, 900px); }
     .wrap { padding-top: 34px; }
     .top h1 { font-size: 32px; }
     .heroes { grid-template-columns: 1fr 1fr; }
@@ -374,7 +398,11 @@
 
 <!-- ============ FOLHA (MODAL) ============ -->
 <div id="sheet-bg" class="sheet-bg" data-act="close-sheet"></div>
-<div id="sheet" class="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheet-body"></div></div>
+<div id="sheet" class="sheet" role="dialog" aria-modal="true">
+  <div class="grab"></div>
+  <button class="sheet-x" data-act="close-sheet" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <div id="sheet-body"></div>
+</div>
 
 <!-- Entradas de arquivo fixas (fora de qualquer modal, para não se perderem ao re-renderizar) -->
 <input type="file" id="file-camera" accept="image/*" capture="environment" class="hidden">
@@ -480,6 +508,49 @@ const mState = (c, code) => c.missions[code] || (c.missions[code] = { status: 'a
 const isDone = (c, code) => (c.missions[code] || {}).status === 'completed';
 const cardInfo = num => CARDS.find(k => k.num === Number(num)) || { num, name: 'Carta ' + num, desc: '' };
 const cardLabel = num => cardInfo(num).name.replace(/^Carta\s+\d+\s+—\s*/, '');
+
+// Estrutura de escolha das próximas missões (Trilha de Campanha do livro)
+const TRAILS = {
+  heavenfall: [
+    { pick: 1, of: ['A'] },
+    { pick: 1, of: ['B', 'C'] },
+    { pick: 2, of: ['D', 'E', 'F', 'G'] },
+    { pick: 1, of: ['H'] },
+    { pick: 1, of: ['I', 'J'] },
+    { pick: 1, of: ['K', 'L', 'M'] },
+    { pick: 1, of: ['N'] },
+  ],
+  horsemen: [
+    { pick: 4, of: ['FH_A', 'FH_B', 'FH_C', 'FH_D'] },
+    { pick: 1, of: ['FH_FINAL'] },
+  ],
+  demondragon: ['DD_A', 'DD_B', 'DD_C', 'DD_D', 'DD_E'].map(x => ({ pick: 1, of: [x] })),
+};
+const trail = c => TRAILS[c.mode] || [];
+const stageLabel = st => st.of.length < 2 ? '' : st.pick === st.of.length ? 'Jogue todas' : st.pick > 1 ? `Escolha ${st.pick}` : 'Escolha 1';
+
+// Missões que podem ser jogadas a seguir. extraDone = missão tratada como já concluída.
+function nextOptions(c, extraDone) {
+  const done = code => isDone(c, code) || code === extraDone;
+  const tr = trail(c);
+  if (!tr.length) {
+    const m = findMission(c, extraDone || c.currentMission);
+    return ((m && m.nextChoices) || []).filter(x => !done(x));
+  }
+  for (const st of tr) {
+    if (st.of.filter(done).length < st.pick) return st.of.filter(x => !done(x));
+  }
+  return [];
+}
+function stageOf(c, code) { return trail(c).find(st => st.of.includes(code)); }
+function missionStatus(c, code) {
+  if (isDone(c, code)) return 'done';
+  if (code === c.currentMission) return 'cur';
+  const st = stageOf(c, code);
+  if (st && st.of.filter(x => isDone(c, x)).length >= st.pick) return 'skip';
+  if (nextOptions(c).includes(code)) return 'next';
+  return 'locked';
+}
 
 function setCurrentMission(c, code) {
   const prev = c.missions[c.currentMission];
@@ -792,17 +863,32 @@ function renderMissions(c) {
         <div class="s">${esc(m.stageTitle || '')}</div>
       </div>
     </button>` : ''}
-    <div class="eyebrow"><span>Livro de missões</span><span style="text-transform:none;letter-spacing:0;font-weight:500;">${done} de ${book(c).length} concluídas</span></div>
+    <div class="eyebrow"><span>Trilha de campanha</span><span style="text-transform:none;letter-spacing:0;font-weight:500;">${done} de ${book(c).length} concluídas</span></div>
+    ${trail(c).length ? `<div class="trail">
+      ${trail(c).map((st, k) => `${k ? '<div class="tr-line"></div>' : ''}
+        <div class="tr-stage ${st.of.length > 1 ? 'group' : ''}">
+          ${stageLabel(st) ? `<span class="tr-lbl">${stageLabel(st)}</span>` : ''}
+          <div class="tr-row">${st.of.map(code => `<button class="tr-box ${missionStatus(c, code)}" data-act="mission" data-code="${esc(code)}" aria-label="Missão ${esc(shortCode(code))}">${esc(shortCode(code))}</button>`).join('')}</div>
+        </div>`).join('')}
+      <div class="legend">
+        <span><i style="background:var(--gold)"></i>Atual</span>
+        <span><i style="border:1px dashed rgba(212,179,108,.7)"></i>Disponível</span>
+        <span><i style="background:rgba(127,184,138,.5)"></i>Concluída</span>
+      </div>
+    </div>` : ''}
+    <div class="eyebrow"><span>Livro de missões</span></div>
     ${stages.map(s => `<div class="stage">
       <div class="stage-title">${esc(s.title)}</div>
       ${s.list.map(x => {
-        const isCur = x.code === c.currentMission, d = isDone(c, x.code);
+        const stt = missionStatus(c, x.code), isCur = x.code === c.currentMission, d = stt === 'done';
         const st = c.missions[x.code] || {};
-        const sub = d ? (st.secondaryDone === true ? 'Concluída · secundária cumprida' : 'Concluída') : (x.hasSecondary ? 'Tem missão secundária' : '');
-        return `<button class="m-row ${isCur ? 'cur' : ''}" data-act="mission" data-code="${esc(x.code)}">
+        const sub = d ? (st.secondaryDone === true ? 'Concluída · secundária cumprida' : 'Concluída')
+                  : stt === 'skip' ? 'Não jogada nesta campanha'
+                  : (x.hasSecondary ? 'Tem missão secundária' : '');
+        return `<button class="m-row ${isCur ? 'cur' : ''} ${stt === 'skip' ? 'skip' : ''}" data-act="mission" data-code="${esc(x.code)}">
           <div class="code ${isCur ? 'gold' : d ? 'done' : ''}">${esc(shortCode(x.code))}</div>
           <div class="grow"><div class="t">${esc(mTitle(x))}</div>${sub ? `<div class="s">${esc(sub)}</div>` : ''}</div>
-          ${isCur ? '<span class="tag cur">Atual</span>' : d ? '<span class="tag done">✓</span>' : ''}
+          ${isCur ? '<span class="tag cur">Atual</span>' : d ? '<span class="tag done">✓</span>' : stt === 'next' ? '<span class="tag next">Disponível</span>' : ''}
         </button>`;
       }).join('')}
     </div>`).join('')}`;
@@ -817,8 +903,9 @@ function missionSheet(code) {
   const bracket = n <= 2 ? 0 : n <= 4 ? 1 : 2;
   const tiles = comp.tilesList || (m.tiles ? m.tiles.replace(/^[^:]*:\s*/, '').split(',').map(s => s.trim()) : []);
   const row = (img, label, txt) => txt ? `<div class="comp"><img src="assets/tokens/${img}" alt=""><div><div class="cl">${label}</div><div class="cd">${esc(txt.trim())}</div></div></div>` : '';
-  const isCur = code === c.currentMission;
+  const isCur = code === c.currentMission, done = isDone(c, code);
   openSheet(`
+    <div class="ws-scroll">
     ${mapHtml(m)}
     <div class="md">
       <div class="k" style="font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--gold);font-weight:600;">${esc(m.stageTitle || '')}</div>
@@ -849,9 +936,11 @@ function missionSheet(code) {
       </details>
       ${m.resultText ? `<details class="fold"><summary>Texto de conclusão</summary><div class="prose" style="padding:8px 0 4px;font-style:italic;">${esc(m.resultText)}</div></details>` : ''}
     </div>
-    <div class="md-cta">
-      ${isCur ? `<button class="btn btn-ghost btn-block" data-act="close-sheet">Esta é a missão atual</button>`
-              : `<button class="btn btn-primary btn-block" data-act="set-mission" data-code="${esc(code)}">Definir como missão atual</button>`}
+    </div>
+    <div class="ws-foot">
+      ${!isCur ? `<button class="btn btn-ghost" data-act="set-mission" data-code="${esc(code)}">Tornar atual</button>` : ''}
+      ${done ? `<button class="btn btn-ghost" data-act="unconclude" data-code="${esc(code)}">Desfazer conclusão</button>`
+             : `<button class="btn btn-primary" data-act="conclude" data-code="${esc(code)}">Concluir missão</button>`}
     </div>
   `, 'wide');
 }
@@ -867,6 +956,33 @@ function startSaveFlow() {
   if (m && m.hasSecondary) flow.steps.push({ type: 'secondary' });
   flow.steps.push({ type: 'next' });
   renderFlow();
+}
+
+function startConcludeFlow(code) {
+  const c = cur(), m = findMission(c, code);
+  mState(c, code).status = 'completed';
+  commit();
+  flow = { code, steps: [], idx: 0, conclude: true };
+  if (m && m.hasSecondary && mState(c, code).secondaryDone == null) flow.steps.push({ type: 'secondary' });
+  flow.steps.push({ type: 'pick-next' });
+  renderFlow();
+}
+
+function nextChoicesHtml(c, opts, act) {
+  return `<div class="choice-list">${opts.map(code => findMission(c, code)).filter(Boolean).map(x => `
+    <button class="choice" data-act="${act}" data-code="${esc(x.code)}">
+      <div class="code">${esc(shortCode(x.code))}</div>
+      <div><div class="t">${esc(mTitle(x))}</div><div class="s">${x.hasSecondary ? 'Com missão secundária' : 'Objetivo único'}</div></div>
+    </button>`).join('')}</div>`;
+}
+
+function stageHint(c, opts) {
+  const st = opts.length && stageOf(c, opts[0]);
+  if (!st || st.of.length < 2) return 'Esta passa a ser a missão atual.';
+  const left = st.pick - st.of.filter(x => isDone(c, x)).length;
+  if (st.pick === st.of.length) return `Jogue todas, em qualquer ordem — faltam ${left}.`;
+  if (st.pick > 1) return `${stageLabel(st)} entre ${st.of.map(shortCode).join(', ')} — falta${left > 1 ? 'm' : ''} ${left}.`;
+  return `Escolha 1 entre ${st.of.map(shortCode).join(' ou ')}.`;
 }
 
 function heroChoices(c, selIdx) {
@@ -909,11 +1025,20 @@ function renderFlow() {
       <h2>Recompensa liberada</h2>
       <div class="sub">${esc(m.secondaryRewardText)}</div>
       <button class="btn btn-primary btn-block" data-act="flow-ok">Continuar</button>`);
+  } else if (step.type === 'pick-next') {
+    const opts = nextOptions(c);
+    openSheet(`${dots}
+      <h2>${esc(shortCode(m.code))} concluída</h2>
+      ${opts.length ? `<div class="sub">Qual é a próxima missão? ${esc(stageHint(c, opts))}</div>
+        ${nextChoicesHtml(c, opts, 'flow-pick')}
+        <button class="btn btn-ghost btn-block" style="margin-top:12px;" data-act="flow-finish">Escolher depois</button>`
+      : `<div class="sub">Essa era a última missão. Campanha concluída!</div>
+        <button class="btn btn-primary btn-block" data-act="flow-finish">Finalizar</button>`}`);
   } else if (step.type === 'next') {
-    const nexts = (m.nextChoices || []).filter(code => code !== flow.code && !isDone(c, code)).map(code => findMission(c, code)).filter(Boolean);
+    const nexts = nextOptions(c, flow.code).map(code => findMission(c, code)).filter(Boolean);
     openSheet(`${dots}
       <h2>Vocês venceram a missão?</h2>
-      <div class="sub">Se sim, escolha a próxima — ela vira a missão atual.</div>
+      <div class="sub">Se sim, escolha a próxima. ${esc(stageHint(c, nexts.map(x => x.code)))}</div>
       <div class="choice-list">
         ${nexts.map(x => `<button class="choice" data-act="flow-next" data-code="${esc(x.code)}"><div class="code">${esc(shortCode(x.code))}</div><div><div class="t">${esc(mTitle(x))}</div><div class="s">Vencemos — seguir para esta</div></div></button>`).join('')}
         ${!nexts.length ? `<button class="choice" data-act="flow-next" data-code=""><div class="code gold">✓</div><div><div class="t">Vencemos</div><div class="s">Marcar ${esc(shortCode(m.code))} como concluída</div></div></button>` : ''}
@@ -929,15 +1054,20 @@ function finishFlow() {
   clearTimeout(saveTimer);
   pushCloud(cur());
   closeSheet();
+  const msg = flow && flow.conclude ? 'Missão concluída' : 'Partida salva';
   flow = null;
   renderCamp();
-  toast('Partida salva');
+  toast(msg);
 }
 
 // =====================================================================
 // FOLHA (modal inferior)
 // =====================================================================
+let sheetOpen = false;
 function openSheet(html, cls) {
+  if (!sheetOpen) { try { history.pushState({ sheet: 1 }, ''); } catch (e) {} }
+  sheetOpen = true;
+  document.body.style.overflow = 'hidden';
   $('sheet').className = 'sheet' + (cls ? ' ' + cls : '');
   $('sheet').scrollTop = 0;
   $('sheet-body').innerHTML = html;
@@ -945,7 +1075,11 @@ function openSheet(html, cls) {
   $('sheet-bg').classList.add('open');
   $('sheet').classList.add('open');
 }
-function closeSheet() {
+function closeSheet(fromHistory) {
+  if (!sheetOpen) return;
+  sheetOpen = false;
+  document.body.style.overflow = '';
+  if (!fromHistory && history.state && history.state.sheet) { try { history.back(); } catch (e) {} }
   $('sheet-bg').classList.remove('open');
   $('sheet').classList.remove('open');
   photoTarget = null;
@@ -1122,6 +1256,13 @@ document.addEventListener('click', e => {
       toast('Missão atual: ' + shortCode(el.dataset.code)); break;
 
     case 'save-game': startSaveFlow(); break;
+    case 'conclude': startConcludeFlow(el.dataset.code); break;
+    case 'unconclude': {
+      const code = el.dataset.code;
+      mState(c, code).status = code === c.currentMission ? 'current' : 'available';
+      commit(); missionSheet(code); renderCamp(); break;
+    }
+    case 'flow-pick': setCurrentMission(c, el.dataset.code); finishFlow(); break;
     case 'flow-sec': {
       const yes = el.dataset.v === '1';
       const m = findMission(c, flow.code);
@@ -1193,6 +1334,8 @@ document.addEventListener('keydown', e => {
     else if ($('d-name') && document.activeElement === $('d-name')) saveDraft();
   }
 });
+// Gesto/botão "voltar" do celular fecha a folha em vez de sair do app
+window.addEventListener('popstate', () => { if (sheetOpen) { flow = null; closeSheet(true); } });
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') pullCloud(); });
 
 let toastTimer;
