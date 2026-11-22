@@ -174,7 +174,102 @@
   .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px); background: var(--text); color: #121315; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 80; max-width: calc(100% - 32px); text-align: center; }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+  /* ---------- Abas ---------- */
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; margin-bottom: 22px; }
+  .tabs button { height: 38px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); transition: background .15s, color .15s; }
+  .tabs button.on { background: var(--surface-2); color: var(--text); box-shadow: 0 1px 0 rgba(255,255,255,.04) inset; }
+
+  /* ---------- Missão atual (atalho no registro) ---------- */
+  .cur-mission { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 12px 14px 12px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 14px; }
+  .code { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-family: var(--serif); font-size: 24px; font-weight: 700; background: var(--surface-2); border: 1px solid var(--line-2); flex-shrink: 0; color: var(--text); }
+  .code.gold { background: var(--gold-soft); border-color: rgba(212,179,108,.35); color: var(--gold); }
+  .code.done { color: var(--muted); }
+  .cur-mission .k { font-size: 10px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+  .cur-mission .t { font-family: var(--serif); font-size: 20px; font-weight: 600; line-height: 1.15; }
+  .cur-mission .grow { flex: 1; min-width: 0; }
+
+  .save-game { margin-top: 22px; }
+
+  /* ---------- Cartas de campanha no herói ---------- */
+  .cards { padding: 12px 16px 16px; border-top: 1px solid var(--line); }
+  .cards .lbl { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 10px; }
+  .card-chip { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--gold-soft); border: 1px solid rgba(212,179,108,.22); margin-bottom: 6px; font-size: 13px; }
+  .card-chip b { font-family: var(--serif); font-size: 17px; color: var(--gold); min-width: 22px; text-align: center; }
+  .card-chip span { flex: 1; min-width: 0; line-height: 1.25; }
+
+  /* ---------- Missões ---------- */
+  .feature { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-bottom: 28px; width: 100%; text-align: left; display: block; }
+  .map { position: relative; aspect-ratio: 16 / 10; background: radial-gradient(circle at 30% 20%, #23262b, #121316); overflow: hidden; }
+  .map img { width: 100%; height: 100%; object-fit: cover; }
+  .map .ph-code { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--serif); font-size: 96px; font-weight: 700; color: rgba(255,255,255,.06); }
+  .map::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 45%, rgba(13,14,16,.92)); pointer-events: none; }
+  .feature .body { padding: 0 18px 18px; margin-top: -54px; position: relative; z-index: 1; }
+  .feature .k { font-size: 10px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+  .feature .t { font-family: var(--serif); font-size: 28px; font-weight: 600; line-height: 1.1; margin-top: 4px; }
+  .feature .s { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  .stage { margin-bottom: 22px; }
+  .stage-title { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 2px 10px; }
+  .m-row { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 10px 12px 10px 10px; border-radius: var(--radius); border: 1px solid transparent; transition: background .15s; }
+  .m-row:hover { background: var(--surface); }
+  .m-row.cur { background: var(--surface); border-color: rgba(212,179,108,.25); }
+  .m-row .grow { flex: 1; min-width: 0; }
+  .m-row .t { font-size: 15px; font-weight: 600; line-height: 1.25; }
+  .m-row .s { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .m-row .tag { font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .tag.cur { background: var(--gold); color: #121315; }
+  .tag.done { color: #7fb88a; background: rgba(127,184,138,.12); }
+
+  /* ---------- Detalhe da missão ---------- */
+  .sheet.wide { padding-left: 0; padding-right: 0; padding-top: 0; }
+  .sheet.wide .grab { position: absolute; left: 50%; transform: translateX(-50%); top: 10px; z-index: 3; background: rgba(255,255,255,.35); margin: 0; }
+  .sheet.wide .map { border-radius: 22px 22px 0 0; }
+  .md { padding: 0 20px; margin-top: -48px; position: relative; z-index: 2; }
+  .md h2 { font-size: 30px; line-height: 1.1; }
+  .sec { margin-top: 22px; }
+  .sec h3 { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+  .prose { font-size: 14px; line-height: 1.6; color: #d5d1ca; white-space: pre-line; }
+  .box { padding: 14px 16px; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--line); }
+  .box.gold { background: var(--gold-soft); border-color: rgba(212,179,108,.22); }
+  .box .bt { font-family: var(--serif); font-size: 19px; font-weight: 600; margin-bottom: 4px; }
+  .box .rw { font-size: 13px; color: var(--gold); margin-top: 8px; font-weight: 500; }
+  .xp-split { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .xp-split div { text-align: center; padding: 10px 6px; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--line); font-size: 11px; color: var(--muted); }
+  .xp-split div b { display: block; font-family: var(--serif); font-size: 24px; color: var(--text); line-height: 1.1; }
+  .xp-split div.on { border-color: rgba(212,179,108,.4); background: var(--gold-soft); }
+  .xp-split div.on b { color: var(--gold); }
+  details.fold { border-top: 1px solid var(--line); margin-top: 22px; }
+  details.fold summary { list-style: none; cursor: pointer; padding: 16px 0 4px; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); font-weight: 600; display: flex; justify-content: space-between; }
+  details.fold summary::-webkit-details-marker { display: none; }
+  details.fold summary::after { content: '+'; font-size: 16px; letter-spacing: 0; }
+  details.fold[open] summary::after { content: '−'; }
+  .tiles-strip { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 6px; }
+  .tiles-strip span { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-2); }
+  .comp { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .comp:last-child { border-bottom: 0; }
+  .comp img { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; }
+  .comp .cl { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .comp .cd { font-size: 13px; color: #c9c5be; line-height: 1.5; }
+  .md-cta { position: sticky; bottom: calc(-22px - env(safe-area-inset-bottom)); padding: 18px 20px calc(22px + env(safe-area-inset-bottom)); background: linear-gradient(rgba(21,23,26,0), var(--surface) 18px); margin: 18px 0 calc(-22px - env(safe-area-inset-bottom)); }
+  .md-cta .btn-ghost { background: var(--surface); }
+
+  /* ---------- Fluxo de salvar partida ---------- */
+  .ask-icon { width: 56px; height: 56px; margin-bottom: 14px; object-fit: contain; }
+  .choice-list { display: grid; gap: 8px; margin-top: 4px; }
+  .choice { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--line-2); background: var(--surface-2); transition: border-color .15s; }
+  .choice:hover { border-color: var(--gold); }
+  .choice .portrait { width: 42px; height: 42px; }
+  .choice .portrait.ph { font-size: 18px; }
+  .choice .code { width: 40px; height: 40px; font-size: 20px; }
+  .choice .t { font-weight: 600; font-size: 14px; }
+  .choice .s { font-size: 12px; color: var(--muted); }
+  .choice.sel { border-color: var(--gold); background: var(--gold-soft); }
+  .steps-dots { display: flex; gap: 5px; margin-bottom: 16px; }
+  .steps-dots i { height: 3px; flex: 1; border-radius: 3px; background: var(--line-2); }
+  .steps-dots i.on { background: var(--gold); }
+
   @media (min-width: 640px) {
+    .sheet.wide { max-width: 640px; }
     .wrap { padding-top: 34px; }
     .top h1 { font-size: 32px; }
     .heroes { grid-template-columns: 1fr 1fr; }
@@ -240,6 +335,16 @@
     <span class="sync" id="sync-camp"><i></i><span></span></span>
   </div>
 
+  <div class="tabs">
+    <button data-act="tab" data-tab="log" id="tab-log" class="on">Registro</button>
+    <button data-act="tab" data-tab="missions" id="tab-missions">Missões</button>
+  </div>
+
+  <div id="pane-missions" class="hidden"></div>
+
+  <div id="pane-log">
+  <button class="cur-mission" id="cur-mission" data-act="tab" data-tab="missions"></button>
+
   <div class="spoils">
     <img src="assets/tokens/token_espolios.png" alt="">
     <div class="grow">
@@ -254,6 +359,12 @@
 
   <div class="eyebrow"><span>Heróis</span></div>
   <div id="heroes" class="heroes"></div>
+
+  <button class="btn btn-primary btn-block save-game" data-act="save-game">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+    Salvar partida
+  </button>
+  </div>
 
   <div class="foot-note">
     Salvo automaticamente neste aparelho e na nuvem.<br>
@@ -272,6 +383,7 @@
 <div id="toast" class="toast"></div>
 
 <script src="heroes.js"></script>
+<script src="missions.js"></script>
 <script>
 // =====================================================================
 // CONFIGURAÇÃO
@@ -343,7 +455,45 @@ function normalize(c) {
   if (typeof c.groupSpoils !== 'number') {
     c.groupSpoils = c.players.reduce((s, p) => s + (Number(p.spoils) || 0), 0);
   }
+  // Missões e cartas (mesmo formato da versão anterior)
+  if (!MISSIONS[c.mode] && c.mode !== 'oneshot') c.mode = 'heavenfall';
+  const book = MISSIONS[c.mode] || [];
+  if (!c.missions || typeof c.missions !== 'object') c.missions = {};
+  if (book.length && (!c.currentMission || !book.some(m => m.code === c.currentMission))) c.currentMission = book[0].code;
+  if (!c.campaignCards || typeof c.campaignCards !== 'object') c.campaignCards = {};
+  if (!Array.isArray(c.rewards)) c.rewards = [];
   return c;
+}
+
+// =====================================================================
+// MISSÕES
+// =====================================================================
+const MISSIONS = window.MD2_MISSIONS || {};
+const CARDS = window.MD2_CARDS || [];
+const MAP_COMP = window.MD2_MAP_COMPONENTS || {};
+
+const book = c => MISSIONS[c.mode] || [];
+const findMission = (c, code) => book(c).find(m => m.code === code);
+const shortCode = code => String(code).replace(/^(FH|DD)_/, '').replace('FINAL', 'F');
+const mTitle = m => (m.name || '').replace(/^Missão\s+[^:]+:\s*/i, '');
+const mState = (c, code) => c.missions[code] || (c.missions[code] = { status: 'available', defeats: 0, secondaryDone: null });
+const isDone = (c, code) => (c.missions[code] || {}).status === 'completed';
+const cardInfo = num => CARDS.find(k => k.num === Number(num)) || { num, name: 'Carta ' + num, desc: '' };
+const cardLabel = num => cardInfo(num).name.replace(/^Carta\s+\d+\s+—\s*/, '');
+
+function setCurrentMission(c, code) {
+  const prev = c.missions[c.currentMission];
+  if (prev && prev.status === 'current') prev.status = 'available';
+  c.currentMission = code;
+  const st = mState(c, code);
+  if (st.status !== 'completed') st.status = 'current';
+}
+
+function mapHtml(m) {
+  return `<div class="map">
+    <div class="ph-code">${esc(shortCode(m.code))}</div>
+    ${m.mapImg ? `<img src="${esc(m.mapImg)}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+  </div>`;
 }
 
 function uid(prefix) { return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
@@ -544,10 +694,22 @@ function renderNew() {
   $('create-btn').disabled = picked.length === 0;
 }
 
+let campTab = 'log';
 function renderCamp() {
   const c = cur();
   $('camp-title').textContent = c.name || 'Campanha';
   $('camp-sub').textContent = MODE_LABEL[c.mode] || 'Campanha';
+  $('tab-log').classList.toggle('on', campTab === 'log');
+  $('tab-missions').classList.toggle('on', campTab === 'missions');
+  $('pane-log').classList.toggle('hidden', campTab !== 'log');
+  $('pane-missions').classList.toggle('hidden', campTab !== 'missions');
+  if (campTab === 'missions') renderMissions(c);
+
+  const cm = findMission(c, c.currentMission);
+  $('cur-mission').innerHTML = cm ? `
+    <div class="code gold">${esc(shortCode(cm.code))}</div>
+    <div class="grow"><div class="k">Missão atual</div><div class="t">${esc(mTitle(cm))}</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>` : '';
   $('spoils-val').textContent = c.groupSpoils || 0;
   const maxL = maxLevel(c);
   $('heroes').innerHTML = c.players.map((p, i) => {
@@ -597,15 +759,189 @@ function renderCamp() {
           </button>
         </div>
       </div>
+      ${heroCardsHtml(c, i)}
     </article>`;
   }).join('');
+}
+
+function heroCardsHtml(c, i) {
+  const nums = Object.keys(c.campaignCards).filter(n => c.campaignCards[n].unlocked && Number(c.campaignCards[n].holderIdx) === i).sort((a, b) => a - b);
+  const rws = c.rewards.filter(r => Number(r.holderIdx) === i);
+  if (!nums.length && !rws.length) return '';
+  return `<div class="cards"><div class="lbl">Cartas de campanha</div>
+    ${nums.map(n => `<button class="card-chip" data-act="card" data-num="${n}"><b>${n}</b><span>${esc(cardLabel(n))}</span></button>`).join('')}
+    ${rws.map(r => `<button class="card-chip" data-act="reward" data-id="${esc(r.id)}"><b>${esc(shortCode(r.code))}</b><span>${esc(r.name)}</span></button>`).join('')}
+  </div>`;
+}
+
+function renderMissions(c) {
+  const m = findMission(c, c.currentMission);
+  const stages = [];
+  book(c).forEach(x => {
+    let g = stages.find(s => s.title === x.stageTitle);
+    if (!g) stages.push(g = { title: x.stageTitle, list: [] });
+    g.list.push(x);
+  });
+  const done = book(c).filter(x => isDone(c, x.code)).length;
+  $('pane-missions').innerHTML = `
+    ${m ? `<button class="feature" data-act="mission" data-code="${esc(m.code)}">
+      ${mapHtml(m)}
+      <div class="body">
+        <div class="k">Missão atual · ${esc(shortCode(m.code))}</div>
+        <div class="t">${esc(mTitle(m))}</div>
+        <div class="s">${esc(m.stageTitle || '')}</div>
+      </div>
+    </button>` : ''}
+    <div class="eyebrow"><span>Livro de missões</span><span style="text-transform:none;letter-spacing:0;font-weight:500;">${done} de ${book(c).length} concluídas</span></div>
+    ${stages.map(s => `<div class="stage">
+      <div class="stage-title">${esc(s.title)}</div>
+      ${s.list.map(x => {
+        const isCur = x.code === c.currentMission, d = isDone(c, x.code);
+        const st = c.missions[x.code] || {};
+        const sub = d ? (st.secondaryDone === true ? 'Concluída · secundária cumprida' : 'Concluída') : (x.hasSecondary ? 'Tem missão secundária' : '');
+        return `<button class="m-row ${isCur ? 'cur' : ''}" data-act="mission" data-code="${esc(x.code)}">
+          <div class="code ${isCur ? 'gold' : d ? 'done' : ''}">${esc(shortCode(x.code))}</div>
+          <div class="grow"><div class="t">${esc(mTitle(x))}</div>${sub ? `<div class="s">${esc(sub)}</div>` : ''}</div>
+          ${isCur ? '<span class="tag cur">Atual</span>' : d ? '<span class="tag done">✓</span>' : ''}
+        </button>`;
+      }).join('')}
+    </div>`).join('')}`;
+}
+
+function missionSheet(code) {
+  const c = cur(), m = findMission(c, code);
+  if (!m) return;
+  const st = c.missions[code] || {};
+  const comp = MAP_COMP[code] || {};
+  const n = c.players.length;
+  const bracket = n <= 2 ? 0 : n <= 4 ? 1 : 2;
+  const tiles = comp.tilesList || (m.tiles ? m.tiles.replace(/^[^:]*:\s*/, '').split(',').map(s => s.trim()) : []);
+  const row = (img, label, txt) => txt ? `<div class="comp"><img src="assets/tokens/${img}" alt=""><div><div class="cl">${label}</div><div class="cd">${esc(txt.trim())}</div></div></div>` : '';
+  const isCur = code === c.currentMission;
+  openSheet(`
+    ${mapHtml(m)}
+    <div class="md">
+      <div class="k" style="font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--gold);font-weight:600;">${esc(m.stageTitle || '')}</div>
+      <h2>${esc(shortCode(m.code))} · ${esc(mTitle(m))}</h2>
+      ${isDone(c, code) ? '<span class="tag done" style="display:inline-block;margin-top:8px;">Concluída</span>' : ''}
+
+      <div class="sec"><h3>Objetivo</h3><div class="prose">${esc(m.mainObjective)}</div></div>
+      ${m.prepRules ? `<div class="sec"><h3>Regras especiais</h3><div class="prose">${esc(m.prepRules)}</div></div>` : ''}
+      ${m.hasSecondary ? `<div class="sec"><h3>Missão secundária${st.secondaryDone === true ? ' · cumprida' : st.secondaryDone === false ? ' · não cumprida' : ''}</h3>
+        <div class="box gold"><div class="bt">${esc(m.secondaryTitle)}</div><div class="prose">${esc(m.secondaryObjective)}</div><div class="rw">${esc(m.secondaryRewardText)}</div></div></div>` : ''}
+      ${Array.isArray(m.xpRewards) ? `<div class="sec"><h3>XP bônus por vitória</h3><div class="xp-split">
+        ${['1–2', '3–4', '5–6'].map((lbl, k) => `<div class="${k === bracket ? 'on' : ''}"><b>${m.xpRewards[k] ?? '—'}</b>${lbl} heróis</div>`).join('')}
+      </div></div>` : ''}
+      ${m.rewardText ? `<div class="sec"><h3>Recompensas</h3><div class="prose">${esc(m.rewardText)}</div></div>` : ''}
+      ${m.nextRule ? `<div class="sec"><h3>Próximo passo</h3><div class="prose">${esc(m.nextRule)}</div></div>` : ''}
+
+      <details class="fold"><summary>Montagem do mapa</summary>
+        ${tiles.length ? `<div class="tiles-strip">${tiles.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
+        ${row('token_zona_inicial.png', 'Zona inicial', comp.startZone)}
+        ${row('token_objetivo_colorido.png', 'Objetivos', comp.objectives)}
+        ${row('token_porta.png', 'Portas', comp.doors)}
+        ${row('token_portal.png', 'Portais', comp.portals)}
+        ${row('token_turba.png', 'Turbas', comp.mobs)}
+        ${row('token_aparecimento.png', 'Aparecimento', comp.spawns)}
+        ${row('token_bau_normal.png', 'Baús', comp.chests)}
+        ${row('token_ponte.png', 'Terreno especial', comp.specialTerrain)}
+        ${row('token_espolios.png', 'Espólios', comp.lootingRule)}
+      </details>
+      ${m.resultText ? `<details class="fold"><summary>Texto de conclusão</summary><div class="prose" style="padding:8px 0 4px;font-style:italic;">${esc(m.resultText)}</div></details>` : ''}
+    </div>
+    <div class="md-cta">
+      ${isCur ? `<button class="btn btn-ghost btn-block" data-act="close-sheet">Esta é a missão atual</button>`
+              : `<button class="btn btn-primary btn-block" data-act="set-mission" data-code="${esc(code)}">Definir como missão atual</button>`}
+    </div>
+  `, 'wide');
+}
+
+// ---------------------------------------------------------------------
+// Fluxo "Salvar partida": secundária → carta → herói → próxima missão
+// ---------------------------------------------------------------------
+let flow = null;
+
+function startSaveFlow() {
+  const c = cur(), m = findMission(c, c.currentMission);
+  flow = { code: c.currentMission, steps: [], idx: 0 };
+  if (m && m.hasSecondary) flow.steps.push({ type: 'secondary' });
+  flow.steps.push({ type: 'next' });
+  renderFlow();
+}
+
+function heroChoices(c, selIdx) {
+  return `<div class="choice-list">${c.players.map((p, k) => `
+    <button class="choice ${selIdx != null && Number(selIdx) === k ? 'sel' : ''}" data-act="flow-hero" data-i="${k}">
+      ${portrait(p)}<div><div class="t">${esc(p.heroName)}</div><div class="s">${esc(p.className || p.classId || '')} · nível ${p.level}</div></div>
+    </button>`).join('')}</div>`;
+}
+
+function renderFlow() {
+  const c = cur(), m = findMission(c, flow.code), step = flow.steps[flow.idx];
+  const dots = `<div class="steps-dots">${flow.steps.map((_, k) => `<i class="${k <= flow.idx ? 'on' : ''}"></i>`).join('')}</div>`;
+  if (!step) return finishFlow();
+
+  if (step.type === 'secondary') {
+    openSheet(`${dots}
+      <h2>Missão secundária cumprida?</h2>
+      <div class="sub">${esc(shortCode(m.code))} · ${esc(mTitle(m))}</div>
+      <div class="box gold" style="margin-bottom:18px;"><div class="bt">${esc(m.secondaryTitle)}</div><div class="prose">${esc(m.secondaryObjective)}</div><div class="rw">${esc(m.secondaryRewardText)}</div></div>
+      <div class="row-btns">
+        <button class="btn btn-ghost" data-act="flow-sec" data-v="0">Não</button>
+        <button class="btn btn-primary" data-act="flow-sec" data-v="1">Sim, cumprimos</button>
+      </div>`);
+  } else if (step.type === 'card') {
+    const info = cardInfo(step.num), held = c.campaignCards[step.num];
+    openSheet(`${dots}
+      <h2>Carta ${step.num} liberada</h2>
+      <div class="sub">${esc(cardLabel(step.num))}${info.desc ? ' — ' + esc(info.desc) : ''}</div>
+      <div class="field"><label>Qual herói fica com ela?</label></div>
+      ${heroChoices(c, held && held.unlocked ? held.holderIdx : null)}`);
+  } else if (step.type === 'reward') {
+    const held = c.rewards.find(r => r.code === flow.code);
+    openSheet(`${dots}
+      <h2>Recompensa liberada</h2>
+      <div class="sub">${esc(m.secondaryRewardText)}</div>
+      <div class="field"><label>Qual herói fica com ela?</label></div>
+      ${heroChoices(c, held ? held.holderIdx : null)}`);
+  } else if (step.type === 'info') {
+    openSheet(`${dots}
+      <h2>Recompensa liberada</h2>
+      <div class="sub">${esc(m.secondaryRewardText)}</div>
+      <button class="btn btn-primary btn-block" data-act="flow-ok">Continuar</button>`);
+  } else if (step.type === 'next') {
+    const nexts = (m.nextChoices || []).filter(code => code !== flow.code && !isDone(c, code)).map(code => findMission(c, code)).filter(Boolean);
+    openSheet(`${dots}
+      <h2>Vocês venceram a missão?</h2>
+      <div class="sub">Se sim, escolha a próxima — ela vira a missão atual.</div>
+      <div class="choice-list">
+        ${nexts.map(x => `<button class="choice" data-act="flow-next" data-code="${esc(x.code)}"><div class="code">${esc(shortCode(x.code))}</div><div><div class="t">${esc(mTitle(x))}</div><div class="s">Vencemos — seguir para esta</div></div></button>`).join('')}
+        ${!nexts.length ? `<button class="choice" data-act="flow-next" data-code=""><div class="code gold">✓</div><div><div class="t">Vencemos</div><div class="s">Marcar ${esc(shortCode(m.code))} como concluída</div></div></button>` : ''}
+      </div>
+      <button class="btn btn-ghost btn-block" style="margin-top:12px;" data-act="flow-finish">Ainda não / perdemos — só salvar</button>`);
+  }
+}
+
+function flowNext() { flow.idx++; renderFlow(); }
+
+function finishFlow() {
+  commit();
+  clearTimeout(saveTimer);
+  pushCloud(cur());
+  closeSheet();
+  flow = null;
+  renderCamp();
+  toast('Partida salva');
 }
 
 // =====================================================================
 // FOLHA (modal inferior)
 // =====================================================================
-function openSheet(html) {
+function openSheet(html, cls) {
+  $('sheet').className = 'sheet' + (cls ? ' ' + cls : '');
+  $('sheet').scrollTop = 0;
   $('sheet-body').innerHTML = html;
+  void $('sheet').offsetWidth;
   $('sheet-bg').classList.add('open');
   $('sheet').classList.add('open');
 }
@@ -715,6 +1051,8 @@ function createCampaign() {
     groupSpoils: 0,
     players: picked.map(h => ({ heroId: h.id, heroName: h.name, heroPhoto: h.img, className: h.cls, classId: h.cls, level: 1, xp: 0, inventory: [] }))
   };
+  normalize(c);
+  setCurrentMission(c, c.currentMission);
   campaigns[c.id] = c;
   currentId = c.id;
   picked = [];
@@ -775,7 +1113,69 @@ document.addEventListener('click', e => {
       numberSheet.onSave && numberSheet.onSave(v);
       commit(); closeSheet(); renderCamp(); break;
     }
-    case 'close-sheet': closeSheet(); break;
+    case 'close-sheet': if (flow) { flow = null; } closeSheet(); break;
+
+    case 'tab': campTab = el.dataset.tab; renderCamp(); window.scrollTo(0, 0); break;
+    case 'mission': missionSheet(el.dataset.code); break;
+    case 'set-mission':
+      setCurrentMission(c, el.dataset.code); commit(); closeSheet(); renderCamp();
+      toast('Missão atual: ' + shortCode(el.dataset.code)); break;
+
+    case 'save-game': startSaveFlow(); break;
+    case 'flow-sec': {
+      const yes = el.dataset.v === '1';
+      const m = findMission(c, flow.code);
+      mState(c, flow.code).secondaryDone = yes;
+      if (yes) {
+        const extra = [];
+        const nums = m.secondaryUnlocksCards || [];
+        if (nums.length) nums.forEach(num => extra.push({ type: 'card', num }));
+        else if (/cada her[óo]i/i.test(m.secondaryRewardText || '')) extra.push({ type: 'info' });
+        else extra.push({ type: 'reward' });
+        flow.steps.splice(flow.idx + 1, 0, ...extra);
+      }
+      flowNext(); break;
+    }
+    case 'flow-hero': {
+      const step = flow.steps[flow.idx];
+      if (step.type === 'card') {
+        const prev = c.campaignCards[step.num] || {};
+        c.campaignCards[step.num] = { ...prev, unlocked: true, holderIdx: i, tokens: prev.tokens ?? (cardInfo(step.num).maxTokens || 0) };
+      } else {
+        const m = findMission(c, flow.code);
+        const r = c.rewards.find(x => x.code === flow.code);
+        if (r) r.holderIdx = i;
+        else c.rewards.push({ id: uid('rw'), code: flow.code, name: m.secondaryTitle, text: m.secondaryRewardText, holderIdx: i });
+      }
+      toast(`Fica com ${c.players[i].heroName}`);
+      flowNext(); break;
+    }
+    case 'flow-ok': flowNext(); break;
+    case 'flow-next': {
+      mState(c, flow.code).status = 'completed';
+      if (el.dataset.code) setCurrentMission(c, el.dataset.code);
+      finishFlow(); break;
+    }
+    case 'flow-finish': finishFlow(); break;
+
+    case 'card': {
+      const num = el.dataset.num, info = cardInfo(num), cc = c.campaignCards[num];
+      openSheet(`<h2>Carta ${num}</h2><div class="sub">${esc(cardLabel(num))}</div>
+        ${info.desc ? `<div class="prose" style="margin-bottom:18px;">${esc(info.desc)}</div>` : ''}
+        <div class="field"><label>Com qual herói?</label></div>
+        <div class="choice-list">${c.players.map((pl, k) => `<button class="choice ${Number(cc.holderIdx) === k ? 'sel' : ''}" data-act="card-hero" data-num="${num}" data-i="${k}">${portrait(pl)}<div><div class="t">${esc(pl.heroName)}</div></div></button>`).join('')}</div>`);
+      break;
+    }
+    case 'card-hero': c.campaignCards[el.dataset.num].holderIdx = i; commit(); closeSheet(); renderCamp(); break;
+    case 'reward': {
+      const r = c.rewards.find(x => x.id === el.dataset.id);
+      openSheet(`<h2>${esc(r.name)}</h2><div class="sub">Recompensa da missão ${esc(shortCode(r.code))}</div>
+        ${r.text ? `<div class="prose" style="margin-bottom:18px;">${esc(r.text)}</div>` : ''}
+        <div class="field"><label>Com qual herói?</label></div>
+        <div class="choice-list">${c.players.map((pl, k) => `<button class="choice ${Number(r.holderIdx) === k ? 'sel' : ''}" data-act="reward-hero" data-id="${esc(r.id)}" data-i="${k}">${portrait(pl)}<div><div class="t">${esc(pl.heroName)}</div></div></button>`).join('')}</div>`);
+      break;
+    }
+    case 'reward-hero': c.rewards.find(x => x.id === el.dataset.id).holderIdx = i; commit(); closeSheet(); renderCamp(); break;
 
     case 'delete-camp':
       if (confirm(`Excluir a campanha "${c.name}"? Isso não pode ser desfeito.`)) {
@@ -787,7 +1187,7 @@ document.addEventListener('click', e => {
 
 $('hero-search').addEventListener('input', renderNew);
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeSheet();
+  if (e.key === 'Escape') { flow = null; closeSheet(); }
   if (e.key === 'Enter' && $('sheet').classList.contains('open')) {
     if ($('n-val')) document.querySelector('[data-act="n-save"]').click();
     else if ($('d-name') && document.activeElement === $('d-name')) saveDraft();
