@@ -4,12 +4,12 @@
 //
 // Segredos (Edge Functions → Secrets):
 //   ELEVENLABS_API_KEY   obrigatório — chave da ElevenLabs (começa com sk_)
-//   ELEVENLABS_VOICE_ID  opcional — voz usada na narração (padrão: Adam, grave)
+//   ELEVENLABS_VOICE_ID  opcional — voz usada na narração (padrão: Will — Grave Suspense)
 //   ELEVENLABS_MODEL_ID  opcional — modelo (padrão: eleven_multilingual_v2, fala português)
 //   ALLOWED_ORIGINS      opcional — sites que podem usar a função, separados por vírgula
 //                        ex.: https://captainscarps.github.io
 
-const DEFAULT_VOICE = 'pNInz6obpgDQGcFmaJgB'; // Adam — voz masculina grave
+const DEFAULT_VOICE = 'h96v1HCJtcisNNeagp0R'; // Will — Grave Suspense (voz brasileira, grave e sombria)
 const MAX_CHARS = 2500;
 
 function cors(origin: string) {
@@ -65,7 +65,7 @@ Deno.serve(async (req) => {
         text,
         model_id: model,
         // Voz grave, firme e sombria: mais estável, com estilo marcado e um pouco mais lenta
-        voice_settings: { stability: 0.6, similarity_boost: 0.8, style: 0.45, use_speaker_boost: true, speed: 0.9 },
+        voice_settings: { stability: 0.55, similarity_boost: 0.8, style: 0.5, use_speaker_boost: true, speed: 0.9 },
       }),
     },
   );

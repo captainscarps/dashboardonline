@@ -1273,7 +1273,7 @@ function stopNarration() {
   narr.btn = null;
 }
 
-async function narrate(btn, text) {
+async function narrate(btn, text, staticUrl) {
   if (narr.btn === btn && narr.audio) { stopNarration(); return; }
   if (narr.busy) return;
   stopNarration();
@@ -1282,7 +1282,14 @@ async function narrate(btn, text) {
   setNarrBtn(btn, 'busy');
   try {
     const key = 'tts:' + await sha(text);
-    let blob = await kv.get(key).catch(() => null);
+    let blob = null;
+    // 1º: narração pronta publicada no site (audio/<livro>/<missão>-missao|conclusao.mp3)
+    if (staticUrl) {
+      try { const r = await fetch(staticUrl); if (r.ok) blob = await r.blob(); } catch (e) {}
+      if (blob && !blob.size) blob = null;
+    }
+    // 2º: cache do aparelho; 3º: gera na hora pela função do Supabase
+    if (!blob) blob = await kv.get(key).catch(() => null);
     if (!blob) {
       const res = await fetch(NARRATE_URL, { method: 'POST', headers: SUPA_HEADERS, body: JSON.stringify({ text }) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1579,7 +1586,7 @@ document.addEventListener('click', e => {
     case 'export-json': exportJSON(); break;
     case 'narrate': {
       const m = findMission(c, el.dataset.code);
-      if (m) narrate(el, narrationText(m, el.dataset.what));
+      if (m) narrate(el, narrationText(m, el.dataset.what), `audio/${c.mode}/${m.code}-${el.dataset.what === 'result' ? 'conclusao' : 'missao'}.mp3`);
       break;
     }
     case 'import-json': $('file-json').click(); break;
