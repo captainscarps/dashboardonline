@@ -313,9 +313,14 @@
   </div>
   <div class="eyebrow"><span>Campanhas</span><span class="sync" id="sync-home"><i></i><span></span></span></div>
   <div id="camp-list" class="camp-list"></div>
+  <input type="file" id="file-json" accept=".json,application/json" class="hidden">
   <button class="btn btn-primary btn-block" data-act="new-camp">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     Nova campanha
+  </button>
+  <button class="btn btn-ghost btn-block" data-act="import-json" style="margin-top:10px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Abrir campanha (JSON)
   </button>
 </section>
 
@@ -335,6 +340,9 @@
       <option value="heavenfall">Heavenfall</option>
       <option value="horsemen">Quatro Cavaleiros</option>
       <option value="demondragon">Dragão Demônio</option>
+      <option value="prologo">Prólogo — Upgrade Pack (A–J)</option>
+      <option value="cristallava">Cristal & Lava — Upgrade Pack (A–F)</option>
+      <option value="chefes">Lutas de Chefe — Darkbringer & Upgrade</option>
     </select>
   </div>
   <div class="field">
@@ -391,6 +399,10 @@
   </div>
 
   <div class="foot-note">
+    <button class="btn btn-ghost btn-block" data-act="export-json" style="margin-bottom:16px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Baixar campanha (JSON)
+    </button>
     Salvo automaticamente neste aparelho e na nuvem.<br>
     <button data-act="delete-camp" style="color:var(--faint);text-decoration:underline;margin-top:10px;font-size:11px;">Excluir esta campanha</button>
   </div>
@@ -412,6 +424,7 @@
 
 <script src="heroes.js"></script>
 <script src="missions.js"></script>
+<script src="missions-extra.js"></script>
 <script>
 // =====================================================================
 // CONFIGURAÇÃO
@@ -427,7 +440,7 @@ const LEGACY_KEY_ACTIVE = 'md2_active_campaign_id_v2';
 // XP necessário para passar do nível N para o N+1
 const XP_TO_NEXT = { 1: 10, 2: 15, 3: 20, 4: 25, 5: 30, 6: 33, 7: 35, 8: 37, 9: 40 };
 const XP_TO_NEXT_ONESHOT = { 1: 10, 2: 15, 3: 20, 4: 25 };
-const MODE_LABEL = { heavenfall: 'Heavenfall', horsemen: 'Quatro Cavaleiros', demondragon: 'Dragão Demônio', oneshot: 'One-shot' };
+const MODE_LABEL = { heavenfall: 'Heavenfall', horsemen: 'Quatro Cavaleiros', demondragon: 'Dragão Demônio', prologo: 'Prólogo (Upgrade Pack)', cristallava: 'Cristal & Lava', chefes: 'Lutas de Chefe', oneshot: 'One-shot' };
 const MAX_PLAYERS = 6;
 
 const HEROES = (window.MD2_HEROES || []);
@@ -502,11 +515,12 @@ const MAP_COMP = window.MD2_MAP_COMPONENTS || {};
 
 const book = c => MISSIONS[c.mode] || [];
 const findMission = (c, code) => book(c).find(m => m.code === code);
-const shortCode = code => String(code).replace(/^(FH|DD)_/, '').replace('FINAL', 'F');
+const shortCode = code => String(code).replace(/^[A-Z]{2}_/, '').replace('FINAL', 'F');
 const mTitle = m => (m.name || '').replace(/^Missão\s+[^:]+:\s*/i, '');
 const mState = (c, code) => c.missions[code] || (c.missions[code] = { status: 'available', defeats: 0, secondaryDone: null });
 const isDone = (c, code) => (c.missions[code] || {}).status === 'completed';
-const cardInfo = num => CARDS.find(k => k.num === Number(num)) || { num, name: 'Carta ' + num, desc: '' };
+const cardsFor = c => ((window.MD2_CARDS_BY_MODE || {})[c && c.mode]) || CARDS;
+const cardInfo = num => cardsFor(cur()).find(k => k.num === Number(num)) || { num, name: 'Carta ' + num, desc: '' };
 const cardLabel = num => cardInfo(num).name.replace(/^Carta\s+\d+\s+—\s*/, '');
 
 // Estrutura de escolha das próximas missões (Trilha de Campanha do livro)
@@ -525,9 +539,30 @@ const TRAILS = {
     { pick: 1, of: ['FH_FINAL'] },
   ],
   demondragon: ['DD_A', 'DD_B', 'DD_C', 'DD_D', 'DD_E'].map(x => ({ pick: 1, of: [x] })),
+  prologo: [
+    { pick: 1, of: ['PR_A'] },
+    { pick: 3, of: ['PR_B', 'PR_C', 'PR_D'] },
+    { pick: 1, of: ['PR_E', 'PR_F'] },
+    { pick: 1, of: ['PR_G', 'PR_H'] },
+    { pick: 1, of: ['PR_I'] },
+    { pick: 1, of: ['PR_J'] },
+  ],
+  cristallava: [
+    { pick: 1, of: ['CL_A', 'CL_B'] },
+    { pick: 1, of: ['CL_C'] },
+    { pick: 1, of: ['CL_D'] },
+    { pick: 1, of: ['CL_E'] },
+    { pick: 1, of: ['CL_F'] },
+  ],
+  chefes: [{ pick: 5, of: ['BS_RE', 'BS_HA', 'BS_CA', 'BS_CI', 'BS_HE'], free: true }],
 };
+// Caminhos: missão só liberada se a anterior do mesmo caminho foi jogada
+const TRAIL_REQ = {
+  prologo: { PR_G: ['PR_E'], PR_H: ['PR_F'] },
+};
+const reqOk = (c, code, done) => ((TRAIL_REQ[c.mode] || {})[code] || []).every(done);
 const trail = c => TRAILS[c.mode] || [];
-const stageLabel = st => st.of.length < 2 ? '' : st.pick === st.of.length ? 'Jogue todas' : st.pick > 1 ? `Escolha ${st.pick}` : 'Escolha 1';
+const stageLabel = st => st.of.length < 2 ? '' : st.free ? 'Em qualquer ordem' : st.pick === st.of.length ? 'Jogue todas' : st.pick > 1 ? `Escolha ${st.pick}` : 'Escolha 1';
 
 // Missões que podem ser jogadas a seguir. extraDone = missão tratada como já concluída.
 function nextOptions(c, extraDone) {
@@ -538,7 +573,7 @@ function nextOptions(c, extraDone) {
     return ((m && m.nextChoices) || []).filter(x => !done(x));
   }
   for (const st of tr) {
-    if (st.of.filter(done).length < st.pick) return st.of.filter(x => !done(x));
+    if (st.of.filter(done).length < st.pick) return st.of.filter(x => !done(x) && reqOk(c, x, done));
   }
   return [];
 }
@@ -548,6 +583,11 @@ function missionStatus(c, code) {
   if (code === c.currentMission) return 'cur';
   const st = stageOf(c, code);
   if (st && st.of.filter(x => isDone(c, x)).length >= st.pick) return 'skip';
+  const req = (TRAIL_REQ[c.mode] || {})[code];
+  if (req && !req.every(x => isDone(c, x))) {
+    const rs = stageOf(c, req[0]);
+    if (rs && rs.of.filter(x => isDone(c, x)).length >= rs.pick) return 'skip';
+  }
   if (nextOptions(c).includes(code)) return 'next';
   return 'locked';
 }
@@ -956,6 +996,7 @@ function startConcludeFlow(code) {
   commit();
   flow = { code, steps: [], idx: 0, conclude: true };
   if (m && m.hasSecondary && mState(c, code).secondaryDone == null) flow.steps.push({ type: 'secondary' });
+  ((m && m.rewardCards) || []).forEach(num => flow.steps.push({ type: 'card', num }));
   flow.steps.push({ type: 'pick-next' });
   renderFlow();
 }
@@ -972,6 +1013,7 @@ function stageHint(c, opts) {
   const st = opts.length && stageOf(c, opts[0]);
   if (!st || st.of.length < 2) return 'Esta passa a ser a missão atual.';
   const left = st.pick - st.of.filter(x => isDone(c, x)).length;
+  if (st.free) return `Em qualquer ordem — faltam ${left}.`;
   if (st.pick === st.of.length) return `Jogue todas, em qualquer ordem — faltam ${left}.`;
   if (st.pick > 1) return `${stageLabel(st)} entre ${st.of.map(shortCode).join(', ')} — falta${left > 1 ? 'm' : ''} ${left}.`;
   return `Escolha 1 entre ${st.of.map(shortCode).join(' ou ')}.`;
@@ -1028,6 +1070,51 @@ function renderFlow() {
         <button class="btn btn-primary btn-block" data-act="flow-finish">Finalizar</button>`}`);
   }
 }
+
+// =====================================================================
+// EXPORTAR / IMPORTAR JSON
+// =====================================================================
+async function exportJSON() {
+  const c = cur();
+  if (!c) return;
+  commit();
+  const fname = 'MD2_' + (c.name || 'Campanha').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w-]+/g, '_') + '.json';
+  const blob = new Blob([JSON.stringify(c, null, 2)], { type: 'application/json' });
+  const download = () => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = fname;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    toast('Arquivo baixado');
+  };
+  try {
+    const file = new File([blob], fname, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      await navigator.share({ files: [file], title: c.name || 'Campanha' });
+      return;
+    }
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  download();
+}
+
+async function importJSON(file) {
+  let data;
+  try { data = JSON.parse(await file.text()); } catch (e) { toast('Arquivo inválido'); return; }
+  if (!data || !Array.isArray(data.players) || !data.players.length) { toast('Esse arquivo não é uma campanha'); return; }
+  if (!data.id) data.id = 'camp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+  if (campaigns[data.id] && !confirm(`Já existe a campanha "${campaigns[data.id].name}" neste aparelho. Substituir pelo arquivo?`)) return;
+  campaigns[data.id] = normalize(data);
+  currentId = data.id;
+  commit();
+  go('camp');
+  toast('Campanha aberta');
+}
+document.getElementById('file-json').addEventListener('change', ev => {
+  const f = ev.target.files && ev.target.files[0];
+  ev.target.value = '';
+  if (f) importJSON(f);
+});
 
 async function saveNow() {
   commit();
@@ -1245,6 +1332,8 @@ document.addEventListener('click', e => {
       toast('Missão atual: ' + shortCode(el.dataset.code)); break;
 
     case 'save-game': saveNow(); break;
+    case 'export-json': exportJSON(); break;
+    case 'import-json': $('file-json').click(); break;
     case 'conclude': startConcludeFlow(el.dataset.code); break;
     case 'unconclude': {
       const code = el.dataset.code;
