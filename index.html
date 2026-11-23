@@ -615,9 +615,17 @@ function normalize(c) {
     if (typeof p.level !== 'number' || p.level < 1) p.level = 1;
     if (typeof p.xp !== 'number' || p.xp < 0) p.xp = 0;
     if (!Array.isArray(p.inventory)) p.inventory = [];
+    if (!Array.isArray(p.skills)) p.skills = [];
+    // A antiga área "Na mão" passou a ser "Habilidades": move o que foi registrado nela
+    if (!c.skillsSplit) {
+      p.skills.push(...p.inventory.filter(it => it.slot === 'Na mão').map(it => ({ ...it, slot: 'Habilidade' })));
+      p.inventory = p.inventory.filter(it => it.slot !== 'Na mão');
+    }
     p.inventory.forEach(it => { if (!it.id) it.id = uid('it'); });
+    p.skills.forEach(it => { if (!it.id) it.id = uid('sk'); });
   });
   // Espólios passam a ser do grupo; na primeira abertura soma o que cada herói tinha
+  c.skillsSplit = true;
   if (typeof c.groupSpoils !== 'number') {
     c.groupSpoils = c.players.reduce((s, p) => s + (Number(p.spoils) || 0), 0);
   }
@@ -956,10 +964,6 @@ function renderCamp() {
     if (!need) foot = `<span>Nível máximo</span>`;
     else if (p.xp >= need) foot = `<span>${need} XP para o nível ${p.level + 1}</span><button class="lvl-up" data-act="lvlup" data-i="${i}">Subir para nível ${p.level + 1}</button>`;
     else foot = `<span>Faltam ${need - p.xp} XP para o nível ${p.level + 1}</span>`;
-    const items = p.inventory.map(it => it.photo
-      ? `<button class="tile" data-act="item" data-i="${i}" data-id="${esc(it.id)}"><img src="${it.photo}" alt="" loading="lazy">${it.name ? `<span class="cap">${esc(it.name)}</span>` : ''}</button>`
-      : `<button class="tile txt" data-act="item" data-i="${i}" data-id="${esc(it.id)}"><span class="cap">${esc(it.name || 'Item')}</span></button>`
-    ).join('');
     return `<article class="hero ${p.heroPhoto ? 'has-art' : ''}">
       ${p.heroPhoto ? `<button class="hero-art" data-act="zoom-hero" data-i="${i}" aria-label="Ver ${esc(p.heroName)}">
         <img src="${esc(p.heroPhoto)}" alt="" loading="lazy" onerror="this.closest('.hero').classList.remove('has-art');this.parentNode.remove()">
@@ -989,19 +993,34 @@ function renderCamp() {
         <div class="bar"><i style="width:${pct}%"></i></div>
         <div class="xp-foot">${foot}</div>
       </div>
-      <div class="items">
-        <div class="lbl"><span>Na mão</span><span>${p.inventory.length || ''}</span></div>
-        <div class="item-grid">
-          ${items}
-          <button class="tile add" data-act="add-item" data-i="${i}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            Adicionar
-          </button>
-        </div>
-      </div>
+      ${entrySection(p, i, 'skills')}
+      ${entrySection(p, i, 'items')}
       ${heroCardsHtml(c, i)}
     </article>`;
   }).join('');
+}
+
+// Habilidades (p.skills) e Itens (p.inventory): foto, nome ou os dois
+const KINDS = {
+  skills: { field: 'skills', label: 'Habilidades', one: 'Habilidade', add: 'Nova habilidade', ph: 'Ex: Golpe Giratório', fallback: 'Habilidade' },
+  items: { field: 'inventory', label: 'Itens', one: 'Item', add: 'Novo item', ph: 'Ex: Espada Vorpal', fallback: 'Item' },
+};
+function entrySection(p, i, kind) {
+  const K = KINDS[kind], list = p[K.field] || [];
+  const tiles = list.map(it => it.photo
+    ? `<button class="tile" data-act="entry" data-kind="${kind}" data-i="${i}" data-id="${esc(it.id)}"><img src="${it.photo}" alt="" loading="lazy">${it.name ? `<span class="cap">${esc(it.name)}</span>` : ''}</button>`
+    : `<button class="tile txt" data-act="entry" data-kind="${kind}" data-i="${i}" data-id="${esc(it.id)}"><span class="cap">${esc(it.name || K.fallback)}</span></button>`
+  ).join('');
+  return `<div class="items">
+    <div class="lbl"><span>${K.label}</span><span>${list.length || ''}</span></div>
+    <div class="item-grid">
+      ${tiles}
+      <button class="tile add" data-act="add-entry" data-kind="${kind}" data-i="${i}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Adicionar
+      </button>
+    </div>
+  </div>`;
 }
 
 function heroCardsHtml(c, i) {
@@ -1297,14 +1316,14 @@ const CAM_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 const GAL_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
 
 // Rascunho do item sendo adicionado/editado
-let draft = null; // { i, id|null, photo, name }
+let draft = null; // { i, kind, id|null, photo, name }
 
-function itemSheet(i, itemId) {
-  const p = cur().players[i];
-  const it = itemId ? p.inventory.find(x => x.id === itemId) : null;
-  draft = { i, id: itemId || null, photo: it ? it.photo || null : null, name: it ? it.name || '' : '' };
+function itemSheet(i, itemId, kind = 'items') {
+  const p = cur().players[i], K = KINDS[kind];
+  const it = itemId ? p[K.field].find(x => x.id === itemId) : null;
+  draft = { i, kind, id: itemId || null, photo: it ? it.photo || null : null, name: it ? it.name || '' : '' };
   openSheet(`
-    <h2>${it ? 'Item' : 'Novo item na mão'}</h2>
+    <h2>${it ? K.one : K.add}</h2>
     <div class="sub">${esc(p.heroName)}</div>
     <div id="d-preview" class="preview ${draft.photo ? '' : 'hidden'}">${draft.photo ? `<img src="${draft.photo}" alt="">` : ''}</div>
     <div class="photo-btns">
@@ -1313,7 +1332,7 @@ function itemSheet(i, itemId) {
     </div>
     <div class="field">
       <label for="d-name">Nome ${draft.photo ? '(opcional)' : ''}</label>
-      <input id="d-name" class="input" placeholder="Ex: Espada Vorpal" value="${esc(draft.name)}" maxlength="60">
+      <input id="d-name" class="input" placeholder="${K.ph}" value="${esc(draft.name)}" maxlength="60">
     </div>
     <div class="row-btns">
       ${it ? `<button class="btn btn-danger" data-act="remove-item">Remover</button>` : ''}
@@ -1347,13 +1366,14 @@ function setDraftPhoto(val) {
 
 function saveDraft() {
   const name = $('d-name').value.trim();
-  if (!draft.photo && !name) { toast('Tire uma foto ou escreva o nome do item'); $('d-name').focus(); return; }
+  const K = KINDS[draft.kind];
+  if (!draft.photo && !name) { toast('Tire uma foto ou escreva o nome'); $('d-name').focus(); return; }
   const p = cur().players[draft.i];
   if (draft.id) {
-    const it = p.inventory.find(x => x.id === draft.id);
+    const it = p[K.field].find(x => x.id === draft.id);
     if (it) { it.name = name; if (draft.photo) it.photo = draft.photo; }
   } else {
-    p.inventory.push({ id: uid('it'), name, photo: draft.photo || undefined, slot: 'Na mão', addedAt: new Date().toISOString() });
+    p[K.field].push({ id: uid(draft.kind === 'skills' ? 'sk' : 'it'), name, photo: draft.photo || undefined, slot: K.one, addedAt: new Date().toISOString() });
   }
   commit(); closeSheet(); renderCamp();
 }
@@ -1391,7 +1411,8 @@ function createCampaign() {
     updatedAt: new Date().toISOString(),
     playerCount: picked.length,
     groupSpoils: 0,
-    players: picked.map(h => ({ heroId: h.id, heroName: h.name, heroPhoto: h.img, className: h.cls, classId: h.cls, level: 1, xp: 0, inventory: [] }))
+    skillsSplit: true,
+    players: picked.map(h => ({ heroId: h.id, heroName: h.name, heroPhoto: h.img, className: h.cls, classId: h.cls, level: 1, xp: 0, skills: [], inventory: [] }))
   };
   normalize(c);
   setCurrentMission(c, c.currentMission);
@@ -1439,13 +1460,14 @@ document.addEventListener('click', e => {
       p.level = Math.min(maxLevel(c), Math.max(1, p.level + d)); commit(); renderCamp(); break;
     case 'lvlup': levelUp(p, c); commit(); renderCamp(); break;
 
-    case 'add-item': itemSheet(i, null); break;
-    case 'item': itemSheet(i, el.dataset.id); break;
+    case 'add-entry': itemSheet(i, null, el.dataset.kind); break;
+    case 'entry': itemSheet(i, el.dataset.id, el.dataset.kind); break;
     case 'photo': askPhoto(el.dataset.src, setDraftPhoto); break;
     case 'save-item': saveDraft(); break;
     case 'remove-item': {
       const pl = c.players[draft.i];
-      pl.inventory = pl.inventory.filter(x => x.id !== draft.id);
+      const fld = KINDS[draft.kind].field;
+      pl[fld] = pl[fld].filter(x => x.id !== draft.id);
       commit(); closeSheet(); renderCamp(); break;
     }
 
