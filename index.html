@@ -292,6 +292,24 @@
   .steps-dots i { height: 3px; flex: 1; border-radius: 3px; background: var(--line-2); }
   .steps-dots i.on { background: var(--gold); }
 
+  /* ---------- Layouts (celular: uma coluna na ordem natural) ---------- */
+  .camp-layout, .home-layout, .new-layout { display: flex; flex-direction: column; }
+  .camp-side, .home-side, .new-side { display: contents; }
+  .camp-side .top { order: 1; } .camp-side .tabs { order: 2; } .camp-side .cur-mission { order: 3; } .camp-side .spoils { order: 4; }
+  .camp-main { order: 5; } .camp-side .save-game { order: 6; } .camp-side .foot-note { order: 7; }
+  .tab-missions .log-only { display: none !important; }
+  .home-side .brand { order: 1; } .home-main { order: 2; } .home-side .home-actions { order: 3; }
+  .new-side .top { order: 1; } .new-fields { order: 2; } .new-main { order: 3; } .new-side .sticky-cta { order: 4; }
+
+  /* ---------- Tablet ---------- */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .feature .map { aspect-ratio: 16 / 8; }
+    .wrap { max-width: 900px; padding-left: 28px; padding-right: 28px; }
+    .camp-list { display: grid; grid-template-columns: 1fr 1fr; }
+    .pick-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+    .xp-split div b { font-size: 26px; }
+  }
+
   @media (min-width: 640px) {
     .sheet.wide { max-width: 640px; height: min(88vh, 900px); }
     .wrap { padding-top: 34px; }
@@ -301,110 +319,205 @@
     .sheet.open { transform: translateY(-50%); opacity: 1; pointer-events: auto; }
     .sheet .grab { display: none; }
   }
+  /* ---------- Computador: painel lateral + área principal ---------- */
+  @media (min-width: 1024px) {
+    body { background: radial-gradient(1200px 600px at 10% -10%, rgba(212,179,108,.06), transparent 60%), var(--bg); background-attachment: fixed; }
+    .wrap { max-width: 1480px; padding: 36px 40px 60px; }
+    .camp-side, .home-side, .new-side { display: flex; flex-direction: column; position: sticky; top: 28px; align-self: start; max-height: calc(100vh - 56px); overflow-y: auto; scrollbar-width: none; }
+    .camp-side::-webkit-scrollbar, .home-side::-webkit-scrollbar, .new-side::-webkit-scrollbar { display: none; }
+    .camp-side > *, .home-side > *, .new-side > * { order: 0 !important; }
+    .tab-missions .log-only { display: revert !important; }
+    .tab-missions .cur-mission { display: flex !important; }
+    .tab-missions .spoils { display: flex !important; }
+    .tab-missions .save-game { display: inline-flex !important; }
+
+    /* Campanha */
+    .camp-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 32px; align-items: start; }
+    .camp-side .top { margin-bottom: 22px; align-items: flex-start; }
+    .camp-side .top h1 { white-space: normal; font-size: 30px; }
+    .camp-side .top .sync { margin-top: 12px; }
+    .camp-side .save-game { margin-top: 4px; }
+    .camp-side .foot-note { margin-top: 22px; text-align: left; }
+    .camp-side .foot-note .btn { justify-content: center; }
+    .camp-main { padding-top: 6px; min-width: 0; }
+    .heroes { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; align-items: start; }
+    .item-grid { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); }
+
+    /* Missões */
+    .feature { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: stretch; }
+    .feature .map { aspect-ratio: auto; min-height: 300px; }
+    .feature .map::after { background: linear-gradient(90deg, transparent 60%, rgba(21,23,26,.9)); }
+    .feature .body { margin-top: 0; padding: 30px 28px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .feature .t { font-size: 34px; }
+    .feature .map img { object-position: center; }
+  }
+  @media (min-width: 1280px) {
+    .camp-layout { grid-template-columns: 340px minmax(0, 1fr); gap: 40px; }
+    .mis-grid { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 32px; align-items: start; }
+    .mis-trail { position: sticky; top: 28px; }
+  }
+  @media (min-width: 1440px) {
+    .mis-book .stage { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
+    .mis-book .stage-title { grid-column: 1 / -1; }
+  }
+  @media (min-width: 1024px) {
+
+    /* Campanhas (início) */
+    .home-layout { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 56px; align-items: start; }
+    .home-side .brand { align-items: flex-start; text-align: left; padding: 10px 0 30px; }
+    .home-side .brand img { width: 300px; }
+    .home-main { padding-top: 18px; }
+    .camp-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+    .camp-item { padding: 20px; align-items: flex-start; }
+    .camp-item .name { font-size: 24px; }
+    .avatars img, .avatars span { width: 34px; height: 34px; }
+    .empty { padding: 60px 20px; }
+
+    /* Nova campanha */
+    .new-layout { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 40px; align-items: start; }
+    .new-side .sticky-cta { position: static; padding: 6px 0 0; background: none; }
+    .new-main { padding-top: 6px; }
+    .pick-grid { max-height: calc(100vh - 150px); grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px; }
+    .pick img, .pick .portrait { width: 76px; height: 76px; }
+
+    /* Detalhe da missão: mapa | texto */
+    .sheet.wide { max-width: 1120px; height: min(86vh, 860px); }
+    .sheet.wide .ws-scroll { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); overflow: hidden; padding: 0; }
+    .sheet.wide .ws-scroll > .map { aspect-ratio: auto; height: 100%; border-radius: 22px 0 0 0; background: #0b0c0e; }
+    .sheet.wide .ws-scroll > .map img { object-fit: contain; }
+    .sheet.wide .ws-scroll > .map::after { display: none; }
+    .sheet.wide .md { margin-top: 0; min-height: 0; overflow-y: auto; padding: 34px 32px 28px; }
+    .sheet.wide .md h2 { padding-right: 40px; }
+    .sheet.wide .grab { display: none; }
+    .ws-foot { justify-content: flex-end; }
+    .ws-foot .btn { flex: 0 0 auto; min-width: 210px; }
+  }
+
 </style>
 </head>
 <body>
 
 <!-- ============ TELA: CAMPANHAS ============ -->
 <section id="view-home" class="wrap hidden">
-  <div class="brand">
-    <img src="logo-registro.png" alt="Registro de Campanha — Massive Darkness 2">
-    <p>Selecione a campanha para registrar o andamento</p>
+  <div class="home-layout">
+    <div class="home-side">
+      <div class="brand">
+        <img src="logo-registro.png" alt="Registro de Campanha — Massive Darkness 2">
+        <p>Selecione a campanha para registrar o andamento</p>
+      </div>
+      <div class="home-actions">
+        <input type="file" id="file-json" accept=".json,application/json" class="hidden">
+        <button class="btn btn-primary btn-block" data-act="new-camp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nova campanha
+        </button>
+        <button class="btn btn-ghost btn-block" data-act="import-json" style="margin-top:10px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Abrir campanha (JSON)
+        </button>
+      </div>
+    </div>
+    <div class="home-main">
+      <div class="eyebrow"><span>Campanhas</span><span class="sync" id="sync-home"><i></i><span></span></span></div>
+      <div id="camp-list" class="camp-list"></div>
+    </div>
   </div>
-  <div class="eyebrow"><span>Campanhas</span><span class="sync" id="sync-home"><i></i><span></span></span></div>
-  <div id="camp-list" class="camp-list"></div>
-  <input type="file" id="file-json" accept=".json,application/json" class="hidden">
-  <button class="btn btn-primary btn-block" data-act="new-camp">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Nova campanha
-  </button>
-  <button class="btn btn-ghost btn-block" data-act="import-json" style="margin-top:10px;">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-    Abrir campanha (JSON)
-  </button>
 </section>
 
 <!-- ============ TELA: NOVA CAMPANHA ============ -->
 <section id="view-new" class="wrap hidden">
-  <div class="top">
-    <button class="icon-btn" data-act="home" aria-label="Voltar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
-    <h1>Nova campanha</h1>
-  </div>
-  <div class="field">
-    <label for="new-name">Nome</label>
-    <input id="new-name" class="input" maxlength="45" placeholder="Ex: Companhia da Luz">
-  </div>
-  <div class="field">
-    <label for="new-mode">Livro de campanha</label>
-    <select id="new-mode" class="input">
-      <option value="heavenfall">Heavenfall</option>
-      <option value="horsemen">Quatro Cavaleiros</option>
-      <option value="demondragon">Dragão Demônio</option>
-      <option value="prologo">Prólogo — Upgrade Pack (A–J)</option>
-      <option value="cristallava">Cristal & Lava — Upgrade Pack (A–F)</option>
-      <option value="chefes">Lutas de Chefe — Darkbringer & Upgrade</option>
-    </select>
-  </div>
-  <div class="field">
-    <label>Heróis <span id="pick-count" style="text-transform:none;letter-spacing:0;font-weight:500;"></span></label>
-    <div id="picked" class="picked"></div>
-    <input id="hero-search" class="input" placeholder="Buscar por nome ou classe" style="margin-bottom:12px;">
-    <div id="pick-grid" class="pick-grid"></div>
-  </div>
-  <div class="sticky-cta">
-    <button class="btn btn-primary btn-block" id="create-btn" data-act="create" disabled>Começar campanha</button>
+  <div class="new-layout">
+    <div class="new-side">
+      <div class="top">
+        <button class="icon-btn" data-act="home" aria-label="Voltar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <h1>Nova campanha</h1>
+      </div>
+      <div class="new-fields">
+        <div class="field">
+          <label for="new-name">Nome</label>
+          <input id="new-name" class="input" maxlength="45" placeholder="Ex: Companhia da Luz">
+        </div>
+        <div class="field">
+          <label for="new-mode">Livro de campanha</label>
+          <select id="new-mode" class="input">
+            <option value="heavenfall">Heavenfall</option>
+            <option value="horsemen">Quatro Cavaleiros</option>
+            <option value="demondragon">Dragão Demônio</option>
+            <option value="prologo">Prólogo — Upgrade Pack (A–J)</option>
+            <option value="cristallava">Cristal & Lava — Upgrade Pack (A–F)</option>
+            <option value="chefes">Lutas de Chefe — Darkbringer & Upgrade</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Heróis <span id="pick-count" style="text-transform:none;letter-spacing:0;font-weight:500;"></span></label>
+          <div id="picked" class="picked"></div>
+        </div>
+      </div>
+      <div class="sticky-cta">
+        <button class="btn btn-primary btn-block" id="create-btn" data-act="create" disabled>Começar campanha</button>
+      </div>
+    </div>
+    <div class="new-main">
+      <input id="hero-search" class="input" placeholder="Buscar por nome, classe ou expansão" style="margin-bottom:12px;">
+      <div id="pick-grid" class="pick-grid"></div>
+    </div>
   </div>
 </section>
 
 <!-- ============ TELA: REGISTRO DA CAMPANHA ============ -->
 <section id="view-camp" class="wrap hidden">
-  <div class="top">
-    <button class="icon-btn" data-act="home" aria-label="Campanhas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
-    <div style="flex:1;min-width:0;">
-      <h1 id="camp-title"></h1>
-      <div class="sub" id="camp-sub"></div>
-    </div>
-    <span class="sync" id="sync-camp"><i></i><span></span></span>
-  </div>
+  <div class="camp-layout" id="camp-layout">
+    <aside class="camp-side">
+      <div class="top">
+        <button class="icon-btn" data-act="home" aria-label="Campanhas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div style="flex:1;min-width:0;">
+          <h1 id="camp-title"></h1>
+          <div class="sub" id="camp-sub"></div>
+        </div>
+        <span class="sync" id="sync-camp"><i></i><span></span></span>
+      </div>
 
-  <div class="tabs">
-    <button data-act="tab" data-tab="log" id="tab-log" class="on">Registro</button>
-    <button data-act="tab" data-tab="missions" id="tab-missions">Missões</button>
-  </div>
+      <div class="tabs">
+        <button data-act="tab" data-tab="log" id="tab-log" class="on">Registro</button>
+        <button data-act="tab" data-tab="missions" id="tab-missions">Missões</button>
+      </div>
 
-  <div id="pane-missions" class="hidden"></div>
+      <button class="cur-mission log-only" id="cur-mission" data-act="tab" data-tab="missions"></button>
 
-  <div id="pane-log">
-  <button class="cur-mission" id="cur-mission" data-act="tab" data-tab="missions"></button>
+      <div class="spoils log-only">
+        <img src="assets/tokens/token_espolios.png" alt="">
+        <div class="grow">
+          <div class="lbl">Espólios do grupo</div>
+          <div class="val" id="spoils-val" data-act="edit-spoils">0</div>
+        </div>
+        <div class="stepper">
+          <button class="step" data-act="spoils" data-d="-1" aria-label="Menos um espólio">−</button>
+          <button class="step" data-act="spoils" data-d="1" aria-label="Mais um espólio">+</button>
+        </div>
+      </div>
 
-  <div class="spoils">
-    <img src="assets/tokens/token_espolios.png" alt="">
-    <div class="grow">
-      <div class="lbl">Espólios do grupo</div>
-      <div class="val" id="spoils-val" data-act="edit-spoils">0</div>
-    </div>
-    <div class="stepper">
-      <button class="step" data-act="spoils" data-d="-1" aria-label="Menos um espólio">−</button>
-      <button class="step" data-act="spoils" data-d="1" aria-label="Mais um espólio">+</button>
-    </div>
-  </div>
+      <button class="btn btn-primary btn-block save-game log-only" data-act="save-game">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Salvar partida
+      </button>
 
-  <div class="eyebrow"><span>Heróis</span></div>
-  <div id="heroes" class="heroes"></div>
+      <div class="foot-note">
+        <button class="btn btn-ghost btn-block" data-act="export-json" style="margin-bottom:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Baixar campanha (JSON)
+        </button>
+        Salvo automaticamente neste aparelho e na nuvem.<br>
+        <button data-act="delete-camp" style="color:var(--faint);text-decoration:underline;margin-top:10px;font-size:11px;">Excluir esta campanha</button>
+      </div>
+    </aside>
 
-  <button class="btn btn-primary btn-block save-game" data-act="save-game">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-    Salvar partida
-  </button>
-  </div>
-
-  <div class="foot-note">
-    <button class="btn btn-ghost btn-block" data-act="export-json" style="margin-bottom:16px;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Baixar campanha (JSON)
-    </button>
-    Salvo automaticamente neste aparelho e na nuvem.<br>
-    <button data-act="delete-camp" style="color:var(--faint);text-decoration:underline;margin-top:10px;font-size:11px;">Excluir esta campanha</button>
+    <main class="camp-main">
+      <div id="pane-log">
+        <div class="eyebrow"><span>Heróis</span></div>
+        <div id="heroes" class="heroes"></div>
+      </div>
+      <div id="pane-missions" class="hidden"></div>
+    </main>
   </div>
 </section>
 
@@ -814,6 +927,7 @@ function renderCamp() {
   $('tab-missions').classList.toggle('on', campTab === 'missions');
   $('pane-log').classList.toggle('hidden', campTab !== 'log');
   $('pane-missions').classList.toggle('hidden', campTab !== 'missions');
+  $('camp-layout').classList.toggle('tab-missions', campTab === 'missions');
   if (campTab === 'missions') renderMissions(c);
 
   const cm = findMission(c, c.currentMission);
@@ -903,6 +1017,7 @@ function renderMissions(c) {
         <div class="s">${esc(m.stageTitle || '')}</div>
       </div>
     </button>` : ''}
+    <div class="mis-grid"><div class="mis-trail">
     <div class="eyebrow"><span>Trilha de campanha</span><span style="text-transform:none;letter-spacing:0;font-weight:500;">${done} de ${book(c).length} concluídas</span></div>
     ${trail(c).length ? `<div class="trail">
       ${trail(c).map((st, k) => `${k ? '<div class="tr-line"></div>' : ''}
@@ -916,6 +1031,7 @@ function renderMissions(c) {
         <span><i style="background:rgba(127,184,138,.5)"></i>Concluída</span>
       </div>
     </div>` : ''}
+    </div><div class="mis-book">
     <div class="eyebrow"><span>Livro de missões</span></div>
     ${stages.map(s => `<div class="stage">
       <div class="stage-title">${esc(s.title)}</div>
@@ -931,7 +1047,8 @@ function renderMissions(c) {
           ${isCur ? '<span class="tag cur">Atual</span>' : d ? '<span class="tag done">✓</span>' : stt === 'next' ? '<span class="tag next">Disponível</span>' : ''}
         </button>`;
       }).join('')}
-    </div>`).join('')}`;
+    </div>`).join('')}
+    </div></div>`;
 }
 
 function missionSheet(code) {
