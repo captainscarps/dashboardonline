@@ -230,6 +230,12 @@
   .md { padding: 0 20px; margin-top: -48px; position: relative; z-index: 2; }
   .md h2 { font-size: 30px; line-height: 1.1; }
   .sec { margin-top: 22px; }
+  .narrate-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; height: 36px; padding: 0 16px 0 12px; border-radius: 999px; border: 1px solid rgba(212,179,108,.45); color: var(--gold); font-size: 13px; font-weight: 600; background: rgba(212,179,108,.06); transition: background .15s; }
+  .narrate-btn:hover { background: var(--gold-soft); }
+  .narrate-btn svg { width: 13px; height: 13px; }
+  .narrate-btn.playing { background: var(--gold); color: #121315; border-color: var(--gold); }
+  .narrate-btn:disabled { opacity: .7; }
+  details.fold .narrate-btn { margin: 6px 0 4px; }
   .sec h3 { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
   .prose { font-size: 14px; line-height: 1.6; color: #d5d1ca; white-space: pre-line; }
   .box { padding: 14px 16px; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--line); }
@@ -1102,6 +1108,7 @@ function missionSheet(code) {
       <div class="k" style="font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--gold);font-weight:600;">${esc(m.stageTitle || '')}</div>
       <h2>${esc(shortCode(m.code))} · ${esc(mTitle(m))}</h2>
       ${isDone(c, code) ? '<span class="tag done" style="display:inline-block;margin-top:8px;">Concluída</span>' : ''}
+      <div><button class="narrate-btn" data-act="narrate" data-what="mission" data-code="${esc(code)}">${NARR_ICON}<span>Narrar missão</span></button></div>
 
       <div class="sec"><h3>Objetivo</h3><div class="prose">${esc(m.mainObjective)}</div></div>
       ${m.prepRules ? `<div class="sec"><h3>Regras especiais</h3><div class="prose">${esc(m.prepRules)}</div></div>` : ''}
@@ -1125,12 +1132,14 @@ function missionSheet(code) {
         ${row('token_ponte.png', 'Terreno especial', comp.specialTerrain)}
         ${row('token_espolios.png', 'Espólios', comp.lootingRule)}
       </details>
-      ${m.resultText ? `<details class="fold"><summary>Texto de conclusão</summary><div class="prose" style="padding:8px 0 4px;font-style:italic;">${esc(m.resultText)}</div></details>` : ''}
+      ${m.resultText ? `<details class="fold"><summary>Texto de conclusão</summary>
+        <button class="narrate-btn" data-act="narrate" data-what="result" data-code="${esc(code)}">${NARR_ICON}<span>Narrar conclusão</span></button>
+        <div class="prose" style="padding:8px 0 4px;font-style:italic;">${esc(m.resultText)}</div></details>` : ''}
     </div>
     </div>
     <div class="ws-foot">
       ${!isCur ? `<button class="btn btn-ghost" data-act="set-mission" data-code="${esc(code)}">Tornar atual</button>` : ''}
-      ${done ? `<button class="btn btn-ghost" data-act="unconclude" data-code="${esc(code)}">Desfazer conclusão</button>`
+      ${done ? `<button class="btn btn-ghost" data-act="unconclude" data-code="${esc(code)}">Reabrir missão</button>`
              : `<button class="btn btn-primary" data-act="conclude" data-code="${esc(code)}">Concluir missão</button>`}
     </div>
   `, 'wide');
@@ -1223,6 +1232,79 @@ function renderFlow() {
 }
 
 // =====================================================================
+// NARRAÇÃO (ElevenLabs via função "narrar" no Supabase — a chave fica lá)
+// =====================================================================
+const NARRATE_URL = `${SUPA_URL}/functions/v1/narrar`;
+const NARR_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"/></svg>`;
+const STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>`;
+let narr = { audio: null, btn: null, label: '', busy: false };
+
+function narrationText(m, what) {
+  const clean = t => String(t || '').replace(/^\s*\d\)\s*/gm, '').replace(/^\s*•\s*/gm, '').replace(/\n+/g, '. ').replace(/\.\s*\./g, '.').trim();
+  if (what === 'result') return clean(m.resultText);
+  const parts = [
+    `Missão ${shortCode(m.code)}... ${mTitle(m)}.`,
+    m.stageTitle ? `${m.stageTitle}.` : '',
+    `Objetivo... ${clean(m.mainObjective)}`,
+    m.hasSecondary ? `Missão secundária... ${m.secondaryTitle}. ${clean(m.secondaryObjective)}` : '',
+  ];
+  return parts.filter(Boolean).join(' ');
+}
+
+async function sha(text) {
+  try {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  } catch (e) { let h = 0; for (const ch of text) h = (h * 31 + ch.charCodeAt(0)) | 0; return 'h' + h; }
+}
+
+function setNarrBtn(btn, state) {
+  if (!btn || !btn.isConnected) return;
+  btn.classList.toggle('playing', state === 'play');
+  btn.disabled = state === 'busy';
+  const lbl = btn.querySelector('span');
+  btn.querySelector('svg').outerHTML = state === 'play' ? STOP_ICON : NARR_ICON;
+  lbl.textContent = state === 'busy' ? 'Preparando a voz…' : state === 'play' ? 'Parar narração' : narr.label;
+}
+
+function stopNarration() {
+  if (narr.audio) { narr.audio.pause(); narr.audio = null; }
+  if (narr.btn) setNarrBtn(narr.btn, 'idle');
+  narr.btn = null;
+}
+
+async function narrate(btn, text) {
+  if (narr.btn === btn && narr.audio) { stopNarration(); return; }
+  if (narr.busy) return;
+  stopNarration();
+  if (!text) { toast('Sem texto para narrar'); return; }
+  narr.btn = btn; narr.label = btn.querySelector('span').textContent; narr.busy = true;
+  setNarrBtn(btn, 'busy');
+  try {
+    const key = 'tts:' + await sha(text);
+    let blob = await kv.get(key).catch(() => null);
+    if (!blob) {
+      const res = await fetch(NARRATE_URL, { method: 'POST', headers: SUPA_HEADERS, body: JSON.stringify({ text }) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      blob = await res.blob();
+      if (!blob.size) throw new Error('vazio');
+      kv.set(key, blob).catch(() => {});
+    }
+    if (narr.btn !== btn) return;
+    const audio = new Audio(URL.createObjectURL(blob));
+    narr.audio = audio;
+    audio.onended = () => { if (narr.audio === audio) stopNarration(); };
+    await audio.play();
+    setNarrBtn(btn, 'play');
+  } catch (e) {
+    console.warn('Narração:', e);
+    setNarrBtn(btn, 'idle');
+    narr.btn = null; narr.audio = null;
+    toast('Narração indisponível no momento');
+  } finally { narr.busy = false; }
+}
+
+// =====================================================================
 // EXPORTAR / IMPORTAR JSON
 // =====================================================================
 async function exportJSON() {
@@ -1304,6 +1386,7 @@ function openSheet(html, cls) {
 }
 function closeSheet(fromHistory) {
   if (!sheetOpen) return;
+  stopNarration();
   sheetOpen = false;
   document.body.style.overflow = '';
   if (!fromHistory && history.state && history.state.sheet) { try { history.back(); } catch (e) {} }
@@ -1494,6 +1577,11 @@ document.addEventListener('click', e => {
 
     case 'save-game': saveNow(); break;
     case 'export-json': exportJSON(); break;
+    case 'narrate': {
+      const m = findMission(c, el.dataset.code);
+      if (m) narrate(el, narrationText(m, el.dataset.what));
+      break;
+    }
     case 'import-json': $('file-json').click(); break;
     case 'conclude': startConcludeFlow(el.dataset.code); break;
     case 'unconclude': {
