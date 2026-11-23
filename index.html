@@ -236,6 +236,10 @@
   .narrate-btn.playing { background: var(--gold); color: #121315; border-color: var(--gold); }
   .narrate-btn:disabled { opacity: .7; }
   details.fold .narrate-btn { margin: 6px 0 4px; }
+  .story { margin-top: 14px; }
+  .story p { margin-top: 12px; font-family: var(--serif); font-size: 18px; line-height: 1.5; font-style: italic; color: #e3dccd; padding-left: 14px; border-left: 2px solid rgba(212,179,108,.45); }
+  .story-sub { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin: 14px 0 6px; }
+  .story-text { font-family: var(--serif); font-size: 17px; font-style: italic; color: #e3dccd; }
   .sec h3 { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
   .prose { font-size: 14px; line-height: 1.6; color: #d5d1ca; white-space: pre-line; }
   .box { padding: 14px 16px; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--line); }
@@ -1108,7 +1112,10 @@ function missionSheet(code) {
       <div class="k" style="font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--gold);font-weight:600;">${esc(m.stageTitle || '')}</div>
       <h2>${esc(shortCode(m.code))} · ${esc(mTitle(m))}</h2>
       ${isDone(c, code) ? '<span class="tag done" style="display:inline-block;margin-top:8px;">Concluída</span>' : ''}
-      <div><button class="narrate-btn" data-act="narrate" data-what="mission" data-code="${esc(code)}">${NARR_ICON}<span>Narrar missão</span></button></div>
+      ${m.storyIntro ? `<div class="story">
+        <button class="narrate-btn" data-act="narrate" data-what="intro" data-code="${esc(code)}">${NARR_ICON}<span>Narrar história</span></button>
+        <p>${esc(m.storyIntro)}</p>
+      </div>` : ''}
 
       <div class="sec"><h3>Objetivo</h3><div class="prose">${esc(m.mainObjective)}</div></div>
       ${m.prepRules ? `<div class="sec"><h3>Regras especiais</h3><div class="prose">${esc(m.prepRules)}</div></div>` : ''}
@@ -1132,9 +1139,11 @@ function missionSheet(code) {
         ${row('token_ponte.png', 'Terreno especial', comp.specialTerrain)}
         ${row('token_espolios.png', 'Espólios', comp.lootingRule)}
       </details>
-      ${m.resultText ? `<details class="fold"><summary>Texto de conclusão</summary>
+      ${(m.storyProgress || m.resultText || m.storyNext) ? `<details class="fold"><summary>História da conclusão</summary>
         <button class="narrate-btn" data-act="narrate" data-what="result" data-code="${esc(code)}">${NARR_ICON}<span>Narrar conclusão</span></button>
-        <div class="prose" style="padding:8px 0 4px;font-style:italic;">${esc(m.resultText)}</div></details>` : ''}
+        ${(m.storyProgress || m.resultText) ? `<div class="story-sub">Progresso da campanha</div><div class="prose story-text">${esc(m.storyProgress || m.resultText)}</div>` : ''}
+        ${m.storyNext ? `<div class="story-sub">Próxima missão</div><div class="prose story-text">${esc(m.storyNext)}</div>` : ''}
+      </details>` : ''}
     </div>
     </div>
     <div class="ws-foot">
@@ -1241,14 +1250,9 @@ let narr = { audio: null, btn: null, label: '', busy: false };
 
 function narrationText(m, what) {
   const clean = t => String(t || '').replace(/^\s*\d\)\s*/gm, '').replace(/^\s*•\s*/gm, '').replace(/\n+/g, '. ').replace(/\.\s*\./g, '.').trim();
-  if (what === 'result') return clean(m.resultText);
-  const parts = [
-    `Missão ${shortCode(m.code)}... ${mTitle(m)}.`,
-    m.stageTitle ? `${m.stageTitle}.` : '',
-    `Objetivo... ${clean(m.mainObjective)}`,
-    m.hasSecondary ? `Missão secundária... ${m.secondaryTitle}. ${clean(m.secondaryObjective)}` : '',
-  ];
-  return parts.filter(Boolean).join(' ');
+  // Só a história: introdução; ou progresso da campanha + gancho da próxima missão
+  if (what === 'result') return [clean(m.storyProgress || m.resultText), clean(m.storyNext)].filter(Boolean).join(' ... ');
+  return clean(m.storyIntro);
 }
 
 async function sha(text) {
@@ -1586,7 +1590,7 @@ document.addEventListener('click', e => {
     case 'export-json': exportJSON(); break;
     case 'narrate': {
       const m = findMission(c, el.dataset.code);
-      if (m) narrate(el, narrationText(m, el.dataset.what), `audio/${c.mode}/${m.code}-${el.dataset.what === 'result' ? 'conclusao' : 'missao'}.mp3`);
+      if (m) narrate(el, narrationText(m, el.dataset.what), `audio/${c.mode}/${m.code}-${el.dataset.what === 'result' ? 'conclusao' : 'intro'}.mp3`);
       break;
     }
     case 'import-json': $('file-json').click(); break;
