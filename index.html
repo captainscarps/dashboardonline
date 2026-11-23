@@ -107,6 +107,10 @@
   .level .lv-row { display: flex; align-items: center; gap: 6px; }
   .level .lv-val { font-family: var(--serif); font-size: 30px; font-weight: 700; min-width: 30px; text-align: center; line-height: 1; }
 
+  .portrait-btn { flex-shrink: 0; border-radius: 50%; }
+  .hero-art { display: none; }
+  .zoom-img { width: 100%; max-height: 70vh; object-fit: contain; border-radius: var(--radius-sm); background: #000; }
+  .sheet.zoom { max-width: 560px; }
   .xp { padding: 14px 16px 16px; border-top: 1px solid var(--line); }
   .xp-row { display: flex; align-items: center; gap: 12px; }
   .xp-row .lbl { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); font-weight: 600; }
@@ -342,6 +346,14 @@
     .camp-main { padding-top: 6px; min-width: 0; }
     .heroes { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; align-items: start; }
     .item-grid { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); }
+    .hero.has-art .hero-art { display: block; position: relative; width: 100%; height: 260px; overflow: hidden; background: radial-gradient(circle at 50% 30%, #23262b, #121316); cursor: zoom-in; }
+    .hero.has-art .hero-art img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; transition: transform .4s ease; }
+    .hero.has-art .hero-art:hover img { transform: scale(1.04); }
+    .hero.has-art .hero-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 55%, var(--surface)); pointer-events: none; }
+    .hero.has-art .hero-head { margin-top: -58px; position: relative; z-index: 1; padding-top: 0; }
+    .hero.has-art .portrait-btn { display: none; }
+    .hero.has-art .hero-head .nm { font-size: 28px; text-shadow: 0 2px 12px rgba(0,0,0,.8); }
+    .hero.has-art .hero-head .cl { text-shadow: 0 1px 8px rgba(0,0,0,.9); }
 
     /* Missões */
     .feature { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: stretch; }
@@ -948,9 +960,12 @@ function renderCamp() {
       ? `<button class="tile" data-act="item" data-i="${i}" data-id="${esc(it.id)}"><img src="${it.photo}" alt="" loading="lazy">${it.name ? `<span class="cap">${esc(it.name)}</span>` : ''}</button>`
       : `<button class="tile txt" data-act="item" data-i="${i}" data-id="${esc(it.id)}"><span class="cap">${esc(it.name || 'Item')}</span></button>`
     ).join('');
-    return `<article class="hero">
+    return `<article class="hero ${p.heroPhoto ? 'has-art' : ''}">
+      ${p.heroPhoto ? `<button class="hero-art" data-act="zoom-hero" data-i="${i}" aria-label="Ver ${esc(p.heroName)}">
+        <img src="${esc(p.heroPhoto)}" alt="" loading="lazy" onerror="this.closest('.hero').classList.remove('has-art');this.parentNode.remove()">
+      </button>` : ''}
       <div class="hero-head">
-        ${portrait(p)}
+        <button class="portrait-btn" data-act="zoom-hero" data-i="${i}" aria-label="Ver ${esc(p.heroName)}">${portrait(p)}</button>
         <div class="who"><div class="nm">${esc(p.heroName || 'Herói')}</div><div class="cl">${esc(p.className || p.classId || '')}</div></div>
         <div class="level">
           <span class="lv-lbl">Nível</span>
@@ -1439,6 +1454,13 @@ document.addEventListener('click', e => {
       const v = Math.max(0, parseInt($('n-val').value) || 0);
       numberSheet.onSave && numberSheet.onSave(v);
       commit(); closeSheet(); renderCamp(); break;
+    }
+    case 'zoom-hero': {
+      const pl = c.players[i];
+      if (!pl.heroPhoto) break;
+      openSheet(`<h2>${esc(pl.heroName)}</h2><div class="sub">${esc(pl.className || pl.classId || '')} · nível ${pl.level}</div>
+        <img class="zoom-img" src="${esc(pl.heroPhoto)}" alt="${esc(pl.heroName)}">`, 'zoom');
+      break;
     }
     case 'close-sheet': if (flow) { flow = null; } closeSheet(); break;
 
