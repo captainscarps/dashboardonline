@@ -946,17 +946,9 @@ function missionSheet(code) {
 }
 
 // ---------------------------------------------------------------------
-// Fluxo "Salvar partida": secundária → carta → herói → próxima missão
+// Fluxo "Concluir missão": secundária → carta → herói → próxima missão
 // ---------------------------------------------------------------------
 let flow = null;
-
-function startSaveFlow() {
-  const c = cur(), m = findMission(c, c.currentMission);
-  flow = { code: c.currentMission, steps: [], idx: 0 };
-  if (m && m.hasSecondary) flow.steps.push({ type: 'secondary' });
-  flow.steps.push({ type: 'next' });
-  renderFlow();
-}
 
 function startConcludeFlow(code) {
   const c = cur(), m = findMission(c, code);
@@ -1034,17 +1026,14 @@ function renderFlow() {
         <button class="btn btn-ghost btn-block" style="margin-top:12px;" data-act="flow-finish">Escolher depois</button>`
       : `<div class="sub">Essa era a última missão. Campanha concluída!</div>
         <button class="btn btn-primary btn-block" data-act="flow-finish">Finalizar</button>`}`);
-  } else if (step.type === 'next') {
-    const nexts = nextOptions(c, flow.code).map(code => findMission(c, code)).filter(Boolean);
-    openSheet(`${dots}
-      <h2>Vocês venceram a missão?</h2>
-      <div class="sub">Se sim, escolha a próxima. ${esc(stageHint(c, nexts.map(x => x.code)))}</div>
-      <div class="choice-list">
-        ${nexts.map(x => `<button class="choice" data-act="flow-next" data-code="${esc(x.code)}"><div class="code">${esc(shortCode(x.code))}</div><div><div class="t">${esc(mTitle(x))}</div><div class="s">Vencemos — seguir para esta</div></div></button>`).join('')}
-        ${!nexts.length ? `<button class="choice" data-act="flow-next" data-code=""><div class="code gold">✓</div><div><div class="t">Vencemos</div><div class="s">Marcar ${esc(shortCode(m.code))} como concluída</div></div></button>` : ''}
-      </div>
-      <button class="btn btn-ghost btn-block" style="margin-top:12px;" data-act="flow-finish">Ainda não / perdemos — só salvar</button>`);
   }
+}
+
+async function saveNow() {
+  commit();
+  clearTimeout(saveTimer);
+  await pushCloud(cur());
+  toast(cloudOk ? 'Partida salva na nuvem' : 'Partida salva neste aparelho');
 }
 
 function flowNext() { flow.idx++; renderFlow(); }
@@ -1054,7 +1043,7 @@ function finishFlow() {
   clearTimeout(saveTimer);
   pushCloud(cur());
   closeSheet();
-  const msg = flow && flow.conclude ? 'Missão concluída' : 'Partida salva';
+  const msg = 'Missão concluída';
   flow = null;
   renderCamp();
   toast(msg);
@@ -1255,7 +1244,7 @@ document.addEventListener('click', e => {
       setCurrentMission(c, el.dataset.code); commit(); closeSheet(); renderCamp();
       toast('Missão atual: ' + shortCode(el.dataset.code)); break;
 
-    case 'save-game': startSaveFlow(); break;
+    case 'save-game': saveNow(); break;
     case 'conclude': startConcludeFlow(el.dataset.code); break;
     case 'unconclude': {
       const code = el.dataset.code;
@@ -1292,11 +1281,6 @@ document.addEventListener('click', e => {
       flowNext(); break;
     }
     case 'flow-ok': flowNext(); break;
-    case 'flow-next': {
-      mState(c, flow.code).status = 'completed';
-      if (el.dataset.code) setCurrentMission(c, el.dataset.code);
-      finishFlow(); break;
-    }
     case 'flow-finish': finishFlow(); break;
 
     case 'card': {
